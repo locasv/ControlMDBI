@@ -1,0 +1,232 @@
+/* Paleta de colores
+
+   'cerulean': {
+    '50': '#f1f9fe',
+    '100': '#e2f3fc',
+    '200': '#bde6fa',
+    '300': '#83d3f6',
+    '400': '#42bcee',
+    '500': '#19a4dd',
+    '600': '#0c84bd',
+    '700': '#0b6a99',
+    '800': '#0d597f',
+    '900': '#114b69',
+    '950': '#0b2f46',
+},
+
+    },
+
+*/
+
+/* Definición de varibles para las colores */
+
+:root {
+    --co-50: #f1f9fe;
+    --co-100: #e2f3fc;
+    --co-200: #bde6fa;
+    --co-300: #83d3f6;
+    --co-400: #42bcee;
+    --co-500: #19a4dd;
+    --co-600: #0c84bd;
+    --co-700: #0b6a99;
+    --co-800: #0d597f;
+    --co-900: #114b69;
+    --co-950: #0b2f46;
+}
+
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.nav-personalizado li a:hover {
+    background: var(--co-600);
+    color: white !important;
+}
+
+/* backgrounds */
+
+.bg-carrotOrange-50 {
+    background-color: var(--co-50);
+}
+.bg-carrotOrange-100 {
+    background-color: var(--co-100);
+}
+.bg-carrotOrange-200 {
+    background-color: var(--co-200);
+}
+.bg-carrotOrange-300 {
+    background-color: var(--co-300);
+}
+.bg-carrotOrange-400 {
+    background-color: var(--co-400);
+}
+.bg-carrotOrange-500 {
+    background-color: var(--co-500);
+}
+.bg-carrotOrange-600 {
+    background-color: var(--co-600);
+}
+.bg-carrotOrange-700 {
+    background-color: var(--co-700);
+}
+.bg-carrotOrange-800 {
+    background-color: var(--co-800);
+}
+.bg-carrotOrange-900 {
+    background-color: var(--co-900);
+}
+.bg-carrotOrange-950 {
+    background-color: var(--co-950);
+}
+
+/* text colors */
+
+.text-carrotOrange-50 {
+    color: var(--co-50);
+}
+.text-carrotOrange-100 {
+    color: var(--co-100);
+}
+.text-carrotOrange-200 {
+    color: var(--co-200);
+}
+.text-carrotOrange-300 {
+    color: var(--co-300);
+}
+.text-carrotOrange-400 {
+    color: var(--co-400);
+}
+.text-carrotOrange-500 {
+    color: var(--co-500);
+}
+.text-carrotOrange-600 {
+    color: var(--co-600);
+}
+.text-carrotOrange-700 {
+    color: var(--co-700);
+}
+.text-carrotOrange-800 {
+    color: var(--co-800);
+}
+.text-carrotOrange-900 {
+    color: var(--co-900);
+}
+.text-carrotOrange-950 {
+    color: var(--co-950);
+}
+
+/* Boton solid */
+.btn-carrotOrange {
+    color: white;
+    background-color: var(--co-500);
+}
+
+    .btn-carrotOrange:hover {
+        color: white;
+        background-color: var(--co-600);
+    }
+
+    .btn-carrotOrange:active {
+        color: white;
+        background-color: var(--co-700);
+    }
+
+    .btn-carrotOrange:focus {
+        color: white;
+        background-color: var(--co-600);
+        box-shadow: 0 0 0 .25rem var(--co-300);
+    }
+
+/* Boton outline */
+.btn-outline-carrotOrange {
+    color: var(--co-600);
+    border-color: var(--co-600);
+}
+
+    .btn-outline-carrotOrange:hover {
+        color: white;
+        background-color: var(--co-600);
+    }
+
+    .btn-outline-carrotOrange:active {
+        color: white;
+        background-color: var(--co-700);
+    }
+
+    .btn-outline-carrotOrange:focus {
+        color: white;
+        background-color: var(--co-600);
+        box-shadow: 0 0 0 .25rem var(--co-300);
+    }
+
+/* Botón Light */
+.btn-light-carrotOrange {
+    color: var(--co-950);
+    background-color: var(--co-200);
+}
+
+    .btn-light-carrotOrange:hover {
+        color: var(--co-950);
+        background-color: var(--co-300);
+    }
+
+    .btn-light-carrotOrange:active {
+        color: var(--co-950);
+        background-color: var(--co-400);
+    }
+
+    .btn-light-carrotOrange:focus {
+        color: var(--co-950);
+        background-color: var(--co-300);
+        box-shadow: 0 0 0 .25rem var(--co-200);
+    }
+
+/*cambiar el color del borde, focus, active de form-control y form-select*/
+.form-control {
+    border-color: #d1d1d1;
+}
+
+    .form-control:focus {
+        border-color: var(--co-600);
+        box-shadow: 1px 1px 0 0 var(--co-600), -1px -1px 0 0 var(--co-600), 1px -1px 0 0 var(--co-600), -1px 1px 0 0 var(--co-600);
+    }
+
+        .form-control:focus + .form-label, .form-control:not(:placeholder-shown) + .form-label {
+            color: var(--co-600);
+        }
+
+    .form-control:not(:focus) + .form-label {
+        color: #000000;
+    }
+
+.form-select {
+    border-color: #d1d1d1;
+}
+
+    .form-select:focus {
+        border-color: var(--co-600);
+        box-shadow: 1px 1px 0 0 var(--co-600), -1px -1px 0 0 var(--co-600), 1px -1px 0 0 var(--co-600), -1px 1px 0 0 var(--co-600);
+    }
+
+        .form-select:focus + .form-label, .form-select:not(:placeholder-shown) + .form-label {
+            color: var(--co-600);
+        }
+
+    .form-select:not(:focus) + .form-label {
+        color: #000000;
+    }

@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ControlMDBI</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="" asp-append-version="true" />
+    @*Icono*@
+    <link rel="icon" href="" type="image/x-icon" />
+
+    @*Font Awesome*@
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-toggleable-md navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                @if (!User.Identity.IsAuthenticated)
+                {
+                    <a class="navbar-brand me-5" asp-controller="Auth" asp-action="Login"><img src="" class="img-fluid" style="height:60px" /></a>
+                }
+                else
+                {
+                    <a class="navbar-brand me-5" asp-controller="Dashboard" asp-action="Index"><img src="" class="img-fluid" style="height:60px" /></a>
+                }
+                <div class="d-flex flex-row">
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <div class="d-block d-md-none">
+                            <ul class="navbar-nav mt-md-0 flex-row">
+                                <li class="nav-item me-2">
+                                    <a class="btn btn-outline-carrotOrange" asp-area="" asp-controller="Auth" asp-action="Login"><i class="fas fa-sign-in-alt"></i>&nbsp;Iniciar Sesión</a>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+
+                <div class="navbar-collapse collapse d-md-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1 nav-personalizado">
+                        @if (User.IsInRole("Administrador"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-black rounded-3 ps-2" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Dashbaord</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-black rounded-3 ps-2" asp-area="Admin" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-black rounded-3 ps-2" asp-area="Admin" asp-controller="Empleados" asp-action="Index">Empleados</a>
+                            </li>
+                        }
+                        else if (User.IsInRole("Empleado"))
+                        {
+                            <li class="nav-item text-center">
+                                <a class="nav-link text-black rounded-3 ps-2" asp-area="Vendedor" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                            </li>
+                           
+                        }
+                    </ul>
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <div class="d-none d-md-block">
+                            <ul class="navbar-nav mt-md-0 mt-2">
+                                <li class="nav-item me-3">
+                                    <a class="btn btn-outline-carrotOrange" asp-area="" asp-controller="Auth" asp-action="Login"><i class="fas fa-sign-in-alt"></i>&nbsp;Iniciar Sesión</a>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <ul class="navbar-nav rounded-3 mt-2 mt-md-0 nav-personalizado">
+                            <li class="nav-item dropdown">
+                                <a class="rounded-3 nav-link dropdown-toggle ps-2 text-black" href="#" id="navDropdownSesion" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    ¡Bienvenido! @User.Identity.Name <i class="fas fa-user-circle"></i>
+                                </a>
+                                <ul class="rounded-3 dropdown-menu dropdown-menu-end" aria-labelledby="navDropdownSesion">
+                                    <li>
+                                        <a class="dropdown-item rounded-3 text-black btn" onclick="mostrarDatosPerfil()"><i class="fas fa-user"></i> Mi Perfil</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item rounded-3" asp-area="" asp-controller="Auth" asp-action="Logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted text-center">
+        <div class="container">
+            &copy; 2025 - MDBI - Todos los derechos reservados
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @* SweerAlert2 *@
+    <script src="~/lib/sweetalert2/sweetalert2.all.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        // Función para mostrar en sweetalert2 los datos del perfil
+        function mostrarDatosPerfil() {
+            // Obtener datos del perfil con consulta a Auth/MiPerfil que retorna un Json
+
+            $.ajax({
+                url: '@Url.Action("MiPerfil", "Auth", new { area = "" })',
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    const nombreUsuario = response.data.nombreUsuario;
+                    const rol = response.data.rol;
+                    Swal.fire({
+                        title: 'Datos de Perfil',
+                        html: `
+                               <strong>Nombre de Usuario:</strong> ${nombreUsuario}<br>
+                               <strong>Rol:</strong> ${rol}
+                               `,
+                               
+                        icon: 'info',
+                        confirmButtonText: 'Cerrar'
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error al obtener los datos del perfil:', error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
