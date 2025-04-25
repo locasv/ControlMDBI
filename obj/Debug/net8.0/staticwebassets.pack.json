@@ -13,6 +13,14 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "D:\\MUNI BDI\\ControlMDBI\\wwwroot\\img\\logos\\contrlmdbi-removebg-preview.png",
+      "PackagePath": "staticwebassets\\img\\logos\\contrlmdbi-removebg-preview.png"
+    },
+    {
+      "Id": "D:\\MUNI BDI\\ControlMDBI\\wwwroot\\img\\logos\\contrlmdbi.png",
+      "PackagePath": "staticwebassets\\img\\logos\\contrlmdbi.png"
+    },
+    {
       "Id": "D:\\MUNI BDI\\ControlMDBI\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },

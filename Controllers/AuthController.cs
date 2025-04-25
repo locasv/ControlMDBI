@@ -13,6 +13,7 @@ namespace ControlMDBI.Controllers
     public class AuthController : Controller
     {
         private readonly ControlMDBIDbContext _context;
+        
 
         public AuthController(ControlMDBIDbContext context)
         {
@@ -30,15 +31,15 @@ namespace ControlMDBI.Controllers
                 }
                 else if (userRole == "Empleado")
                 {
-                    return RedirectToAction("Index", "Dashboard", new { area = "Empleado" });
+                    return RedirectToAction("Index", "Dashboard", new { area = "Emple" });
                 }
                 else if (userRole == "Patrimonio")
                 {
-                    return RedirectToAction("Index", "Dashboard", new { area = "Patrimonio" });
+                    return RedirectToAction("Index", "Dashboard", new { area = "Patri" });
                 }
                 else if (userRole == "Vigilante")
                 {
-                    return RedirectToAction("Index", "Dashboard", new { area = "Vigilante" });
+                    return RedirectToAction("Index", "Dashboard", new { area = "Vigi" });
                 }
                 else if (userRole == "RRHH")
                 {
@@ -90,9 +91,9 @@ namespace ControlMDBI.Controllers
                 return userDB.Rol switch
                 {
                     "Administrador" => RedirectToAction("Index", "Dashboard", new { area = "Admin" }),
-                    "Empleado" => RedirectToAction("Index", "Dashboard", new { area = "Empleado" }),
-                    "Patrimonio" => RedirectToAction("Index", "Dashboard", new { area = "Patrimonio" }),
-                    "Vigilante" => RedirectToAction("Index", "Dashboard", new { area = "Vigilante" }),
+                    "Empleado" => RedirectToAction("Index", "Dashboard", new { area = "Emple" }),
+                    "Patrimonio" => RedirectToAction("Index", "Dashboard", new { area = "Patri" }),
+                    "Vigilante" => RedirectToAction("Index", "Dashboard", new { area = "Vigi" }),
                     "RRHH" => RedirectToAction("Index", "Dashboard", new { area = "RRHH" }),
                     _ => RedirectToAction("Index", "Home"),
                 };
@@ -136,7 +137,7 @@ namespace ControlMDBI.Controllers
         public JsonResult MiPerfil()
         {
             var userName = User.Identity.Name;
-            var usuario = _context.Usuario.Include(u=> u.Empleado).Where(u => u.NombreUsuario == userName).Select(u => new {
+            var usuario = _context.Usuario.Include(u=> u.Empleado).Where(u => u.Empleado.Nombres == userName).Select(u => new {
                 u.IdUsuario,
                 u.IdEmpleado,
                 u.NombreUsuario,
@@ -149,7 +150,7 @@ namespace ControlMDBI.Controllers
 
             if (usuario == null)
             {
-                return Json(new { success = false, message  ="Usuario no encontrado o inactivo" });
+                return Json(new { success = false, message  ="Usuario no encontrado" });
             }
             // Serializar el objeto usuario a JSON
             //string data = JsonConvert.SerializeObject(usuario);

@@ -6,9 +6,11 @@
     <title>@ViewData["Title"] - ControlMDBI</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ControlMDBI.styles.css" asp-append-version="true" />
+
     <link rel="stylesheet" href="" asp-append-version="true" />
     @*Icono*@
-    <link rel="icon" href="" type="image/x-icon" />
+    <link rel="icon" href="~/img/logos/contrlmdbi.png" type="image/x-icon" />
 
     @*Font Awesome*@
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
@@ -19,11 +21,11 @@
             <div class="container-fluid">
                 @if (!User.Identity.IsAuthenticated)
                 {
-                    <a class="navbar-brand me-5" asp-controller="Auth" asp-action="Login"><img src="" class="img-fluid" style="height:60px" /></a>
+                    <a class="navbar-brand me-5" asp-controller="Auth" asp-action="Login"><img src="~/img/logos/contrlmdbi-removebg-preview.png" class="img-fluid" style="height:60px" /></a>
                 }
                 else
                 {
-                    <a class="navbar-brand me-5" asp-controller="Dashboard" asp-action="Index"><img src="" class="img-fluid" style="height:60px" /></a>
+                    <a class="navbar-brand me-5" asp-controller="Dashboard" asp-action="Index"><img src="~/img/logos/contrlmdbi-removebg-preview.png" class="img-fluid" style="height:60px" /></a>
                 }
                 <div class="d-flex flex-row">
                     @if (!User.Identity.IsAuthenticated)
@@ -37,7 +39,7 @@
                         </div>
                     }
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
+                    aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                 </div>
@@ -59,10 +61,42 @@
                         else if (User.IsInRole("Empleado"))
                         {
                             <li class="nav-item text-center">
-                                <a class="nav-link text-black rounded-3 ps-2" asp-area="Vendedor" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                                <a class="nav-link text-black rounded-3 ps-2" asp-area="Emple" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
                             </li>
-                           
+                            <li class="nav-item text-center">
+                                <a class="nav-link text-black rounded-3 ps-2" asp-area="Emple" asp-controller="Solicitud" asp-action="Index">Solicitud</a>
+                            </li>
+
+                        }else if (User.IsInRole("Patrimonio"))
+                        {
+                            <li class="nav-item text-center">
+                                <a class="nav-link text-black rounded-3 ps-2" asp-area="Patri" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                            </li>
+                            <li class="nav-item text-center">
+                                <a class="nav-link text-black rounded-3 ps-2" asp-area="Patri" asp-controller="Aprobacion" asp-action="Index">Solicitudes a aprobar</a>
+                            </li>
+                            
                         }
+
+                        else if (User.IsInRole("Vigilante"))
+                        {
+                            <li class="nav-item text-center">
+                                <a class="nav-link text-black rounded-3 ps-2" asp-area="Vigi" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                            </li>
+                            <li class="nav-item text-center">
+                                <a class="nav-link text-black rounded-3 ps-2" asp-area="Vigi" asp-controller="Registrar" asp-action="Index">Registrar</a>
+                            </li>
+                        }
+                        else if (User.IsInRole("RRHH"))
+                        {
+                            <li class="nav-item text-center">
+                                <a class="nav-link text-black rounded-3 ps-2" asp-area="RRHH" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                            </li>
+                            <li class="nav-item text-center">
+                                <a class="nav-link text-black rounded-3 ps-2" asp-area="RRHH" asp-controller="Registros" asp-action="Index">Registros</a>
+                            </li>
+                        }
+
                     </ul>
                     @if (!User.Identity.IsAuthenticated)
                     {
@@ -120,30 +154,97 @@
         // Función para mostrar en sweetalert2 los datos del perfil
         function mostrarDatosPerfil() {
             // Obtener datos del perfil con consulta a Auth/MiPerfil que retorna un Json
-
+                console.log("Función mostrarDatosPerfil() ejecutada");
             $.ajax({
                 url: '@Url.Action("MiPerfil", "Auth", new { area = "" })',
                 type: 'GET',
                 dataType: 'json',
                 success: function (response) {
-                    const nombreUsuario = response.data.nombreUsuario;
-                    const rol = response.data.rol;
-                    Swal.fire({
-                        title: 'Datos de Perfil',
-                        html: `
-                               <strong>Nombre de Usuario:</strong> ${nombreUsuario}<br>
-                               <strong>Rol:</strong> ${rol}
-                               `,
-                               
-                        icon: 'info',
-                        confirmButtonText: 'Cerrar'
-                    });
+                     // Ahora accedemos a las propiedades con seguridad
+                const nombreUsuario = response.data.nombreUsuario || 'No disponible';
+                const rol = response.data.rol || 'No disponible';
+                const nombreEmpleado = response.data.empleado && response.data.empleado.nombres ?
+                                       response.data.empleado.nombres : 'No disponible';
+
+                Swal.fire({
+                    title: 'Datos de Perfil',
+                    html: `
+                        <strong>Nombre de Usuario:</strong> ${nombreUsuario}<br>
+                        <strong>Rol:</strong> ${rol}<br>
+                        <strong>Nombre del Empleado:</strong> ${nombreEmpleado}
+                    `,
+                    icon: 'info',
+                    confirmButtonText: 'Cerrar'
+                });
+
                 },
                 error: function (xhr, status, error) {
                     console.error('Error al obtener los datos del perfil:', error);
                 }
             });
+
+            /*
+                 $.ajax({
+            url: '@Url.Action("MiPerfil", "Auth", new { area = "" })',
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                console.log("Respuesta completa:", response);
+
+                if (!response || !response.success) {
+                    console.error("Error en la respuesta:", response);
+                    Swal.fire({
+                        title: 'Error',
+                        text: response && response.message ? response.message : 'No se pudieron obtener los datos del perfil',
+                        icon: 'error',
+                        confirmButtonText: 'Cerrar'
+                    });
+                    return;
+                }
+
+                if (!response.data) {
+                    console.error("No hay datos en la respuesta");
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'No se encontraron datos del perfil',
+                        icon: 'error',
+                        confirmButtonText: 'Cerrar'
+                    });
+                    return;
+                }
+
+                console.log("Datos del usuario:", response.data);
+
+                // Ahora accedemos a las propiedades con seguridad
+                const nombreUsuario = response.data.nombreUsuario || 'No disponible';
+                const rol = response.data.rol || 'No disponible';
+                const nombreEmpleado = response.data.empleado && response.data.empleado.nombres ?
+                                       response.data.empleado.nombres : 'No disponible';
+
+                Swal.fire({
+                    title: 'Datos de Perfil',
+                    html: `
+                        <strong>Nombre de Usuario:</strong> ${nombreUsuario}<br>
+                        <strong>Rol:</strong> ${rol}<br>
+                        <strong>Nombre del Empleado:</strong> ${nombreEmpleado}
+                    `,
+                    icon: 'info',
+                    confirmButtonText: 'Cerrar'
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error('Error en la petición AJAX:', status, error);
+                console.log('Respuesta del servidor:', xhr.responseText);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Error al obtener los datos del perfil',
+                    icon: 'error',
+                    confirmButtonText: 'Cerrar'
+                });
+            }
+        });*/
         }
     </script>
+        
 </body>
 </html>

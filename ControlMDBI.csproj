@@ -18,14 +18,8 @@
 
   <ItemGroup>
     <Folder Include="Areas\Admin\ViewModels\" />
-    <Folder Include="Areas\Empleado\Controllers\" />
-    <Folder Include="Areas\Empleado\Data\" />
-    <Folder Include="Areas\Empleado\Models\" />
-    <Folder Include="Areas\Empleado\Views\" />
-    <Folder Include="Areas\Vigilante\Controllers\" />
-    <Folder Include="Areas\Vigilante\Data\" />
-    <Folder Include="Areas\Vigilante\Models\" />
-    <Folder Include="Areas\Vigilante\Views\" />
+    <Folder Include="Areas\Emple\ViewsModels\" />
+    <Folder Include="Areas\Vigi\ViewsModels\" />
   </ItemGroup>
 
 </Project>

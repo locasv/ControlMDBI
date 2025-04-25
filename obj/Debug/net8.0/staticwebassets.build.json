@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "eNjVOo3AgHc1dRkun2TkebagEelNMCGfsbElkLqcV44=",
+  "Hash": "cfG6s/dt2bmCHcB5m8B+t6gWQwKuFqWralt2GevuVeA=",
   "Source": "ControlMDBI",
   "BasePath": "_content/ControlMDBI",
   "Mode": "Default",
@@ -99,6 +99,48 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "D:\\MUNI BDI\\ControlMDBI\\wwwroot\\img\\logos\\contrlmdbi.png",
+      "SourceId": "ControlMDBI",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\MUNI BDI\\ControlMDBI\\wwwroot\\",
+      "BasePath": "_content/ControlMDBI",
+      "RelativePath": "img/logos/contrlmdbi#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "4bvfqnboir",
+      "Integrity": "QBKULjapfGAs4cnF7uVdU89t5/JJV6SW1uaqlRdt9+E=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\img\\logos\\contrlmdbi.png"
+    },
+    {
+      "Identity": "D:\\MUNI BDI\\ControlMDBI\\wwwroot\\img\\logos\\contrlmdbi-removebg-preview.png",
+      "SourceId": "ControlMDBI",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\MUNI BDI\\ControlMDBI\\wwwroot\\",
+      "BasePath": "_content/ControlMDBI",
+      "RelativePath": "img/logos/contrlmdbi-removebg-preview#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "qnn5h4prnl",
+      "Integrity": "+meZWjpRy8yfsjC3lhDlTfhlas9+pL+R2f6nxspLnL8=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\img\\logos\\contrlmdbi-removebg-preview.png"
     },
     {
       "Identity": "D:\\MUNI BDI\\ControlMDBI\\wwwroot\\js\\site.js",
@@ -2779,6 +2821,170 @@
         {
           "Name": "integrity",
           "Value": "sha256-Jtxf9L+5ITKRc1gIRl4VbUpGkRNfOBXjYTdhJD4facM="
+        }
+      ]
+    },
+    {
+      "Route": "img/logos/contrlmdbi.4bvfqnboir.png",
+      "AssetFile": "D:\\MUNI BDI\\ControlMDBI\\wwwroot\\img\\logos\\contrlmdbi.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "307586"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"QBKULjapfGAs4cnF7uVdU89t5/JJV6SW1uaqlRdt9+E=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 25 Apr 2025 14:50:33 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "4bvfqnboir"
+        },
+        {
+          "Name": "label",
+          "Value": "img/logos/contrlmdbi.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-QBKULjapfGAs4cnF7uVdU89t5/JJV6SW1uaqlRdt9+E="
+        }
+      ]
+    },
+    {
+      "Route": "img/logos/contrlmdbi.png",
+      "AssetFile": "D:\\MUNI BDI\\ControlMDBI\\wwwroot\\img\\logos\\contrlmdbi.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "307586"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"QBKULjapfGAs4cnF7uVdU89t5/JJV6SW1uaqlRdt9+E=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 25 Apr 2025 14:50:33 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-QBKULjapfGAs4cnF7uVdU89t5/JJV6SW1uaqlRdt9+E="
+        }
+      ]
+    },
+    {
+      "Route": "img/logos/contrlmdbi-removebg-preview.png",
+      "AssetFile": "D:\\MUNI BDI\\ControlMDBI\\wwwroot\\img\\logos\\contrlmdbi-removebg-preview.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "292035"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"+meZWjpRy8yfsjC3lhDlTfhlas9+pL+R2f6nxspLnL8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 25 Apr 2025 14:52:07 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-+meZWjpRy8yfsjC3lhDlTfhlas9+pL+R2f6nxspLnL8="
+        }
+      ]
+    },
+    {
+      "Route": "img/logos/contrlmdbi-removebg-preview.qnn5h4prnl.png",
+      "AssetFile": "D:\\MUNI BDI\\ControlMDBI\\wwwroot\\img\\logos\\contrlmdbi-removebg-preview.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "292035"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"+meZWjpRy8yfsjC3lhDlTfhlas9+pL+R2f6nxspLnL8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 25 Apr 2025 14:52:07 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "qnn5h4prnl"
+        },
+        {
+          "Name": "label",
+          "Value": "img/logos/contrlmdbi-removebg-preview.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-+meZWjpRy8yfsjC3lhDlTfhlas9+pL+R2f6nxspLnL8="
         }
       ]
     },
