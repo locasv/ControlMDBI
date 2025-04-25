@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Diagnostics.Contracts;
 
 namespace ControlMDBI.Controllers
 {
@@ -69,6 +70,8 @@ namespace ControlMDBI.Controllers
             var userDB = await _context.Usuario
                 .Include(u => u.Empleado) // Cargar la relación con Empleado
                 .FirstOrDefaultAsync(u => u.NombreUsuario == usuario.NombreUsuario && u.Empleado.Activo==true);
+            //verifica 2: que el empleado este activo
+         
             // Verificar 1: Que el usuario exista,Que la contraseña sea correcta
             if (userDB != null && BCrypt.Net.BCrypt.Verify(usuario.Contrasenia, userDB.Contrasenia))
             {

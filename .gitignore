@@ -339,5 +339,3 @@ appsettings.*.json
 # VS Code
 .vscode/
 
-# Custom
-wwwroot/img/
