@@ -1,8 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Net;
 
 namespace ControlMDBI.Models
 {
+
     public class Usuario
     {
         [Key]
@@ -24,8 +27,9 @@ namespace ControlMDBI.Models
         [StringLength(50, ErrorMessage = "El rol no puede exceder los 50 caracteres.")]
         public string Rol { get; set; }
 
+        [Required(ErrorMessage = "La fecha de registro es obligatorio.")]
         [DataType(DataType.DateTime, ErrorMessage = "La fecha de registro no es válida.")]
-        public DateTime? FechaRegistro { get; set; } = DateTime.Now;
+        public DateTime FechaRegistro { get; set; } = DateTime.Now;
 
         // Relación: Un usuario (vigilante) puede hacer muchos registros de empleados
         public ICollection<RegistroEmpleado>? RegistroEmpleados { get; set; }

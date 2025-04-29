@@ -79,10 +79,9 @@ namespace ControlMDBI.Controllers
                 // Crear claims (añadir más datos si es necesario)
                 var claims = new List<Claim>
                     {
-                       new Claim(ClaimTypes.Name, userDB.Empleado.Nombres),
                        new Claim(ClaimTypes.Name, userDB.NombreUsuario),
                         new Claim(ClaimTypes.Role, userDB.Rol),
-                       
+                        new Claim("NombreEmpleado",$"{userDB.Empleado.Nombres}")
                     };
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -140,14 +139,15 @@ namespace ControlMDBI.Controllers
         public JsonResult MiPerfil()
         {
             var userName = User.Identity.Name;
-            var usuario = _context.Usuario.Include(u=> u.Empleado).Where(u => u.Empleado.Nombres == userName).Select(u => new {
+            var usuario = _context.Usuario.Include(u=> u.Empleado).Where(u => u.NombreUsuario == userName).Select(u => new {
                 u.IdUsuario,
                 u.IdEmpleado,
                 u.NombreUsuario,
                 u.Rol,
                 Empleado = new
                 {
-                    u.Empleado.Nombres
+                    u.Empleado.Nombres,
+                    u.Empleado.Apellidos,
                 }
             }).FirstOrDefault();
 

@@ -1,5 +1,6 @@
 ﻿@model ControlMDBI.Models.Usuario
 
+
 @{
     ViewData["Title"] = "Create";
 }
@@ -11,10 +12,12 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="IdEmpleado" class="control-label"></label>
-                <select asp-for="IdEmpleado" class ="form-control" asp-items="ViewBag.IdEmpleado"></select>
+                <select asp-for="IdEmpleado" class="form-control" asp-items="ViewBag.IdEmpleado">
+                    <option value="">-- Seleccionar Empleado --</option>
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="NombreUsuario" class="control-label"></label>
@@ -22,15 +25,25 @@
                 <span asp-validation-for="NombreUsuario" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Contrasenia" class="control-label"></label>
-                <input asp-for="Contrasenia" class="form-control" />
+                <label asp-for="Contrasenia" class="control-label">Contraseña</label>
+                <input asp-for="Contrasenia" class="form-control" type="password"/>
+                    <button class="btn top-0 end-0 translate-middle-x text-secondary " type="button" id="togglePassword" style="background: none; border: none; box-shadow: none;">
+                        <i class="fa-solid fa-eye" style="font-size: 1.25rem;"></i>
+                    </button>
+                   
                 <span asp-validation-for="Contrasenia" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Rol" class="control-label"></label>
-                <input asp-for="Rol" class="form-control" />
+                <select asp-for="Rol" class="form-control" asp-items="@(new SelectList(Enum.GetNames(typeof(ListaRolesUsuario))))">
+                    <option value="" selected disabled>Seleccione Rol</option>
+
+                </select>
                 <span asp-validation-for="Rol" class="text-danger"></span>
             </div>
+
+           
             <div class="form-group">
                 <label asp-for="FechaRegistro" class="control-label"></label>
                 <input asp-for="FechaRegistro" class="form-control" />
@@ -47,3 +60,29 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+
+ 
+    <script>
+            // Función para mostrar/ocultar la contraseña
+            document.getElementById('togglePassword').addEventListener('click', function () {
+                const passwordInput = document.getElementById('Contrasenia');
+                const icon = this.querySelector('i');
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+    </script>
+
+}

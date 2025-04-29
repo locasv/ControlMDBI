@@ -1,13 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ControlMDBI.Models
 {
+
     public class Empleado
     {
         [Key]
         public int IdEmpleado { get; set; }
 
+        
         [Required(ErrorMessage = "El campo DNI es obligatorio.")]
         [StringLength(8, ErrorMessage = "El DNI debe tener {1} caracteres.")]
         [RegularExpression(@"^[^\s]+$",ErrorMessage ="DNI sin espacios")]
@@ -36,10 +39,14 @@ namespace ControlMDBI.Models
         [StringLength(50, ErrorMessage = "La unidad o subgerencia no puede exceder los {1} caracteres.")]
         public string Unidad { get; set; }
         [Required(ErrorMessage = "El estado es obligatorio.")]
-        public bool Activo { get; set; }
+        public bool Activo { get; set; } = true;
         [Required(ErrorMessage = "La sede es obligatoria.")]
+
+        
         public int IdSede { get; set; }
         [ForeignKey("IdSede")]
+
+
         public Sede? Sede { get; set; }
 
 

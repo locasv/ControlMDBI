@@ -7,10 +7,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ControlMDBI.Data;
 using ControlMDBI.Models;
+using Microsoft.AspNetCore.Authorization;
+using ControlMDBI.Areas.Admin.ViewModels;
 
 namespace ControlMDBI.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Administrador")]
+
     public class EmpleadosController : Controller
     {
         private readonly ControlMDBIDbContext _context;
@@ -19,12 +23,64 @@ namespace ControlMDBI.Areas.Admin.Controllers
         {
             _context = context;
         }
+        //PaginadoEmpleados
+        public async Task<EmpleadoPaginadoViewModel> GetEmpleadoPaginado(string? busquedaNombre,string? busquedaDNI,int paginaActual,int usuariosPorPagina)
+        {
+            IQueryable<Empleado> query = _context.Empleado.Include(e => e.Sede);
+            if(!string.IsNullOrEmpty(busquedaNombre))
+            {
+                query = query.Where(e => (e.Nombres+" "+e.Apellidos).Contains(busquedaNombre));
+            }
+            if(!string.IsNullOrEmpty(busquedaDNI))
+            {
+                query = query.Where(e => e.DNI.Contains(busquedaDNI));
+            }
+            int totalEmpleados = await query.CountAsync();
+            int totalPaginas = (int)Math.Ceiling((double)totalEmpleados / usuariosPorPagina);
+            if (paginaActual < 1)
+            {
+                paginaActual = 1;
+            }
+            else if (paginaActual > totalPaginas)
+            {
+                paginaActual = totalPaginas;
+            }
+            List<Empleado> empleados = new();
+            if (totalEmpleados > 0)
+            {
+                empleados = await query.OrderBy(e => e.Nombres)
+                    .Skip((paginaActual - 1) * usuariosPorPagina)
+                    .Take(usuariosPorPagina)
+                    .ToListAsync();
+            }
+            var model = new EmpleadoPaginadoViewModel
+            {
+                Empleados = empleados,
+                PaginaActual = paginaActual,
+                TotalPaginas = totalPaginas,
+                BusquedaNombre = busquedaNombre,
+                BusquedaDNI = busquedaDNI
+            };
+            return model;
+        }
 
         // GET: Admin/Empleados
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? busquedaNombre,string? busquedaDNI,int paginaActual=1)
         {
-            var controlMDBIDbContext = _context.Empleado.Include(e => e.Sede);
-            return View(await controlMDBIDbContext.ToListAsync());
+            int usuariosPorPagina = 15;
+            if (string.IsNullOrEmpty(busquedaNombre))
+            {
+                busquedaNombre = "";
+            }
+            if (string.IsNullOrEmpty(busquedaDNI))
+            {
+                busquedaDNI = "";
+            }
+            var model = await GetEmpleadoPaginado(busquedaNombre, busquedaDNI, paginaActual, usuariosPorPagina);
+
+            return View(model);
+            //var controlMDBIDbContext = _context.Empleado.Include(e => e.Sede);
+            //return View(await controlMDBIDbContext.ToListAsync());
         }
 
         // GET: Admin/Empleados/Details/5

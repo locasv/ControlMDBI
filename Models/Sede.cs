@@ -15,9 +15,9 @@ namespace ControlMDBI.Models
         public string Direccion { get; set; }
 
         // Relación: Una sede puede tener muchos empleados
-        public ICollection<Empleado> Empleados { get; set; }
+        public ICollection<Empleado>? Empleados { get; set; }
 
         // Relación: Una sede puede tener muchos vehículos
-        public ICollection<Vehiculo> Vehiculos { get; set; }
+        public ICollection<Vehiculo>? Vehiculos { get; set; }
     }
 }

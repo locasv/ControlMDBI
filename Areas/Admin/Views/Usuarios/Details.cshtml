@@ -11,10 +11,11 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Empleado)
+            Nombres completos:
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Empleado.Apellidos)
+            @Html.DisplayFor(model => model.Empleado.Nombres)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.NombreUsuario)
@@ -26,7 +27,7 @@
             @Html.DisplayNameFor(model => model.Contrasenia)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Contrasenia)
+            @*Html.DisplayFor(model => model.Contrasenia)*@
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Rol)

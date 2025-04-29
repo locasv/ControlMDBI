@@ -57,6 +57,12 @@
                             <li class="nav-item">
                                 <a class="nav-link text-black rounded-3 ps-2" asp-area="Admin" asp-controller="Empleados" asp-action="Index">Empleados</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-black rounded-3 ps-2" asp-area="Admin" asp-controller="Sedes" asp-action="Index">Sedes</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-black rounded-3 ps-2" asp-area="Admin" asp-controller="Vehiculos" asp-action="Index">Vehiculos</a>
+                            </li>
                         }
                         else if (User.IsInRole("Empleado"))
                         {
@@ -112,8 +118,11 @@
                     {
                         <ul class="navbar-nav rounded-3 mt-2 mt-md-0 nav-personalizado">
                             <li class="nav-item dropdown">
+                                @{
+                                    var nombreEmpleado = User.FindFirst("NombreEmpleado")?.Value;
+                                }
                                 <a class="rounded-3 nav-link dropdown-toggle ps-2 text-black" href="#" id="navDropdownSesion" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    ¡Bienvenido! @User.Identity.Name <i class="fas fa-user-circle"></i>
+                                    ¡Bienvenido! @(nombreEmpleado ?? User.Identity.Name) <i class="fas fa-user-circle"></i>
                                 </a>
                                 <ul class="rounded-3 dropdown-menu dropdown-menu-end" aria-labelledby="navDropdownSesion">
                                     <li>
@@ -165,13 +174,15 @@
                 const rol = response.data.rol || 'No disponible';
                 const nombreEmpleado = response.data.empleado && response.data.empleado.nombres ?
                                        response.data.empleado.nombres : 'No disponible';
+                const apellidosEmpleado = response.data.empleado && response.data.empleado.apellidos ?
+                                       response.data.empleado.apellidos : 'No disponible';
 
                 Swal.fire({
                     title: 'Datos de Perfil',
                     html: `
                         <strong>Nombre de Usuario:</strong> ${nombreUsuario}<br>
                         <strong>Rol:</strong> ${rol}<br>
-                        <strong>Nombre del Empleado:</strong> ${nombreEmpleado}
+                        <strong>Nombre del Empleado:</strong> ${nombreEmpleado} ${apellidosEmpleado}
                     `,
                     icon: 'info',
                     confirmButtonText: 'Cerrar'
@@ -182,67 +193,6 @@
                     console.error('Error al obtener los datos del perfil:', error);
                 }
             });
-
-            /*
-                 $.ajax({
-            url: '@Url.Action("MiPerfil", "Auth", new { area = "" })',
-            type: 'GET',
-            dataType: 'json',
-            success: function (response) {
-                console.log("Respuesta completa:", response);
-
-                if (!response || !response.success) {
-                    console.error("Error en la respuesta:", response);
-                    Swal.fire({
-                        title: 'Error',
-                        text: response && response.message ? response.message : 'No se pudieron obtener los datos del perfil',
-                        icon: 'error',
-                        confirmButtonText: 'Cerrar'
-                    });
-                    return;
-                }
-
-                if (!response.data) {
-                    console.error("No hay datos en la respuesta");
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'No se encontraron datos del perfil',
-                        icon: 'error',
-                        confirmButtonText: 'Cerrar'
-                    });
-                    return;
-                }
-
-                console.log("Datos del usuario:", response.data);
-
-                // Ahora accedemos a las propiedades con seguridad
-                const nombreUsuario = response.data.nombreUsuario || 'No disponible';
-                const rol = response.data.rol || 'No disponible';
-                const nombreEmpleado = response.data.empleado && response.data.empleado.nombres ?
-                                       response.data.empleado.nombres : 'No disponible';
-
-                Swal.fire({
-                    title: 'Datos de Perfil',
-                    html: `
-                        <strong>Nombre de Usuario:</strong> ${nombreUsuario}<br>
-                        <strong>Rol:</strong> ${rol}<br>
-                        <strong>Nombre del Empleado:</strong> ${nombreEmpleado}
-                    `,
-                    icon: 'info',
-                    confirmButtonText: 'Cerrar'
-                });
-            },
-            error: function (xhr, status, error) {
-                console.error('Error en la petición AJAX:', status, error);
-                console.log('Respuesta del servidor:', xhr.responseText);
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Error al obtener los datos del perfil',
-                    icon: 'error',
-                    confirmButtonText: 'Cerrar'
-                });
-            }
-        });*/
         }
     </script>
         
