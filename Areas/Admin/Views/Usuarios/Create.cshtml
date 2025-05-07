@@ -5,7 +5,7 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Crear Nuevo</h1>
 
 <h4>Usuario</h4>
 <hr />
@@ -14,23 +14,25 @@
         <form asp-action="Create">
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="IdEmpleado" class="control-label"></label>
+                <label asp-for="IdEmpleado" class="control-label">Empleado</label>
                 <select asp-for="IdEmpleado" class="form-control" asp-items="ViewBag.IdEmpleado">
                     <option value="">-- Seleccionar Empleado --</option>
                 </select>
             </div>
             <div class="form-group">
-                <label asp-for="NombreUsuario" class="control-label"></label>
+                <label asp-for="NombreUsuario" class="control-label">Nombre de Usuario</label>
                 <input asp-for="NombreUsuario" class="form-control" />
                 <span asp-validation-for="NombreUsuario" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group position-relative">
                 <label asp-for="Contrasenia" class="control-label">Contraseña</label>
-                <input asp-for="Contrasenia" class="form-control" type="password"/>
-                    <button class="btn top-0 end-0 translate-middle-x text-secondary " type="button" id="togglePassword" style="background: none; border: none; box-shadow: none;">
+                <div class="input-group">
+                    <!-- Contenedor para alinear input + botón -->
+                    <input asp-for="Contrasenia" class="form-control pe-5" type="password" />
+                    <button class="btn position-absolute top-50 end-0 translate-middle-y p-0 me-3" type="button" id="togglePassword" style="background: none; border: none; box-shadow: none;">
                         <i class="fa-solid fa-eye" style="font-size: 1.25rem;"></i>
                     </button>
-                   
+                </div>
                 <span asp-validation-for="Contrasenia" class="text-danger"></span>
             </div>
 
@@ -45,20 +47,21 @@
 
            
             <div class="form-group">
-                <label asp-for="FechaRegistro" class="control-label"></label>
-                <input asp-for="FechaRegistro" class="form-control" />
+                <label asp-for="FechaRegistro" class="control-label"> Fecha de Registro </label>
+                <input asp-for="FechaRegistro" class="form-control" readonly />
                 <span asp-validation-for="FechaRegistro" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="form-group d-flex gap-2">
+                <input type="submit" value="Crear" class="btn btn-blueMuni" />
+                <a asp-action="Index" class="btn btn-outline-blueMuni">
+                    <i class="fa-solid fa-circle-arrow-left"></i>
+                </a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 
 @section Scripts {

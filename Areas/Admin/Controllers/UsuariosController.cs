@@ -97,6 +97,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
         // GET: Admin/Usuarios/Create
         public IActionResult Create()
         {
+
             ViewData["IdEmpleado"] = new SelectList(
         _context.Empleado.Select(e => new {
             e.IdEmpleado,
@@ -104,8 +105,13 @@ namespace ControlMDBI.Areas.Admin.Controllers
         }),
         "IdEmpleado",
         "DisplayText");
-            //ViewData["IdEmpleado"] = new SelectList(_context.Empleado, "IdEmpleado", "Apellidos");
-            return View();
+
+            // Crear una instancia de Usuario con la fecha actual
+            var usuario = new Usuario
+            {
+                FechaRegistro = DateTime.Now
+            };
+            return View(usuario);
         }
 
         // POST: Admin/Usuarios/Create
@@ -115,10 +121,12 @@ namespace ControlMDBI.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IdUsuario,IdEmpleado,NombreUsuario,Contrasenia,Rol,FechaRegistro")] Usuario usuario)
         {
+
             if (ModelState.IsValid)
             {
                 //Hashear la contraseña antes de guardar
                 usuario.Contrasenia = BCrypt.Net.BCrypt.HashPassword(usuario.Contrasenia);
+                
 
                 _context.Add(usuario);
                 await _context.SaveChangesAsync();
@@ -150,6 +158,20 @@ namespace ControlMDBI.Areas.Admin.Controllers
                 {
                     return NotFound();
                 }
+            var viewModel = new UsuarioEditViewModel
+            {
+                IdUsuario = usuario.IdUsuario,
+                IdEmpleado = usuario.IdEmpleado,
+                NombreUsuario = usuario.NombreUsuario,
+                Contrasenia = usuario.Contrasenia,
+                Rol = usuario.Rol,
+                FechaRegistro = usuario.FechaRegistro,
+                NombresEmpleado = usuario.Empleado.Nombres,
+                ApellidosEmpleado = usuario.Empleado.Apellidos,
+                Cargo = usuario.Empleado.Cargo,
+                Unidad = usuario.Empleado.Unidad,
+                ActivoEmpleado = usuario.Empleado.Activo
+            };
 
             //ViewData["IdEmpleado"] = new SelectList(_context.Empleado, "IdEmpleado", "Apellidos", usuario.IdEmpleado);
             ViewData["IdEmpleado"] = new SelectList(
@@ -157,7 +179,10 @@ namespace ControlMDBI.Areas.Admin.Controllers
           e.IdEmpleado,
           DisplayText = $"{e.Apellidos}, {e.Nombres} - Cargo : {e.Cargo} - Unidad/Subgerencia : {e.Unidad}"
       }),"IdEmpleado","DisplayText",usuario.IdEmpleado);
-            return View(usuario);
+
+          
+
+            return View(viewModel);
 
         }
 
@@ -166,38 +191,55 @@ namespace ControlMDBI.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdUsuario,IdEmpleado,NombreUsuario,Contrasenia,Rol,FechaRegistro")] Usuario usuario)
+        public async Task<IActionResult> Edit(int id, UsuarioEditViewModel model)
         {
-            if (id != usuario.IdUsuario)
+            if (id != model.IdUsuario)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+                var usuario = await _context.Usuario.FindAsync(id);
+                var empleado = await _context.Empleado.FindAsync(model.IdEmpleado);
+                if (usuario == null || empleado == null)
+                {
+                    return NotFound();
+                }
+                // Obtener la contraseña actual del usuario en la base de datos
+                var usuarioActual = await _context.Usuario.AsNoTracking().FirstOrDefaultAsync(u => u.IdUsuario == id);
+                
+                
+                if (usuarioActual == null)
+                {
+                    return NotFound();
+                }
+
+                // Hashear solo si cambió la contraseña
+                if (model.Contrasenia != usuarioActual.Contrasenia)
+                {
+                    usuario.Contrasenia = BCrypt.Net.BCrypt.HashPassword(model.Contrasenia);
+                }
+                else
+                {
+                    usuario.Contrasenia = usuarioActual.Contrasenia; // No cambió, mantener la misma
+                }
+
+                usuario.NombreUsuario = model.NombreUsuario;
+                usuario.Rol = model.Rol;
+                usuario.FechaRegistro = DateTime.Now;
+                //actualizar estado del empleado
+
+                empleado.Activo = model.ActivoEmpleado;
+
                 try
                 {
-
-                    // Obtener la contraseña actual del usuario en la base de datos
-                    var usuarioActual = await _context.Usuario.AsNoTracking().FirstOrDefaultAsync(u => u.IdUsuario == id);
-                    if (usuarioActual == null)
-                    {
-                        return NotFound();
-                    }
-
-                    // Verificar si la contraseña fue modificada
-                    if (usuario.Contrasenia != usuarioActual.Contrasenia)
-                    {
-                        // Hashear la nueva contraseña antes de actualizar
-                        usuario.Contrasenia = BCrypt.Net.BCrypt.HashPassword(usuario.Contrasenia);
-                    }
-
-                    _context.Update(usuario);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UsuarioExists(usuario.IdUsuario))
+                    if (!_context.Usuario.Any(u => u.IdUsuario == id))
                     {
                         return NotFound();
                     }
@@ -206,16 +248,8 @@ namespace ControlMDBI.Areas.Admin.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["IdEmpleado"] = new SelectList(
-                _context.Empleado.Select(e => new
-                {
-                    e.IdEmpleado,
-                    DisplayText = $"{e.Apellidos}, {e.Nombres} - Cargo : {e.Cargo} - Unidad/Subgerencia : {e.Unidad}"
-                }), "IdEmpleado", "DisplayText", usuario.IdEmpleado);
-
-            return View(usuario);
+                return View(model);
         }
        
         // GET: Admin/Usuarios/Delete/5

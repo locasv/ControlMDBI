@@ -1,4 +1,4 @@
-﻿@model ControlMDBI.Models.Usuario
+﻿@model ControlMDBI.Areas.Admin.ViewModels.UsuarioEditViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -14,15 +14,16 @@
             <div asp-validation-summary="All" class="text-danger"></div>
 
             <input type="hidden" asp-for="IdUsuario" />
-          
+            <input type="hidden" asp-for="IdEmpleado" />
 
+
+            <input type="hidden" asp-for="IdEmpleado" />
             <div class="form-group">
-                <label asp-for="IdEmpleado" class="control-label">Empleado</label>
-                <select asp-for="IdEmpleado" class="form-control" asp-items="ViewBag.IdEmpleado">
-                    <option value="">-- Seleccionar Empleado --</option>    
-                </select>
-                <span asp-validation-for="IdEmpleado" class="text-danger"></span>
+                <label class="control-label">Empleado</label>
+                <input class="form-control" value="@Model.NombresEmpleado @Model.ApellidosEmpleado   Cargo: @Model.Cargo - Unidad:  @Model.Unidad" readonly />
             </div>
+
+
             <div class="form-group">
                 <label asp-for="NombreUsuario" class="control-label">Nombre Usuario</label>
                 <input asp-for="NombreUsuario" class="form-control" />
@@ -44,8 +45,14 @@
 
             <div class="form-group">
                 <label asp-for="FechaRegistro" class="control-label"></label>
-                <input asp-for="FechaRegistro" class="form-control" />
+                <input asp-for="FechaRegistro" class="form-control" readonly />
                 <span asp-validation-for="FechaRegistro" class="text-danger"></span>
+            </div>
+
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="ActivoEmpleado" /> @Html.DisplayNameFor(model => model.ActivoEmpleado)
+                </label>
             </div>
 
             <div class="form-group">

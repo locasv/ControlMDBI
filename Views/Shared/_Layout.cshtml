@@ -8,148 +8,205 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ControlMDBI.styles.css" asp-append-version="true" />
 
-    <link rel="stylesheet" href="" asp-append-version="true" />
+    @*Font Awesome*@
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
+
     @*Icono*@
     <link rel="icon" href="~/img/logos/contrlmdbi.png" type="image/x-icon" />
 
-    @*Font Awesome*@
-    <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
+  
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-md navbar-toggleable-md navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
+    <!-- Overlay para cerrar el sidebar al hacer clic fuera -->
+    <div class="overlay"></div>
+
+    <!-- Sidebar -->
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <img src="~/img/logos/contrlmdbi-removebg-preview.png" class="img-fluid" alt="ControlMDBI">
+            <button type="button" id="sidebarCollapseInside" class="btn text-white">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <ul class="list-unstyled components">
+                @if (User.IsInRole("Administrador"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Usuarios" asp-action="Index">
+                            <i class="fas fa-users me-2"></i>Usuarios
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Empleados" asp-action="Index">
+                            <i class="fas fa-user-tie me-2"></i>Empleados
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Sedes" asp-action="Index">
+                            <i class="fas fa-building me-2"></i>Sedes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Vehiculos" asp-action="Index">
+                            <i class="fas fa-car me-2"></i>Vehículos
+                        </a>
+                    </li>
+                }
+                else if (User.IsInRole("Empleado"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Emple" asp-controller="Dashboard" asp-action="Index">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Emple" asp-controller="Solicitud" asp-action="Index">
+                            <i class="fas fa-file-alt me-2"></i>Solicitud
+                        </a>
+                    </li>
+                }
+                else if (User.IsInRole("Patrimonio"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Patri" asp-controller="Dashboard" asp-action="Index">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Patri" asp-controller="Aprobacion" asp-action="Index">
+                            <i class="fas fa-check-circle me-2"></i>Solicitudes a aprobar
+                        </a>
+                    </li>
+                }
+                else if (User.IsInRole("Vigilante"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Vigi" asp-controller="Dashboard" asp-action="Index">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Vigi" asp-controller="Registrar" asp-action="Index">
+                            <i class="fas fa-clipboard-list me-2"></i>Registrar
+                        </a>
+                    </li>
+                }
+                else if (User.IsInRole("RRHH"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="RRHH" asp-controller="Dashboard" asp-action="Index">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="RRHH" asp-controller="Registros" asp-action="Index">
+                            <i class="fas fa-clipboard me-2"></i>Registros
+                        </a>
+                    </li>
+                }
+            </ul>
+
+            <div class="profile-section">
+                @{
+                    var nombreEmpleado = User.FindFirst("NombreEmpleado")?.Value;
+                }
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-user-circle me-2 fs-4"></i>
+                    <div>
+                        <div class="fw-bold">@(nombreEmpleado ?? User.Identity.Name)</div>
+                        <div class="small">@User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value</div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <a class="btn btn-sm btn-outline-light w-100 mb-2" onclick="mostrarDatosPerfil()">
+                        <i class="fas fa-user me-1"></i> Mi Perfil
+                    </a>
+                    <a class="btn btn-sm btn-outline-light w-100" asp-area="" asp-controller="Auth" asp-action="Logout">
+                        <i class="fas fa-sign-out-alt me-1"></i> Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                MDBI &copy; 2025 - Todos los derechos reservados
+            </div>
+        }
+    </nav>
+
+    <!-- Page Content -->
+    <div id="content">
+        <header class="main-header">
+            <div class="container-fluid d-flex align-items-center justify-content-between" style="height: 100%;">
+                <div class="d-flex align-items-center">
+                    <a class="navbar-brand" asp-controller="@(User.Identity.IsAuthenticated ? "Dashboard" : "Auth")" asp-action="@(User.Identity.IsAuthenticated ? "Index" : "Login")">
+                        <img src="~/img/logos/contrlmdbi-removebg-preview.png" class="img-fluid" style="height:60px" alt="ControlMDBI" />
+                    </a>
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <button type="button" id="sidebarToggler" aria-label="Toggle Sidebar">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    }
+                </div>
+
                 @if (!User.Identity.IsAuthenticated)
                 {
-                    <a class="navbar-brand me-5" asp-controller="Auth" asp-action="Login"><img src="~/img/logos/contrlmdbi-removebg-preview.png" class="img-fluid" style="height:60px" /></a>
+                    <div>
+                        <a class="btn btn-outline-carrotOrange" asp-area="" asp-controller="Auth" asp-action="Login">
+                            <i class="fas fa-sign-in-alt"></i>&nbsp;Iniciar Sesión
+                        </a>
+                    </div>
                 }
                 else
                 {
-                    <a class="navbar-brand me-5" asp-controller="Dashboard" asp-action="Index"><img src="~/img/logos/contrlmdbi-removebg-preview.png" class="img-fluid" style="height:60px" /></a>
+                    <div class="d-md-block d-none">
+                        @{
+                            var nombreEmpleado = User.FindFirst("NombreEmpleado")?.Value;
+                        }
+                        <div class="dropdown">
+                            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle me-1"></i> @(nombreEmpleado ?? User.Identity.Name)
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li>
+                                    <a class="dropdown-item" onclick="mostrarDatosPerfil()" style="cursor: pointer;">
+                                        <i class="fas fa-user me-2"></i>Mi Perfil
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Auth" asp-action="Logout">
+                                        <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 }
-                <div class="d-flex flex-row">
-                    @if (!User.Identity.IsAuthenticated)
-                    {
-                        <div class="d-block d-md-none">
-                            <ul class="navbar-nav mt-md-0 flex-row">
-                                <li class="nav-item me-2">
-                                    <a class="btn btn-outline-carrotOrange" asp-area="" asp-controller="Auth" asp-action="Login"><i class="fas fa-sign-in-alt"></i>&nbsp;Iniciar Sesión</a>
-                                </li>
-                            </ul>
-                        </div>
-                    }
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                </div>
-
-                <div class="navbar-collapse collapse d-md-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1 nav-personalizado">
-                        @if (User.IsInRole("Administrador"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-black rounded-3 ps-2" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Dashbaord</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-black rounded-3 ps-2" asp-area="Admin" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-black rounded-3 ps-2" asp-area="Admin" asp-controller="Empleados" asp-action="Index">Empleados</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-black rounded-3 ps-2" asp-area="Admin" asp-controller="Sedes" asp-action="Index">Sedes</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-black rounded-3 ps-2" asp-area="Admin" asp-controller="Vehiculos" asp-action="Index">Vehiculos</a>
-                            </li>
-                        }
-                        else if (User.IsInRole("Empleado"))
-                        {
-                            <li class="nav-item text-center">
-                                <a class="nav-link text-black rounded-3 ps-2" asp-area="Emple" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
-                            </li>
-                            <li class="nav-item text-center">
-                                <a class="nav-link text-black rounded-3 ps-2" asp-area="Emple" asp-controller="Solicitud" asp-action="Index">Solicitud</a>
-                            </li>
-
-                        }else if (User.IsInRole("Patrimonio"))
-                        {
-                            <li class="nav-item text-center">
-                                <a class="nav-link text-black rounded-3 ps-2" asp-area="Patri" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
-                            </li>
-                            <li class="nav-item text-center">
-                                <a class="nav-link text-black rounded-3 ps-2" asp-area="Patri" asp-controller="Aprobacion" asp-action="Index">Solicitudes a aprobar</a>
-                            </li>
-                            
-                        }
-
-                        else if (User.IsInRole("Vigilante"))
-                        {
-                            <li class="nav-item text-center">
-                                <a class="nav-link text-black rounded-3 ps-2" asp-area="Vigi" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
-                            </li>
-                            <li class="nav-item text-center">
-                                <a class="nav-link text-black rounded-3 ps-2" asp-area="Vigi" asp-controller="Registrar" asp-action="Index">Registrar</a>
-                            </li>
-                        }
-                        else if (User.IsInRole("RRHH"))
-                        {
-                            <li class="nav-item text-center">
-                                <a class="nav-link text-black rounded-3 ps-2" asp-area="RRHH" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
-                            </li>
-                            <li class="nav-item text-center">
-                                <a class="nav-link text-black rounded-3 ps-2" asp-area="RRHH" asp-controller="Registros" asp-action="Index">Registros</a>
-                            </li>
-                        }
-
-                    </ul>
-                    @if (!User.Identity.IsAuthenticated)
-                    {
-                        <div class="d-none d-md-block">
-                            <ul class="navbar-nav mt-md-0 mt-2">
-                                <li class="nav-item me-3">
-                                    <a class="btn btn-outline-carrotOrange" asp-area="" asp-controller="Auth" asp-action="Login"><i class="fas fa-sign-in-alt"></i>&nbsp;Iniciar Sesión</a>
-                                </li>
-                            </ul>
-                        </div>
-                    }
-                    else
-                    {
-                        <ul class="navbar-nav rounded-3 mt-2 mt-md-0 nav-personalizado">
-                            <li class="nav-item dropdown">
-                                @{
-                                    var nombreEmpleado = User.FindFirst("NombreEmpleado")?.Value;
-                                }
-                                <a class="rounded-3 nav-link dropdown-toggle ps-2 text-black" href="#" id="navDropdownSesion" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    ¡Bienvenido! @(nombreEmpleado ?? User.Identity.Name) <i class="fas fa-user-circle"></i>
-                                </a>
-                                <ul class="rounded-3 dropdown-menu dropdown-menu-end" aria-labelledby="navDropdownSesion">
-                                    <li>
-                                        <a class="dropdown-item rounded-3 text-black btn" onclick="mostrarDatosPerfil()"><i class="fas fa-user"></i> Mi Perfil</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item rounded-3" asp-area="" asp-controller="Auth" asp-action="Logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    }
-                </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        </header>
+
+        <div class="container" id="main-container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+
+        <footer class="border-top footer text-muted text-center py-3">
+            <div class="container">
+                &copy; 2025 - MDBI - Todos los derechos reservados
+            </div>
+        </footer>
     </div>
 
-    <footer class="border-top footer text-muted text-center">
-        <div class="container">
-            &copy; 2025 - MDBI - Todos los derechos reservados
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
@@ -160,41 +217,67 @@
     @await RenderSectionAsync("Scripts", required: false)
 
     <script>
+        $(document).ready(function () {
+            // Funcionalidad para mostrar/ocultar sidebar
+            $('#sidebarToggler, #sidebarCollapseInside').on('click', function () {
+                $('#sidebar').toggleClass('active');
+                $('.overlay').toggleClass('active');
+            });
+
+            // Cerrar sidebar cuando se hace clic en overlay
+            $('.overlay').on('click', function () {
+                $('#sidebar').removeClass('active');
+                $('.overlay').removeClass('active');
+            });
+
+            // Marcar como activo el enlace actual
+            const currentUrl = window.location.pathname;
+            $('#sidebar .nav-link').each(function() {
+                const linkUrl = $(this).attr('href');
+                if (currentUrl.includes(linkUrl) && linkUrl !== '/') {
+                    $(this).parent().addClass('active');
+                }
+            });
+        });
+
         // Función para mostrar en sweetalert2 los datos del perfil
         function mostrarDatosPerfil() {
-            // Obtener datos del perfil con consulta a Auth/MiPerfil que retorna un Json
-                console.log("Función mostrarDatosPerfil() ejecutada");
+            console.log("Función mostrarDatosPerfil() ejecutada");
             $.ajax({
                 url: '@Url.Action("MiPerfil", "Auth", new { area = "" })',
                 type: 'GET',
                 dataType: 'json',
                 success: function (response) {
-                     // Ahora accedemos a las propiedades con seguridad
-                const nombreUsuario = response.data.nombreUsuario || 'No disponible';
-                const rol = response.data.rol || 'No disponible';
-                const nombreEmpleado = response.data.empleado && response.data.empleado.nombres ?
-                                       response.data.empleado.nombres : 'No disponible';
-                const apellidosEmpleado = response.data.empleado && response.data.empleado.apellidos ?
-                                       response.data.empleado.apellidos : 'No disponible';
+                    // Ahora accedemos a las propiedades con seguridad
+                    const nombreUsuario = response.data.nombreUsuario || 'No disponible';
+                    const rol = response.data.rol || 'No disponible';
+                    const nombreEmpleado = response.data.empleado && response.data.empleado.nombres ?
+                                        response.data.empleado.nombres : 'No disponible';
+                    const apellidosEmpleado = response.data.empleado && response.data.empleado.apellidos ?
+                                        response.data.empleado.apellidos : 'No disponible';
 
-                Swal.fire({
-                    title: 'Datos de Perfil',
-                    html: `
-                        <strong>Nombre de Usuario:</strong> ${nombreUsuario}<br>
-                        <strong>Rol:</strong> ${rol}<br>
-                        <strong>Nombre del Empleado:</strong> ${nombreEmpleado} ${apellidosEmpleado}
-                    `,
-                    icon: 'info',
-                    confirmButtonText: 'Cerrar'
-                });
-
+                    Swal.fire({
+                        title: 'Datos de Perfil',
+                        html: `
+                            <strong>Nombre de Usuario:</strong> ${nombreUsuario}<br>
+                            <strong>Rol:</strong> ${rol}<br>
+                            <strong>Nombre del Empleado:</strong> ${nombreEmpleado} ${apellidosEmpleado}
+                        `,
+                        icon: 'info',
+                        confirmButtonText: 'Cerrar'
+                    });
                 },
                 error: function (xhr, status, error) {
                     console.error('Error al obtener los datos del perfil:', error);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'No se pudieron obtener los datos del perfil',
+                        icon: 'error',
+                        confirmButtonText: 'Cerrar'
+                    });
                 }
             });
         }
     </script>
-        
 </body>
 </html>
