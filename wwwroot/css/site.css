@@ -539,3 +539,72 @@ body {
         }
 }
 
+
+/* Estilo para las tarjetas del dashboard */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
+    }
+
+/* Personalización de bordes de tarjetas */
+.card-header {
+    border-bottom: 1px solid rgba(0,0,0,.05);
+}
+
+.card-footer {
+    border-top: 1px solid rgba(0,0,0,.05);
+}
+
+/* Estilos para los iconos en círculos */
+.rounded-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+}
+
+/* Estilos para las tablas */
+.table thead th {
+    background-color: var(--co-50);
+    border-bottom: none;
+}
+
+.table-hover tbody tr:hover {
+    background-color: var(--co-50);
+}
+
+/* Botones personalizados */
+.btn-outline-carrotOrange {
+    color: var(--carrotOrange);
+    border-color: var(--carrotOrange);
+}
+
+    .btn-outline-carrotOrange:hover {
+        color: white;
+        background-color: var(--carrotOrange);
+        border-color: var(--carrotOrange);
+    }
+
+/* Animación para los gráficos */
+.chart-container {
+    transition: opacity 0.5s ease;
+}
+
+/* Estilo para la barra de progreso */
+.progress {
+    background-color: #f0f0f0;
+    border-radius: 0.25rem;
+    overflow: hidden;
+    margin-bottom: 0.25rem;
+}
+
+/* Estilos para mostrar correctamente los gráficos */
+.chart-container {
+    position: relative;
+    width: 100%;
+}

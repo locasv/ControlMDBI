@@ -1,6 +1,306 @@
-﻿
+﻿@model dynamic
+
 @{
     ViewData["Title"] = "Dashboard";
 }
 
-<h1 class="p-3" >MDBI Control admin</h1>
+<div class="container-fluid py-4">
+    <h1 class="mb-4">Dasboard</h1>
+
+    <!-- Tarjetas de estadísticas -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card h-100 border-start border-5 border-primary shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title">Usuarios Activos</h5>
+                            <h3 class="mb-0">@Model.UsuariosActivos</h3>
+                        </div>
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle">
+                            <i class="fas fa-user-check text-primary fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-white border-0 p-3">
+                    <a asp-area="Admin" asp-controller="Usuarios" asp-action="Index" class="btn btn-sm btn-outline-primary w-100">
+                        <i class="fas fa-list me-1"></i> Ver Usuarios
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card h-100 border-start border-5 border-info shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title">Total Usuarios</h5>
+                            <h3 class="mb-0">@Model.TotalUsuarios</h3>
+                        </div>
+                        <div class="bg-info bg-opacity-10 p-3 rounded-circle">
+                            <i class="fas fa-users text-info fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-white border-0 p-3">
+                    <a asp-area="Admin" asp-controller="Usuarios" asp-action="Index" class="btn btn-sm btn-outline-info w-100">
+                        <i class="fas fa-list me-1"></i> Ver Usuarios
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card h-100 border-start border-5 border-success shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title">Empleados Activos</h5>
+                            <h3 class="mb-0">@Model.EmpleadosActivos</h3>
+                        </div>
+                        <div class="bg-success bg-opacity-10 p-3 rounded-circle">
+                            <i class="fas fa-user-tie text-success fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-white border-0 p-3">
+                    <a asp-area="Admin" asp-controller="Empleados" asp-action="Index" class="btn btn-sm btn-outline-success w-100">
+                        <i class="fas fa-list me-1"></i> Ver Empleados
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card h-100 border-start border-5 border-warning shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title">Total Empleados</h5>
+                            <h3 class="mb-0">@Model.TotalEmpleados</h3>
+                        </div>
+                        <div class="bg-warning bg-opacity-10 p-3 rounded-circle">
+                            <i class="fas fa-id-card text-warning fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-white border-0 p-3">
+                    <a asp-area="Admin" asp-controller="Empleados" asp-action="Index" class="btn btn-sm btn-outline-warning w-100">
+                        <i class="fas fa-list me-1"></i> Ver Empleados
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">Distribución de Empleados por Sede</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="empleadosPorSedeChart"></canvas>
+                    </div>
+                </div>
+                <div class="card-footer bg-white border-0 p-3">
+                    <a asp-area="Admin" asp-controller="Sedes" asp-action="Index" class="btn btn-sm btn-outline-dark w-100">
+                        <i class="fas fa-building me-1"></i> Ver Sedes
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">Estado de Usuarios y Empleados</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="estadosChart"></canvas>
+                    </div>
+                </div>
+                <div class="card-footer bg-white border-0 p-3">
+                    <div class="row">
+                        <div class="col-6">
+                            <a asp-area="Admin" asp-controller="Usuarios" asp-action="Index" class="btn btn-sm btn-outline-secondary w-100">
+                                <i class="fas fa-users me-1"></i> Usuarios
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a asp-area="Admin" asp-controller="Empleados" asp-action="Index" class="btn btn-sm btn-outline-secondary w-100">
+                                <i class="fas fa-user-tie me-1"></i> Empleados
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de Detalles -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">Detalle de Sedes y Empleados</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Sede</th>
+                                    <th>Empleados Activos</th>
+                                    <th>Total Empleados</th>
+                                    <th>% Activos</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var sede in Model.SedesEmpleados)
+                                {
+                                    <tr>
+                                        <td>@sede.Nombre</td>
+                                        <td>@sede.EmpleadosActivos</td>
+                                        <td>@sede.TotalEmpleados</td>
+                                        <td>
+                                            @{
+                                                var porcentaje = sede.TotalEmpleados > 0 ? (sede.EmpleadosActivos * 100 / sede.TotalEmpleados) : 0;
+                                            }
+                                            <div class="progress" style="height: 10px;">
+                                                <div class="progress-bar bg-success" role="progressbar" style="width: @porcentaje%;"
+                                                     aria-valuenow="@porcentaje" aria-valuemin="0" aria-valuemax="100">
+                                                </div>
+                                            </div>
+                                            <small>@porcentaje%</small>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer bg-white border-0 p-3">
+                    <a asp-area="Admin" asp-controller="Sedes" asp-action="Index" class="btn btn-sm btn-outline-dark w-100">
+                        <i class="fas fa-building me-1"></i> Administrar Sedes
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Preparar datos para el gráfico de Empleados por Sede
+
+        @{
+            var labels = new List<string>();
+            var data = new List<string>();
+            foreach (var s in Model.SedesEmpleados)
+            {
+                labels.Add($"'{s.Nombre}'");
+                data.Add(s.TotalEmpleados.ToString());
+            }
+        }
+        const sedesLabels = [@Html.Raw(string.Join(",", labels))];
+        const sedesData = [@Html.Raw(string.Join(",", data))];
+
+        @*const sedesLabels = [@Html.Raw(string.Join(",", Model.SedesEmpleados.Select(s => $"'{s.Nombre}'")))];
+        const sedesData = [@Html.Raw(string.Join(",", Model.SedesEmpleados.Select(s => s.TotalEmpleados)))];*@
+        const colorsPalette = [
+            '#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b',
+            '#5a5c69', '#6f42c1', '#20c9a6', '#fd7e14', '#6610f2'
+        ];
+
+        // Aplicar colores según cantidad de sedes
+        const backgroundColors = colorsPalette.slice(0, sedesLabels.length);
+
+        // Gráfico circular para Empleados por Sede
+        const ctxEmpleadosPorSede = document.getElementById('empleadosPorSedeChart').getContext('2d');
+        const empleadosPorSedeChart = new Chart(ctxEmpleadosPorSede, {
+            type: 'pie',
+            data: {
+                labels: sedesLabels,
+                datasets: [{
+                    data: sedesData,
+                    backgroundColor: backgroundColors,
+                    hoverOffset: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            padding: 20,
+                            boxWidth: 15
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.raw || 0;
+                                const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
+                                const percentage = Math.round((value / total) * 100);
+                                return `${label}: ${value} (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Gráfico de barras para estados
+        const ctxEstados = document.getElementById('estadosChart').getContext('2d');
+        const estadosChart = new Chart(ctxEstados, {
+            type: 'bar',
+            data: {
+                labels: ['Usuarios', 'Empleados'],
+                datasets: [
+                    {
+                        label: 'Activos',
+                        data: [@Model.UsuariosActivos, @Model.EmpleadosActivos],
+                        backgroundColor: '#1cc88a',
+                        borderColor: '#169c6c',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Inactivos',
+                        data: [@(Model.TotalUsuarios - Model.UsuariosActivos), @(Model.TotalEmpleados - Model.EmpleadosActivos)],
+                        backgroundColor: '#e74a3b',
+                        borderColor: '#c93a2c',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        stacked: true,
+                    },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                }
+            }
+        });
+    </script>
+}
