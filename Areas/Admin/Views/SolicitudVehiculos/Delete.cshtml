@@ -1,0 +1,69 @@
+﻿@model ControlMDBI.Models.SolicitudVehiculo
+
+@{
+    ViewData["Title"] = "Eliminar Solicitud";
+}
+
+<h1>Eliminar</h1>
+<div class="alert alert-warning">
+    <h3>¿Está seguro de que desea eliminar esta solicitud?</h3>
+    <p>Esta acción no se puede deshacer.</p>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        Detalles de la Solicitud de Vehículo
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">
+                Empleado
+            </dt>
+            <dd class="col-sm-9">
+                @(Model.Usuario?.Empleado != null ? $"{Model.Usuario.Empleado.Nombres} {Model.Usuario.Empleado.Apellidos}" : "No disponible")
+            </dd>
+            <dt class="col-sm-3">
+                Vehículo
+            </dt>
+            <dd class="col-sm-9">
+                @(Model.Vehiculo != null ? $"{Model.Vehiculo.Placa}" : "No disponible")
+            </dd>
+            <dt class="col-sm-3">
+                Fecha de Salida
+            </dt>
+            <dd class="col-sm-9">
+                @Model.FechaSalida
+            </dd>
+            <dt class="col-sm-3">
+                Fecha de Regreso
+            </dt>
+            <dd class="col-sm-9">
+                @Model.FechaRegreso
+            </dd>
+            <dt class="col-sm-3">
+                Recorrido
+            </dt>
+            <dd class="col-sm-9">
+                @Model.Recorrido
+            </dd>
+            <dt class="col-sm-3">
+                Fecha de Solicitud
+            </dt>
+            <dd class="col-sm-9">
+                @Model.FechaSolicitud
+            </dd>
+        </dl>
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="IdSolicitudVehiculo" />
+            <div class="form-group">
+                <input type="submit" value="Eliminar" class="btn btn-danger" /> |
+                <a asp-action="Index" class="btn btn-outline-blueMuni">
+                    <i class="fa-solid fa-circle-arrow-left"></i> Regresar
+                </a>
+            </div>
+        </form>
+
+        
+    </div>
+    
+</div>

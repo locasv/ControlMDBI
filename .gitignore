@@ -326,7 +326,7 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # ASP.NET Core
-wwwroot/lib/
+wwwroot/
 appsettings.json
 appsettings.*.json
 

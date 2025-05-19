@@ -20,7 +20,7 @@ namespace ControlMDBI.Models
         [StringLength(20, ErrorMessage = "El estado no puede exceder los {1} caracteres.")]
         public string Estado { get; set; }
 
-        [Required(ErrorMessage = "La sede donde se encuentra el vehiculo es obligatorio.")]
+        [Required(ErrorMessage = "La sede es obligatoria.")]
         public int IdSede { get; set; }
         [ForeignKey("IdSede")]
         public Sede? Sede { get; set; }

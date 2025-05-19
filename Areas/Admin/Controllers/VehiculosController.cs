@@ -51,7 +51,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
         // GET: Admin/Vehiculos/Create
         public IActionResult Create()
         {
-            ViewData["IdSede"] = new SelectList(_context.Sede, "IdSede", "Direccion");
+            ViewData["IdSede"] = new SelectList(_context.Sede, "IdSede", "Nombre");
             return View();
         }
 
@@ -60,7 +60,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdVehiculo,Placa,Marca,Estado,IdSede")] Vehiculo vehiculo)
+        public async Task<IActionResult> Create(Vehiculo vehiculo)
         {
             if (ModelState.IsValid)
             {
@@ -68,7 +68,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdSede"] = new SelectList(_context.Sede, "IdSede", "Direccion", vehiculo.IdSede);
+            ViewData["IdSede"] = new SelectList(_context.Sede, "IdSede", "Nombre", vehiculo.IdSede);
             return View(vehiculo);
         }
 

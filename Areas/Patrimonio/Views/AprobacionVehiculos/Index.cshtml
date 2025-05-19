@@ -1,0 +1,59 @@
+﻿@model IEnumerable<ControlMDBI.Models.AprobacionVehiculo>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SolicitudVehiculo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Usuario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaAprobacion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Observaciones)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Estado)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SolicitudVehiculo.IdSolicitudVehiculo)
+            </td>
+            <td>
+                    @item.Usuario?.Empleado?.Nombres @item.Usuario?.Empleado?.Apellidos - Subgerencia/Unidad : @item.Usuario?.Empleado?.Unidad
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaAprobacion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Observaciones)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Estado)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdAprobacionVehiculo">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IdAprobacionVehiculo">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdAprobacionVehiculo">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

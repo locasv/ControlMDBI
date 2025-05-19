@@ -24,14 +24,14 @@ namespace ControlMDBI.Areas.Admin.Controllers
             _context = context;
         }
         //PaginadoEmpleados
-        public async Task<EmpleadoPaginadoViewModel> GetEmpleadoPaginado(string? busquedaNombre,string? busquedaDNI,int paginaActual,int usuariosPorPagina)
+        public async Task<EmpleadoPaginadoViewModel> GetEmpleadoPaginado(string? busquedaNombre, string? busquedaDNI, int paginaActual, int usuariosPorPagina)
         {
             IQueryable<Empleado> query = _context.Empleado.Include(e => e.Sede);
-            if(!string.IsNullOrEmpty(busquedaNombre))
+            if (!string.IsNullOrEmpty(busquedaNombre))
             {
-                query = query.Where(e => (e.Nombres+" "+e.Apellidos).Contains(busquedaNombre));
+                query = query.Where(e => (e.Nombres + " " + e.Apellidos).Contains(busquedaNombre));
             }
-            if(!string.IsNullOrEmpty(busquedaDNI))
+            if (!string.IsNullOrEmpty(busquedaDNI))
             {
                 query = query.Where(e => e.DNI.Contains(busquedaDNI));
             }
@@ -65,7 +65,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
         }
 
         // GET: Admin/Empleados
-        public async Task<IActionResult> Index(string? busquedaNombre,string? busquedaDNI,int paginaActual=1)
+        public async Task<IActionResult> Index(string? busquedaNombre, string? busquedaDNI, int paginaActual = 1)
         {
             int usuariosPorPagina = 15;
             if (string.IsNullOrEmpty(busquedaNombre))
@@ -105,7 +105,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
         // GET: Admin/Empleados/Create
         public IActionResult Create()
         {
-            ViewData["IdSede"] = new SelectList(_context.Sede, "IdSede", "Direccion");
+            ViewData["IdSede"] = new SelectList(_context.Sede, "IdSede", "Nombre");
             return View();
         }
 
@@ -114,7 +114,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdEmpleado,DNI,Nombres,Apellidos,Direccion,Correo,Cargo,Unidad,Activo,IdSede")] Empleado empleado)
+        public async Task<IActionResult> Create(Empleado empleado)
         {
             if (ModelState.IsValid)
             {
@@ -122,7 +122,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdSede"] = new SelectList(_context.Sede, "IdSede", "Direccion", empleado.IdSede);
+            ViewData["IdSede"] = new SelectList(_context.Sede, "IdSede", "Nombre", empleado.IdSede);
             return View(empleado);
         }
 
@@ -139,7 +139,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdSede"] = new SelectList(_context.Sede, "IdSede", "Direccion", empleado.IdSede);
+            ViewData["IdSede"] = new SelectList(_context.Sede, "IdSede", "Nombre", empleado.IdSede);
             return View(empleado);
         }
 
@@ -175,7 +175,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdSede"] = new SelectList(_context.Sede, "IdSede", "Direccion", empleado.IdSede);
+            ViewData["IdSede"] = new SelectList(_context.Sede, "IdSede", "Nombre", empleado.IdSede);
             return View(empleado);
         }
 

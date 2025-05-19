@@ -40,13 +40,11 @@ namespace ControlMDBI.Models
         public string Unidad { get; set; }
         [Required(ErrorMessage = "El estado es obligatorio.")]
         public bool Activo { get; set; } = true;
-        [Required(ErrorMessage = "La sede es obligatoria.")]
 
-        
+
+        [Required(ErrorMessage = "La sede es obligatoria.")]
         public int IdSede { get; set; }
         [ForeignKey("IdSede")]
-
-
         public Sede? Sede { get; set; }
 
 

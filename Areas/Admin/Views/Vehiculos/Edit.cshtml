@@ -25,7 +25,10 @@
             </div>
             <div class="form-group">
                 <label asp-for="Estado" class="control-label"></label>
-                <input asp-for="Estado" class="form-control" />
+                <select asp-for="Estado" class="form-control" asp-items="@(new SelectList(Enum.GetNames(typeof(ListaEstadoVehiculo))))">
+                    <option value="" selected disabled>--Seleccione Estado--</option>
+                </select>
+                @* <input asp-for="Estado" class="form-control" /> *@
                 <span asp-validation-for="Estado" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -41,6 +44,8 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-outline-blueMuni">
+        <i class="fa-solid fa-circle-arrow-left"></i> Regresar
+    </a>
 </div>
 

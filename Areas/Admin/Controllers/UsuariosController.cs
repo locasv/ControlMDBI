@@ -93,19 +93,31 @@ namespace ControlMDBI.Areas.Admin.Controllers
 
             return View(usuario);
         }
+        //buscar empleado por nombres y dni
+        [HttpGet]
+        public async Task<JsonResult> GetEmpleados(string? empleadoBuscado)
+        {
+          
+            var empleados = await _context.Empleado
+                .Where(b => b.Activo && ((b.Nombres + " " + b.Apellidos).Contains(empleadoBuscado) || (b.Apellidos + " " + b.Nombres).Contains(empleadoBuscado) ) || b.DNI.Contains(empleadoBuscado))
+                .Select(e => new { id = e.IdEmpleado, text = e.Nombres + " " + e.Apellidos +" - Cargo : "+e.Cargo+" Unidad/Subgerencia : "+ e.Unidad })
+                .ToListAsync();
+            return Json(empleados);
+        }
+
 
         // GET: Admin/Usuarios/Create
         public IActionResult Create()
         {
 
-            ViewData["IdEmpleado"] = new SelectList(
+            /*ViewData["IdEmpleado"] = new SelectList(
         _context.Empleado.Select(e => new {
             e.IdEmpleado,
             DisplayText = $"{e.Apellidos}, {e.Nombres} - Cargo : {e.Cargo} - Unidad/Subgerencia : {e.Unidad}"
         }),
         "IdEmpleado",
         "DisplayText");
-
+            */
             // Crear una instancia de Usuario con la fecha actual
             var usuario = new Usuario
             {
@@ -119,7 +131,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdUsuario,IdEmpleado,NombreUsuario,Contrasenia,Rol,FechaRegistro")] Usuario usuario)
+        public async Task<IActionResult> Create(Usuario usuario)
         {
 
             if (ModelState.IsValid)
@@ -133,13 +145,13 @@ namespace ControlMDBI.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
 
             }
-           
+           /*
             ViewData["IdEmpleado"] = new SelectList(
             _context.Empleado.Select(e => new {
                  e.IdEmpleado,
                  DisplayText = $"{e.Apellidos}, {e.Nombres} - Cargo : {e.Cargo} - Unidad/Subgerencia : {e.Unidad}"
-             }), "IdEmpleado","DisplayText",usuario.IdEmpleado);
-            //ViewData["IdEmpleado"] = new SelectList(_context.Empleado, "IdEmpleado", "Apellidos", usuario.IdEmpleado);
+             }), "IdEmpleado","DisplayText",usuario.IdEmpleado);*/
+           
             return View(usuario);
         }
 

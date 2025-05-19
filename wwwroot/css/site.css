@@ -35,18 +35,18 @@
 }
 
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
-
-
-html {
-  position: relative;
-  min-height: 100%;
-}
 
 body {
-  margin-bottom: 60px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
 }
 
 .nav-personalizado li a:hover {
@@ -126,6 +126,10 @@ body {
     color: var(--co-950);
 }
 
+
+
+
+
 /* Boton solid */
 .btn-blueMuni {
     color: white;
@@ -148,6 +152,8 @@ body {
         box-shadow: 0 0 0 .25rem var(--co-300);
     }
 
+
+
 /* Boton outline */
 .btn-outline-blueMuni{
     color: var(--co-600);
@@ -169,6 +175,8 @@ body {
         background-color: var(--co-600);
         box-shadow: 0 0 0 .25rem var(--co-300);
     }
+
+
 
 /* Botón Light */
 .btn-light-blueMuni {
@@ -194,7 +202,7 @@ body {
 
 /*cambiar el color del borde, focus, active de form-control y form-select*/
 .form-control {
-    border-color: #d1d1d1;
+    border-color: var(--co-600);
 }
 
     .form-control:focus {
@@ -211,7 +219,7 @@ body {
     }
 
 .form-select {
-    border-color: #d1d1d1;
+    border-color: var(--co-600);
 }
 
     .form-select:focus {
@@ -229,11 +237,6 @@ body {
 
 
 
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    overflow-x: hidden;
-}
 
 /* Sidebar */
 .sidebar-container {
@@ -368,28 +371,6 @@ body {
         transform: translateX(0);
     }
 }
-
-/* Estilos personalizados para botones */
-.btn-blueMuni {
-    background-color: var(--blueMuni);
-    color: white;
-}
-
-.btn-outline-blueMuni {
-    border-color: var(--blueMuni);
-    color: var(--blueMuni);
-}
-
-    .btn-outline-blueMuni:hover {
-        background-color: var(--blueMuni);
-        color: white;
-    }
-
-.bg-blueMuni-300 {
-    background-color: var(--blueMuni);
-}
-
-
 /* Estilos para la barra lateral */
 #sidebar {
     min-width: 250px;
@@ -448,11 +429,16 @@ body {
     }
 
 #content {
-    width: 100%;
-    min-height: 100vh;
-    transition: all 0.3s;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
-
+main {
+    flex-grow: 1;
+}
+footer {
+    margin-top: auto;
+}
 .overlay {
     display: none;
     position: fixed;
@@ -518,16 +504,8 @@ body {
     font-size: 0.8rem;
 }
 
-/* Estilos para los botones personalizados */
-.btn-outline-carrotOrange {
-    color: var(--carrotOrange);
-    border-color: var(--carrotOrange);
-}
 
-    .btn-outline-carrotOrange:hover {
-        color: white;
-        background-color: var(--carrotOrange);
-    }
+
 
 @media (max-width: 768px) {
     #sidebar {
@@ -543,6 +521,9 @@ body {
 /* Estilo para las tarjetas del dashboard */
 .card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-color: var(--co-200);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
 }
 
     .card:hover {
@@ -551,9 +532,7 @@ body {
     }
 
 /* Personalización de bordes de tarjetas */
-.card-header {
-    border-bottom: 1px solid rgba(0,0,0,.05);
-}
+
 
 .card-footer {
     border-top: 1px solid rgba(0,0,0,.05);
@@ -578,18 +557,6 @@ body {
     background-color: var(--co-50);
 }
 
-/* Botones personalizados */
-.btn-outline-carrotOrange {
-    color: var(--carrotOrange);
-    border-color: var(--carrotOrange);
-}
-
-    .btn-outline-carrotOrange:hover {
-        color: white;
-        background-color: var(--carrotOrange);
-        border-color: var(--carrotOrange);
-    }
-
 /* Animación para los gráficos */
 .chart-container {
     transition: opacity 0.5s ease;
@@ -607,4 +574,190 @@ body {
 .chart-container {
     position: relative;
     width: 100%;
+}
+
+
+.col-md-6 {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+h5 {
+    color: var(--co-800);
+    margin-bottom: 15px;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+    background-color: white;
+}
+
+.table-bordered {
+    border: 1px solid var(--co-200);
+}
+
+.table-sm th,
+.table-sm td {
+    padding: 0.5rem;
+}
+
+.thead-light th {
+    background-color: var(--co-100);
+    color: var(--co-900);
+    border-bottom: 2px solid var(--co-300);
+}
+
+th, td {
+    border: 1px solid var(--co-300);
+    text-align: center;
+    color: var(--co-500);
+}
+
+tbody tr:hover {
+    background-color: var(--co-50);
+}
+
+tbody tr:nth-child(even) {
+    background-color: var(--co-50);
+}
+
+tbody td {
+    color: var(--co-800);
+}
+
+h1,h3, h4 {
+    color: var(--co-800);
+}
+
+hr {
+    border-color: var(--co-300);
+}
+
+.form-control {
+    border-color: var(--co-200);
+}
+
+    .form-control:focus {
+        border-color: var(--co-400);
+        box-shadow: 0 0 0 0.2rem rgba(25, 164, 221, 0.25);
+    }
+
+.control-label {
+    color: var(--co-800);
+    font-weight: 500;
+}
+
+.btn-primary {
+    background-color: var(--co-600);
+    border-color: var(--co-700);
+}
+
+    .btn-primary:hover {
+        background-color: var(--co-700);
+        border-color: var(--co-800);
+    }
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+    background-color: white;
+}
+
+.table-bordered {
+    border: 1px solid var(--co-200);
+}
+
+a {
+    color: var(--co-600);
+    text-decoration: none;
+}
+
+    a:hover {
+        color: var(--co-700);
+        text-decoration: none;
+    }
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.alert {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #bd2130;
+}
+
+    .btn-danger:hover {
+        background-color: #c82333;
+        border-color: #a71d2a;
+    }
+
+.btn-secondary {
+    background-color: var(--co-300);
+    border-color: var(--co-400);
+    color: var(--co-900);
+}
+
+    .btn-secondary:hover {
+        background-color: var(--co-400);
+        border-color: var(--co-500);
+        color: white;
+    }
+
+dl {
+    margin-bottom: 2rem;
+}
+
+dt {
+    font-weight: 600;
+    color: var(--co-800);
+}
+
+dd {
+    margin-bottom: 0.5rem;
+}
+
+
+
+.card-header {
+    background-color: var(--co-100);
+    color: var(--co-800);
+    border-bottom: 1px solid var(--co-200);
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.alert-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
 }

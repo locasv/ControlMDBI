@@ -24,10 +24,23 @@ namespace ControlMDBI.Areas.Admin.Controllers
             // Total de usuarios
             int totalUsuarios = await _context.Usuario.CountAsync();
 
+            // Total de vehículos
+            int totalVehiculos = await _context.Vehiculo.CountAsync();
+
+            // Estado de Vehículos (activos, inactivos y mantenimiento)
+            int vehiculosActivos = await _context.Vehiculo.CountAsync(v => v.Estado == "Activo");
+            int vehiculosInactivos = await _context.Vehiculo.CountAsync(v => v.Estado == "Inactivo");
+            int vehiculosMantenimiento = await _context.Vehiculo.CountAsync(v => v.Estado == "Mantenimiento");
+
+
             // Usuarios activos (que tienen un empleado activo)
             int usuariosActivos = await _context.Usuario
                 .Include(u => u.Empleado)
                 .CountAsync(u => u.Empleado != null && u.Empleado.Activo);
+
+            // Estado de Vehiculos (activos, inactivos y mantenimiento)
+            
+
 
             // Total de empleados
             int totalEmpleados = await _context.Empleado.CountAsync();
@@ -52,7 +65,11 @@ namespace ControlMDBI.Areas.Admin.Controllers
                 UsuariosActivos = usuariosActivos,
                 TotalEmpleados = totalEmpleados,
                 EmpleadosActivos = empleadosActivos,
-                SedesEmpleados = sedesConEmpleados
+                SedesEmpleados = sedesConEmpleados,
+                TotalVehiculos = totalVehiculos,
+                VehiculosActivos = vehiculosActivos,
+                VehiculosInactivos = vehiculosInactivos,
+                VehiculosMantenimiento = vehiculosMantenimiento
             };
 
             return View(dashboardVM);

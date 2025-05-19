@@ -5,11 +5,12 @@
 }
 
 <div class="container-fluid py-4">
-    <h1 class="mb-4">Dasboard</h1>
+    <h1 class="mb-4">Dashboard</h1>
 
-    <!-- Tarjetas de estadísticas -->
-    <div class="row mb-4">
-        <div class="col-md-3 mb-3">
+    <!-- Usuarios -->
+    <h2 class="mb-3">Usuarios <i class="fas fa-users text-info fs-4"></i></h2>
+    <div class="row g-3 mb-4">
+        <div class="col-md-6">
             <div class="card h-100 border-start border-5 border-primary shadow-sm">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
@@ -30,7 +31,7 @@
             </div>
         </div>
 
-        <div class="col-md-3 mb-3">
+        <div class="col-md-6">
             <div class="card h-100 border-start border-5 border-info shadow-sm">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
@@ -50,8 +51,12 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="col-md-3 mb-3">
+    <!-- Empleados -->
+    <h2 class="mb-3">Empleados <i class="fas fa-id-card text-warning fs-4"></i></h2>
+    <div class="row g-3 mb-4">
+        <div class="col-md-6">
             <div class="card h-100 border-start border-5 border-success shadow-sm">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
@@ -72,7 +77,7 @@
             </div>
         </div>
 
-        <div class="col-md-3 mb-3">
+        <div class="col-md-6">
             <div class="card h-100 border-start border-5 border-warning shadow-sm">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
@@ -93,6 +98,81 @@
             </div>
         </div>
     </div>
+
+    <!-- Vehículos -->
+    <h2 class="mb-3">Vehículos <i class="fas fa-car text-primary fs-4"></i></h2>
+    <div class="border border-5 border-dark rounded p-3 mb-4">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
+            <div class="col">
+                <div class="card h-100 border-start border-5 border-primary shadow-sm small">
+                    <div class="card-body p-2 d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-1">Total Vehículos</h6>
+                            <h5 class="mb-0">@Model.TotalVehiculos</h5>
+                        </div>
+                        <div class="bg-primary bg-opacity-10 p-2 rounded-circle">
+                            <i class="fas fa-car text-primary fs-5"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100 border-start border-5 border-success shadow-sm small">
+                    <div class="card-body p-2 d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-1">Vehículos Activos</h6>
+                            <h5 class="mb-0">@Model.VehiculosActivos</h5>
+                        </div>
+                        <div class="bg-success bg-opacity-10 p-2 rounded-circle">
+                            <i class="fas fa-check-circle text-success fs-5"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100 border-start border-5 border-danger shadow-sm small">
+                    <div class="card-body p-2 d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-1">Vehículos Inactivos</h6>
+                            <h5 class="mb-0">@Model.VehiculosInactivos</h5>
+                        </div>
+                        <div class="bg-danger bg-opacity-10 p-2 rounded-circle">
+                            <i class="fas fa-times-circle text-danger fs-5"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+
+                <div class="card h-100 border-5 shadow-sm small" style="border-color:var(--co-400)">
+                    <div class="card-body p-2 d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-1">En Mantenimiento</h6>
+                            <h5 class="mb-0">@Model.VehiculosMantenimiento</h5>
+                        </div>
+                        <div class="bg-blueMuni-100 bg-opacity-10 p-2 rounded-circle">
+
+                            <i class="fas fa-tools text-blueMuni-400 fs-5"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="card-footer bg-white border-0 p-2">
+                    <a asp-area="Admin" asp-controller="Vehiculos" asp-action="Index" class="btn btn-sm btn-outline-primary w-100">
+                        <i class="fas fa-list me-1"></i> Ver Vehículos
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Gráficos -->
     <div class="row mb-4">
@@ -198,7 +278,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        // Preparar datos para el gráfico de Empleados por Sede
+            // Preparar datos para el gráfico de Empleados por Sede
 
         @{
             var labels = new List<string>();
@@ -209,98 +289,98 @@
                 data.Add(s.TotalEmpleados.ToString());
             }
         }
-        const sedesLabels = [@Html.Raw(string.Join(",", labels))];
-        const sedesData = [@Html.Raw(string.Join(",", data))];
+            const sedesLabels = [@Html.Raw(string.Join(",", labels))];
+            const sedesData = [@Html.Raw(string.Join(",", data))];
 
         @*const sedesLabels = [@Html.Raw(string.Join(",", Model.SedesEmpleados.Select(s => $"'{s.Nombre}'")))];
         const sedesData = [@Html.Raw(string.Join(",", Model.SedesEmpleados.Select(s => s.TotalEmpleados)))];*@
-        const colorsPalette = [
-            '#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b',
-            '#5a5c69', '#6f42c1', '#20c9a6', '#fd7e14', '#6610f2'
-        ];
+            const colorsPalette = [
+                '#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b',
+                '#5a5c69', '#6f42c1', '#20c9a6', '#fd7e14', '#6610f2'
+            ];
 
-        // Aplicar colores según cantidad de sedes
-        const backgroundColors = colorsPalette.slice(0, sedesLabels.length);
+            // Aplicar colores según cantidad de sedes
+            const backgroundColors = colorsPalette.slice(0, sedesLabels.length);
 
-        // Gráfico circular para Empleados por Sede
-        const ctxEmpleadosPorSede = document.getElementById('empleadosPorSedeChart').getContext('2d');
-        const empleadosPorSedeChart = new Chart(ctxEmpleadosPorSede, {
-            type: 'pie',
-            data: {
-                labels: sedesLabels,
-                datasets: [{
-                    data: sedesData,
-                    backgroundColor: backgroundColors,
-                    hoverOffset: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                        labels: {
-                            padding: 20,
-                            boxWidth: 15
-                        }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const label = context.label || '';
-                                const value = context.raw || 0;
-                                const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
-                                const percentage = Math.round((value / total) * 100);
-                                return `${label}: ${value} (${percentage}%)`;
+            // Gráfico circular para Empleados por Sede
+            const ctxEmpleadosPorSede = document.getElementById('empleadosPorSedeChart').getContext('2d');
+            const empleadosPorSedeChart = new Chart(ctxEmpleadosPorSede, {
+                type: 'pie',
+                data: {
+                    labels: sedesLabels,
+                    datasets: [{
+                        data: sedesData,
+                        backgroundColor: backgroundColors,
+                        hoverOffset: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                padding: 20,
+                                boxWidth: 15
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${label}: ${value} (${percentage}%)`;
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
+            });
 
-        // Gráfico de barras para estados
-        const ctxEstados = document.getElementById('estadosChart').getContext('2d');
-        const estadosChart = new Chart(ctxEstados, {
-            type: 'bar',
-            data: {
-                labels: ['Usuarios', 'Empleados'],
-                datasets: [
-                    {
-                        label: 'Activos',
-                        data: [@Model.UsuariosActivos, @Model.EmpleadosActivos],
-                        backgroundColor: '#1cc88a',
-                        borderColor: '#169c6c',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Inactivos',
-                        data: [@(Model.TotalUsuarios - Model.UsuariosActivos), @(Model.TotalEmpleados - Model.EmpleadosActivos)],
-                        backgroundColor: '#e74a3b',
-                        borderColor: '#c93a2c',
-                        borderWidth: 1
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: {
-                        stacked: true,
-                    },
-                    y: {
-                        stacked: true,
-                        beginAtZero: true
-                    }
+            // Gráfico de barras para estados
+            const ctxEstados = document.getElementById('estadosChart').getContext('2d');
+            const estadosChart = new Chart(ctxEstados, {
+                type: 'bar',
+                data: {
+                    labels: ['Usuarios', 'Empleados'],
+                    datasets: [
+                        {
+                            label: 'Activos',
+                            data: [@Model.UsuariosActivos, @Model.EmpleadosActivos],
+                            backgroundColor: '#1cc88a',
+                            borderColor: '#169c6c',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Inactivos',
+                            data: [@(Model.TotalUsuarios - Model.UsuariosActivos), @(Model.TotalEmpleados - Model.EmpleadosActivos)],
+                            backgroundColor: '#e74a3b',
+                            borderColor: '#c93a2c',
+                            borderWidth: 1
+                        }
+                    ]
                 },
-                plugins: {
-                    legend: {
-                        position: 'top',
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            stacked: true,
+                        },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
                     }
                 }
-            }
-        });
+            });
     </script>
-}
+    }

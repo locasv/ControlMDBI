@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ControlMDBI.Models.Vehiculo>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Vehiculos";
 }
 
 
@@ -13,6 +13,16 @@
                 <i class="fa-solid fa-plus"></i>&nbsp;Nuevo Vehiculo
             </a>
         </div>
+       
+        <div class="col-8 col-md-4 col-lg-6 mb-3 mb-md-0">
+            <a class="btn-lg btn-outline-blueMuni" asp-controller="SolicitudVehiculos" asp-action="index" >
+                <i class="fa-regular fa-hand-point-up" ></i>&nbsp;Solicitudes de Vehiculos
+            </a>
+            <a class="btn-lg btn-outline-blueMuni" asp-action="AprobacionSolicitudes" asp-action="index">
+                <i class="fa-duotone fa-solid fa-person-circle-check" ></i>&nbsp;Aprobacion de Solicitudes
+            </a>
+        </div>
+      
     </div>
 
     <div class="table-responsive">
@@ -44,25 +54,25 @@
                             @Html.DisplayFor(modelItem => item.Marca)
                         </td>
                         <td class="text-success">
-                            @*Html.DisplayFor(modelItem => item.Estado)*@
+                          
 
                                 @if (item.Estado == "Activo")
                                 {
-                                    <span class="badge bg-success">Activo</span>
+                                <span class="badge rounded-pill bg-success">Activo</span>
                                 }
                                 else if (item.Estado == "Inactivo")
                                 {
-                                    <span class="badge bg-danger">Inactivo</span>
+                                <span class="badge rounded-pill bg-danger">Inactivo</span>
                                 }else
                                 {
-                                <span class="badge bg-blueMuni-400">Mantenimiento</span>
+                                <span class="badge rounded-pill bg-blueMuni-400">Mantenimiento</span>
                                 }
 
                         </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Sede.Direccion)
             </td>
-            <td>
+                        <td style="position: sticky; right: 0;">
                             <a class="btn-sm btn-warning" asp-action="Edit" asp-route-id="@item.IdVehiculo" data-bs-toggle="tooltip" data-bs-placement="right" title="Editar Vehiculo"><i class="fa-solid fa-pen"></i></a>
                             <a class="btn-sm btn-info" asp-action="Details" asp-route-id="@item.IdVehiculo" data-bs-toggle="tooltip" data-bs-placement="right" title="Detalles del Vehiculo"><i class="fa-solid fa-list"></i></a> |
                             <a class="btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.IdVehiculo" data-bs-toggle="tooltip" data-bs-placement="right" title="Eliminar Vehiculo"><i class="fa-solid fa-trash"></i></a>
@@ -73,3 +83,12 @@
 </table>
 </div>
 </div>
+
+@section Scripts {
+    <script>
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
+}

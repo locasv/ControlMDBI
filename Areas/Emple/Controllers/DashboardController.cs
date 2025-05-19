@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using ControlMDBI.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ControlMDBI.Areas.Emple.Controllers
 {
@@ -8,10 +10,16 @@ namespace ControlMDBI.Areas.Emple.Controllers
     [Authorize(Roles = "Empleado")]
     public class DashboardController : Controller
     {
-        public IActionResult Index()
+        
+
+  
+        public async Task<IActionResult> Index()
         {
+          
+
             return View();
         }
+
 
     }
 }

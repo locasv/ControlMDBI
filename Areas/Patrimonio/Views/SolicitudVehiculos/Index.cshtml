@@ -1,0 +1,60 @@
+﻿@model IEnumerable<ControlMDBI.Models.SolicitudVehiculo>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Usuario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vehiculo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaSalida)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaRegreso)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Recorrido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaSolicitud)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Usuario.Contrasenia)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vehiculo.Estado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaSalida)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaRegreso)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Recorrido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaSolicitud)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdSolicitudVehiculo">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IdSolicitudVehiculo">Details</a> |
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,71 @@
+﻿@model ControlMDBI.Models.SolicitudVehiculo
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Detalles</h1>
+
+<div>
+    <h4>SolicitudVehiculo</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Usuario)
+        </dt>
+        <dd class = "col-sm-10">
+            @($"{Model.Usuario.Empleado.Nombres} {Model.Usuario.Empleado.Apellidos}")
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Vehiculo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Vehiculo.Placa)
+            @if (Model.Vehiculo.Estado == "Activo")
+            {
+                <span class="badge bg-success">Activo</span>
+            }
+            else if (Model.Vehiculo.Estado == "Inactivo")
+            {
+                <span class="badge bg-danger">Inactivo</span>
+            }
+            else
+            {
+                <span class="badge bg-blueMuni-400">Mantenimiento</span>
+            }
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FechaSalida)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FechaSalida)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FechaRegreso)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FechaRegreso)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Recorrido)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Recorrido)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FechaSolicitud)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FechaSolicitud)
+        </dd>
+    </dl>
+</div>
+<div>
+    <!--Botones -->
+    <div class="form-group d-flex gap-2">
+        <a asp-action="Index" class="btn btn-outline-blueMuni">
+            <i class="fa-solid fa-circle-arrow-left"></i>
+        </a>
+    </div>
+
+</div>

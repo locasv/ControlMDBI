@@ -15,6 +15,7 @@ namespace ControlMDBI.Models
         public int IdEmpleado { get; set; }
         [ForeignKey("IdEmpleado")]
         public Empleado? Empleado { get; set; }
+
         [Required(ErrorMessage = "Es necesario ingresar un nombre de usuario.")]
         [StringLength(50, ErrorMessage = "El nombre de usuario no puede exceder los 50 caracteres.")]
         [RegularExpression(@"^[^\s]+$", ErrorMessage = "El nombre de usuario no debe contener espacios.")]

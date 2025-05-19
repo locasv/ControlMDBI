@@ -26,7 +26,20 @@
             @Html.DisplayNameFor(model => model.Estado)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Estado)
+
+            @if (Model.Estado == "Activo")
+            {
+                <span class="badge rounded-pill bg-success">Activo</span>
+            }
+            else if (Model.Estado == "Inactivo")
+            {
+                <span class="badge rounded-pill bg-danger">Inactivo</span>
+            }
+            else
+            {
+                <span class="badge rounded-pill bg-blueMuni-400">Mantenimiento</span>
+            }
+
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Sede)
@@ -37,6 +50,11 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.IdVehiculo">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a class="btn-sm btn-warning" asp-action="Edit" asp-route-id="@Model?.IdVehiculo">Editar 
+        <i class="fa-solid fa-pen"></i>
+    </a>
+ 
+    <a asp-action="Index" class="btn-sm btn-outline-blueMuni">
+        <i class="fa-solid fa-circle-arrow-left"></i> Regresar
+    </a>
 </div>

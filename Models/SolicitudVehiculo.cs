@@ -21,12 +21,16 @@ namespace ControlMDBI.Models
         public Vehiculo? Vehiculo { get; set; }
 
         [Required(ErrorMessage = "La fecha de salida es obligatoria.")]
-        [DataType(DataType.Date, ErrorMessage = "La fecha de salida no es válida.")]
-        public DateOnly FechaSalida { get; set; }
+        [DataType(DataType.DateTime, ErrorMessage = "La fecha de salida no es válida.")]
+        //que muestre la hora en pm y am
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy hh:mm tt}", ApplyFormatInEditMode = false)]
+        [Display(Name = "Fecha de Salida")]
+        public DateTime FechaSalida { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "La fecha de regreso es obligatoria.")]
-        [DataType(DataType.Date, ErrorMessage = "La fecha de regreso no es válida.")]
-        public DateOnly FechaRegreso { get; set; }
+        [DataType(DataType.DateTime, ErrorMessage = "La fecha de regreso no es válida.")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy hh:mm tt}", ApplyFormatInEditMode = false)]
+        public DateTime FechaRegreso { get; set; } =  DateTime.Now;
 
         [Required(ErrorMessage = "El recorrido de la solicitud es obligatorio.")]
         [StringLength(200, ErrorMessage = "El recorrido no puede exceder los {1} caracteres.")]
@@ -35,6 +39,7 @@ namespace ControlMDBI.Models
 
         [Required(ErrorMessage = "La fecha de solicitud es obligatoria.")]
         [DataType(DataType.DateTime, ErrorMessage = "La fecha de solicitud no es válida.")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy hh:mm tt}", ApplyFormatInEditMode = false)]
         public DateTime FechaSolicitud { get; set; } = DateTime.Now;
 
 

@@ -14,10 +14,12 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.3" />
+    <PackageReference Include="QuestPDF" Version="2025.4.4" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Areas\Emple\ViewsModels\" />
+    <Folder Include="Areas\Patrimonio\ViewModels\" />
     <Folder Include="Areas\Vigi\ViewsModels\" />
   </ItemGroup>
 

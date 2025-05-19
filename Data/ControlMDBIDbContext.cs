@@ -35,7 +35,8 @@ namespace ControlMDBI.Data
                 .HasOne(e => e.Sede)
                 .WithMany(s => s.Empleados)
                 .HasForeignKey(e => e.IdSede)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
+          
 
 
             base.OnModelCreating(modelBuilder);

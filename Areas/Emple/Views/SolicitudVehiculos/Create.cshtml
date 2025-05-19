@@ -1,0 +1,96 @@
+﻿@model ControlMDBI.Models.SolicitudVehiculo
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Crear Solicitud</h1>
+
+<h4>Solicitud de Vehiculo</h4>
+<hr />
+<div class="row">
+    <!-- Columna izquierda: Formulario -->
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary=ModelOnly" class="text-danger"></div>
+
+
+            <div class="form-group">
+                <label class="control-label">Empleado</label>
+                <input type="text" class="form-control" value="@ViewBag.NombreEmpleado" readonly />
+                <input type="hidden" asp-for="IdUsuario" value="@ViewBag.IdUsuario" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="IdVehiculo" class="control-label">Placa</label>
+                <select asp-for="IdVehiculo" class="form-control" asp-items="ViewBag.IdVehiculo"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaSalida" class="control-label"></label>
+                <input asp-for="FechaSalida" value="@Model.FechaSalida.ToString("yyyy-MM-ddTHH:mm")" class="form-control" />
+                <span asp-validation-for="FechaSalida" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaRegreso" class="control-label"></label>
+                <input asp-for="FechaRegreso" value="@Model.FechaSalida.ToString("yyyy-MM-ddTHH:mm")" class="form-control" />
+                <span asp-validation-for="FechaRegreso" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Recorrido" class="control-label"></label>
+                <input asp-for="Recorrido" class="form-control" />
+                <span asp-validation-for="Recorrido" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaSolicitud" class="control-label">Fecha de Solicitud</label>
+                <input asp-for="FechaSolicitud" value="@Model.FechaSalida.ToString("yyyy-MM-ddTHH:mm")" class="form-control" readonly />
+                <span asp-validation-for="FechaSolicitud" class="text-danger"></span>
+            </div>
+
+            <div class="form-group d-flex gap-2">
+                <input type="submit" value="Crear" class="btn btn-blueMuni" />
+                <a asp-action="Index" class="btn btn-outline-blueMuni">
+                    <i class="fa-solid fa-circle-arrow-left"></i>
+                </a>
+            </div>
+        </form>
+
+
+    </div>
+    <!-- Columna derecha: Lista de vehículos -->
+    <div class="col-md-6">
+        <h5>Vehículos disponibles</h5>
+        <table class="table table-bordered table-sm">
+            <thead class="thead-light">
+                <tr>
+                    <th>Placa</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var vehiculo in ViewBag.ListaVehiculos)
+                {
+                    <tr>
+                        <td>@vehiculo.Placa</td>
+                        <td>
+                            @if (vehiculo.Estado == "Activo")
+                            {
+                                <span class="badge bg-success">Activo</span>
+                            }
+                            else if (vehiculo.Estado == "Inactivo")
+                            {
+                                <span class="badge bg-danger">Inactivo</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-blueMuni-400">Mantenimiento</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
