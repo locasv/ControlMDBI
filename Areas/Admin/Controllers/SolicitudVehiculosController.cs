@@ -1,4 +1,5 @@
-﻿using ControlMDBI.Data;
+﻿using ControlMDBI.Areas.Admin.ViewModels;
+using ControlMDBI.Data;
 using ControlMDBI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,28 +32,81 @@ namespace ControlMDBI.Areas.Admin.Controllers
             _hostingEnvironment = hostingEnvironment;
         }
 
-        // GET: Emple/SolicitudVehiculos
-        public async Task<IActionResult> Index()
+        //Paginado de solicitudes de vehiculo
+        public async Task<SolicitudesPaginadoViewModel> GetSolicitudPaginado(string? busquedaNombres, string? busquedaPlacaVehiculo, int paginaActual, int usuariosPorPagina)
         {
-            var usuarioActual = _context.Usuario
-        .FirstOrDefault(u => u.NombreUsuario == User.Identity.Name);
+            
+            IQueryable<SolicitudVehiculo> query = _context.SolicitudVehiculo
+                .Include(u => u.Usuario)
+                .ThenInclude(e => e.Empleado)
+                .Include(v => v.Vehiculo);
+            if (!string.IsNullOrEmpty(busquedaNombres))
+            {
+                query = query.Where(s => (s.Usuario.Empleado.Nombres + " " + s.Usuario.Empleado.Apellidos).Contains(busquedaNombres));
+            }
+            if (!string.IsNullOrEmpty(busquedaPlacaVehiculo))
+            {
+                query = query.Where(s => s.Vehiculo.Placa.Contains(busquedaPlacaVehiculo));
+            }
+            int totalSolicitudes = await query.CountAsync();
+            int totalPaginas = (int)Math.Ceiling((double)totalSolicitudes / usuariosPorPagina);
+            if (paginaActual < 1)
+            {
+                paginaActual = 1;
+            }
+            else if (paginaActual > totalPaginas)
+            {
+                paginaActual = totalPaginas;
+            }
+            List<SolicitudVehiculo> solicitudes = new();
+            if (totalSolicitudes > 0)
+            {
+                solicitudes = await query.OrderBy(e => e.Usuario.Empleado.Nombres)
+                    .Skip((paginaActual - 1) * usuariosPorPagina)
+                    .Take(usuariosPorPagina)
+                    .ToListAsync();
+            }
+            var model = new SolicitudesPaginadoViewModel
+            {
+                Solicitudes = solicitudes,
+                PaginaActual = paginaActual,
+                TotalPaginas = totalPaginas,
+                BusquedaNombres = busquedaNombres,
+                BusquedaPlacaVehiculo = busquedaPlacaVehiculo
+            };
+            return model;
+        }
+
+        // GET: Admin/SolicitudVehiculos
+        public async Task<IActionResult> Index(string? busquedaNombres, string? busquedaPlacaVehiculo, int paginaActual = 1)
+        {
+            int usuariosPorPagina = 10;
+            if (string.IsNullOrEmpty(busquedaNombres))
+            {
+                busquedaNombres = "";
+            }
+            if (string.IsNullOrEmpty(busquedaPlacaVehiculo))
+            {
+                busquedaPlacaVehiculo = "";
+            }
+            var usuarioActual = _context.Usuario.FirstOrDefault(u => u.NombreUsuario == User.Identity.Name);
 
             if (usuarioActual != null)
             {
                 ViewBag.IdUsuarioActual = usuarioActual.IdUsuario;
             }
 
-            var solicitudes = _context.SolicitudVehiculo
-        .Include(s => s.Usuario)
-            .ThenInclude(u => u.Empleado)
-        .Include(s => s.Vehiculo);
+            var model = await GetSolicitudPaginado(busquedaNombres, busquedaPlacaVehiculo, paginaActual, usuariosPorPagina);
 
-
-
-            return View(await solicitudes.ToListAsync());
+            //    var solicitudes = _context.SolicitudVehiculo
+            //.Include(s => s.Usuario)
+            //    .ThenInclude(u => u.Empleado)
+            //.Include(s => s.Vehiculo);
+            //return View(await solicitudes.ToListAsync());
+            return View(model);
         }
 
-        // GET: Emple/SolicitudVehiculos/Details/5
+        // GET: Admin/SolicitudVehiculos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -75,7 +129,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
 
             return View(solicitudVehiculo);
         }
-        // GET: Emple/SolicitudVehiculos/GenerarPDF/5 QuesPDF
+        // GET: Admin/SolicitudVehiculos/GenerarPDF/5 QuesPDF
         public async Task<IActionResult> GenerarPDF(int? id)
         {
             if (id == null)
@@ -221,7 +275,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
             }).GeneratePdf();
         }
 
-        // GET: Emple/SolicitudVehiculos/Create
+        // GET: Admin/SolicitudVehiculos/Create
         public IActionResult Create()
         {
 
@@ -289,7 +343,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
             return Json(placaVehiculos);
         }
 
-        // POST: Emple/SolicitudVehiculos/Create
+        // POST: Admin/SolicitudVehiculos/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -323,7 +377,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Emple/SolicitudVehiculos/Edit/5
+        // GET: Admin/SolicitudVehiculos/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -356,7 +410,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
             return View(solicitudVehiculo);
         }
 
-        // POST: Emple/SolicitudVehiculos/Edit/5
+        // POST: Admin/SolicitudVehiculos/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -398,7 +452,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
             return View(solicitudVehiculo);
         }
 
-        // GET: Emple/SolicitudVehiculos/Delete/5
+        // GET: Admin/SolicitudVehiculos/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -418,7 +472,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
             return View(solicitudVehiculo);
         }
 
-        // POST: Emple/SolicitudVehiculos/Delete/5
+        // POST: Admin/SolicitudVehiculos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

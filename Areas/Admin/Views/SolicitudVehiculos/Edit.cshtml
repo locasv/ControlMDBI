@@ -1,7 +1,7 @@
 ﻿@model ControlMDBI.Models.SolicitudVehiculo
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar";
 }
 
 <h1>Editar Solicitud</h1>
@@ -62,9 +62,14 @@
            
             <!--Botones -->
             <div class="form-group d-flex gap-2">
-                <input type="submit" value="Actualizar" class="btn btn-blueMuni" />
+                @* <i  class="fa-solid fa-arrows-rotate"></i> 
+                <input type="submit" value="Actualizar" class="btn btn-blueMuni" /> *@
+                <button type="submit" class="btn btn-blueMuni">
+                    <i class="fa-solid fa-arrows-rotate"></i> Actualizar
+                </button>
+
                 <a asp-action="Index" class="btn btn-outline-blueMuni">
-                    <i class="fa-solid fa-circle-arrow-left"></i>
+                    <i class="fa-solid fa-circle-arrow-left"></i> Regresar
                 </a>
             </div>
 

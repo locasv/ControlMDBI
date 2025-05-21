@@ -1,0 +1,224 @@
+﻿@model IEnumerable<ControlMDBI.Models.AprobacionVehiculo>
+@{
+    ViewData["Title"] = "Aprobaciones de Solicitudes";
+}
+
+<div class="container-fluid">
+    <h1>Aprobaciones de Solicitudes de Vehículos</h1>
+    <div class="d-flex justify-content-start align-items-center mb-4">
+        <a asp-action="Create" class="btn btn-success">
+            <i class="fa-solid fa-circle-plus"></i> Nueva Aprobación
+        </a>
+    </div>
+
+    <div class="mt-3">
+            <div class="row">
+                <div class="col-md-6">
+                    <form asp-action="Filtrar" method="get" id="searchForm">
+                        <div class="input-group">
+                            <input type="text" id="entradaBusqueda" name="buscarPalabra" class="form-control" placeholder="Buscar..." value="@ViewBag.FiltroActual">
+                            <input type="hidden" name="estado" value="@ViewBag.EstadoActual" />
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="fa-solid fa-arrows-rotate"></i>
+                            </a>
+                            <button class="btn btn-outline-secondary" type="submit">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-6 text-end">
+                    <div class="btn-group">
+                        <button class="btn btn-outline-blueMuni dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            Estado: @(ViewBag.EstadoActual ?? "Todos")
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" 
+                                href="@Url.Action("Filtrar", new { buscarPalabra = ViewBag.FiltroActual, estado = "Todos" })">
+                                Todos</a></li>
+                            <li><a class="dropdown-item" href="@Url.Action("Filtrar", new { buscarPalabra = ViewBag.FiltroActual, estado = "Aprobado" })">Aprobado</a></li>
+                            <li><a class="dropdown-item" href="@Url.Action("Filtrar", new { buscarPalabra = ViewBag.FiltroActual, estado = "Rechazado" })">Rechazado</a></li>
+                            <li><a class="dropdown-item" href="@Url.Action("Filtrar", new { buscarPalabra = ViewBag.FiltroActual, estado = "Pendiente" })">Pendiente</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        <br />
+        <div class="p-0">
+            <div class="table-responsive">
+                <table class="table table-hover text-nowrap mb-0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Solicitud</th>
+                            <th>Solicitante</th>
+                            <th>Aprobador</th>
+                            <th>Fecha Aprobación</th>
+                            <th>Estado</th>
+                            <th>Observaciones</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.IdAprobacionVehiculo</td>
+                                <td class="text-start">
+                                    <span class="badge bg-info ">Número de Solicitud : @item.IdSolicitudVehiculo</span>
+                                    <div class="small text-muted" >
+                                       Recorrido : @(item.SolicitudVehiculo?.Recorrido?.Length > 40 ? item.SolicitudVehiculo.Recorrido.Substring(0, 40) + "..." : item.SolicitudVehiculo?.Recorrido)
+                                        <br />
+                                        Fecha Solicitud : @item.SolicitudVehiculo?.FechaSolicitud.ToString("dd/MM/yyyy HH:mm")
+                                        <br />
+                                        Placa de Vehículo : @item.SolicitudVehiculo?.Vehiculo?.Placa 
+
+                                </div>
+                            </td>
+                            <td>
+                                @(item.SolicitudVehiculo?.Usuario?.NombreUsuario ?? "No especificado")
+                            </td>
+                            <td>
+                                @(item.Usuario?.NombreUsuario ?? "No especificado")
+                            </td>
+                            <td>
+                                @item.FechaAprobacion.ToString("dd/MM/yyyy HH:mm")
+                            </td>
+                            <td>
+                                @{
+                                        string badgeClass = "bg-secondary";
+                                        switch (item.Estado)
+                                        {
+                                            case "Aprobado":
+                                                badgeClass = "bg-success";
+                                                break;
+                                            case "Rechazado":
+                                                badgeClass = "bg-danger";
+                                                break;
+                                            case "Pendiente":
+                                                badgeClass = "bg-warning text-dark";
+                                                break;
+                                        }
+                                    }
+                                    <span class="badge @badgeClass">@item.Estado</span>
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.Observaciones))
+                                    {
+                                        <span data-bs-toggle="tooltip" data-bs-placement="top" title="@item.Observaciones">
+                                            @(item.Observaciones.Length > 20 ? item.Observaciones.Substring(0, 20) + "..." : item.Observaciones)
+                                </span>                         }
+                                    else
+                                    {
+                                        <span class="text-muted">Sin observaciones</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a class="btn-sm btn-warning" asp-action="Edit" asp-route-id="@item.IdAprobacionVehiculo" data-bs-toggle="tooltip" data-bs-placement="right" title="Editar Aprobación"><i class="fa-solid fa-pen"></i></a>
+                                        <a class="btn-sm btn-info" asp-action="Details" asp-route-id="@item.IdAprobacionVehiculo" data-bs-toggle="tooltip" data-bs-placement="right" title="Detalles del Aprobación"><i class="fa-solid fa-list"></i></a> | 
+                                        <a class="btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.IdAprobacionVehiculo" data-bs-toggle="tooltip" data-bs-placement="right" title="Eliminar Aprobación"><i class="fa-solid fa-trash"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <br />
+      <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mb-0">
+                @{
+                    var anteriorDeshabilitado = ViewBag.PaginaActual <= 1 ? "disabled" : "";
+                    var siguienteDeshabilitado = ViewBag.PaginaActual >= ViewBag.TotalPaginas ? "disabled" : "";
+                    //retrocer 5 paginas si se puede
+                    var cincoPaginasAtras = ViewBag.PaginaActual - 5 < 1 ? 1 : ViewBag.PaginaActual - 5;
+                    var paginaAnterior = ViewBag.PaginaActual - 1;
+                    var paginaSiguiente = ViewBag.PaginaActual + 1;
+                    //avanzar 5 paginas si se puede
+                    var cincoPaginasAdelante = ViewBag.PaginaActual + 5 > ViewBag.TotalPaginas ? ViewBag.TotalPaginas : ViewBag.PaginaActual + 5;
+                    
+                }
+                @if (ViewBag.TotalPaginas > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="@Url.Action("Index", new { pagina = cincoPaginasAtras, buscarPalabra = ViewBag.FiltroActual, estado = ViewBag.EstadoActual })">
+                           <i class="fa-solid fa-backward-fast"></i>
+                       </a>
+                    </li>
+
+                    <li class="page-item @anteriorDeshabilitado">
+                        <a class="page-link"
+                           href="@Url.Action("Index", new { pagina = paginaAnterior, buscarPalabra = ViewBag.FiltroActual, estado = ViewBag.EstadoActual })"
+                           tabindex="-1">
+                           <i class="fa-solid fa-backward-step"></i>
+                       </a>
+                    </li>
+                    @for (int i = 1; i <= ViewBag.TotalPaginas; i++)
+                    {
+                        var active = i == ViewBag.PaginaActual ? "active" : "";
+                        <li class="page-item @active">
+                            <a class="page-link"
+                               href="@Url.Action("Index", new { pagina = i, buscarPalabra = ViewBag.FiltroActual, estado = ViewBag.EstadoActual })">
+                                @i
+                            </a>
+                        </li>
+                    }
+                    <li class="page-item @siguienteDeshabilitado">
+                        <a class="page-link"
+                           href="@Url.Action("Index", new { pagina = paginaSiguiente, buscarPalabra = ViewBag.FiltroActual, estado = ViewBag.EstadoActual })">
+                           <i class="fa-solid fa-backward-step fa-flip-both"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="@Url.Action("Index", new { pagina = cincoPaginasAdelante, buscarPalabra = ViewBag.FiltroActual, estado = ViewBag.EstadoActual })">
+                          <i class="fa-solid fa-backward-fast fa-flip-both"></i>
+                       </a>
+                    </li>
+                }
+                </ul>
+      </nav>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            // Habilitar tooltips para las observaciones
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+
+            // Filtro de búsqueda en tiempo real (opcional - complementa al formulario de búsqueda)
+            $("#entradaBusqueda").on("keyup", function(e) {
+                // Si se presiona Enter, enviar el formulario
+                if (e.key === 'Enter') {
+                    $(this).closest('form').submit();
+                    return;
+                }
+                 // Filtro en tiempo real opcional (solo en la página actual)
+                // var value = $(this).val().toLowerCase();
+                // $("table tbody tr").filter(function() {
+                //     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                // });
+            });
+                 // Mostrar el estado actual (número de registros, filtros aplicados)
+            var totalItems = @ViewBag.TotalItems;
+            var FiltroActual = "@ViewBag.FiltroActual";
+            var EstadoActual = "@ViewBag.EstadoActual";
+
+            if (totalItems === 0) {
+                $("table tbody").append('<tr><td colspan="8" class="text-center py-3">No se encontraron resultados.</td></tr>');
+            }
+        });
+
+    </script>
+}

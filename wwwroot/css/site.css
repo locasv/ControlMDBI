@@ -549,7 +549,7 @@ footer {
 
 /* Estilos para las tablas */
 .table thead th {
-    background-color: var(--co-50);
+    background-color: var(--co-100);
     border-bottom: none;
 }
 
@@ -746,7 +746,7 @@ dd {
 
 
 .card-header {
-    background-color: var(--co-100);
+    background-color: var(--co-400);
     color: var(--co-800);
     border-bottom: 1px solid var(--co-200);
     font-weight: 600;
@@ -760,4 +760,34 @@ dd {
     color: #856404;
     background-color: #fff3cd;
     border-color: #ffeeba;
+}
+
+/*
+    Estilo para la paginación
+*/
+.pagination .page-link {
+    color: var(--co-600);
+    background-color: var(--co-50);
+    border: 1px solid var(--co-200);
+    transition: all 0.2s ease-in-out;
+}
+
+    .pagination .page-link:hover {
+        background-color: var(--co-100);
+        color: var(--co-700);
+        border-color: var(--co-300);
+    }
+
+.pagination .page-item.active .page-link {
+    background-color: var(--co-500);
+    border-color: var(--co-500);
+    color: white;
+    font-weight: bold;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: var(--co-300);
+    pointer-events: none;
+    background-color: var(--co-100);
+    border-color: var(--co-100);
 }

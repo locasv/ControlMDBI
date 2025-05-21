@@ -1,5 +1,5 @@
-﻿@model IEnumerable<ControlMDBI.Models.SolicitudVehiculo>
-
+﻿@* @model IEnumerable<ControlMDBI.Models.SolicitudVehiculo> *@
+@model ControlMDBI.Areas.Admin.ViewModels.SolicitudesPaginadoViewModel
 @{
     ViewData["Title"] = "Solicitudes Vehiculos";
 }
@@ -10,7 +10,6 @@
         <i class="fa-solid fa-triangle-exclamation fa-2xl"></i>
         @TempData["ErrorMessage"]
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-          
         </button>
     </div>
 }
@@ -21,10 +20,11 @@
         <i class="fa-solid fa-circle-check fa-2xl"></i>
         @TempData["SuccessMessage"]
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-            
         </button>
     </div>
 }
+
+
 <div class="mt-3" style="font-size: 14px;">
     <h2>Solicitudes</h2>
     <div class="row d-fex flex-column flex-md-row my-4">
@@ -32,82 +32,144 @@
             <a class="btn btn-success" asp-action="Create">
                 <i class="fa-solid fa-plus"></i>&nbsp;Nueva Solictud
             </a>
-        </div>
-        <div class="col-8 col-md-4 col-lg-6 mb-3 mb-md-0 d-flex justify-content-end align-items-end">
             <a asp-action="index" asp-controller="Vehiculos" class="btn btn-outline-blueMuni">
                 <i class="fa-solid fa-circle-arrow-left"></i> Regresar a Vehiculos
             </a>
         </div>
+        <div class="col-12 col-md-8 col-lg-6 mb-3 mb-md-0 d-flex justify-content-end align-items-end">
+            <form method="get">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="input-group">
+                    <input asp-for="@Model.BusquedaNombres" name="busquedaNombres" class="form-control" placeholder="Nombre del Empleado" aria-label="Nombre del Empleado" autocomplete="off" />
+                    <input asp-for="@Model.BusquedaPlacaVehiculo" name="busquedaPlacaVehiculo" class="form-control" placeholder="Placa de vehiculo" aria-label="Placa de vehiculo" autocomplete="off" />
+                    <button name="botonBusqueda" id="botonBusqueda" type="submit" class="btn btn-outline-primary">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <span class="d-none d-md-inline-block">Buscar</span>
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                    </a>
+                </div>
+            </form>
+
+        </div>
+       
+        @* <div class="col-12 col-md-8 col-lg-6">
+            
+        </div> *@
     </div>
-    <div class="table-responsive">
-        <table class="table table-hover text-nowrap">
-            <thead>
-                <tr>
-                    <th>
-                       Numero de solicitud
-                    </th>
-                    <th>
-                        Usuario
-                    </th>
-                    <th>
-                       Vehiculo
-                    </th>
-                    <th>
-                       Fecha de Salida
-                    </th>
-                    <th>
-                       Fecha de Regreso
-                    </th>
-                    <th>
-                        Recorrido
-                    </th>
-                    <th>
-                      Fecha de la Solicitud
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+    @if (Model.Solicitudes.Count == 0)
+    {
+        <div class="col-md-12">
+            <p>
+                No se encontraron personas que coincidan con la búsqueda.
+                No se encontraron vehiculos con esa placa.
+            </p>
+        </div>
+    }
+    else
+    {
+
+        <div class="table-responsive">
+            <table class="table table-hover text-nowrap">
+                <thead>
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.IdSolicitudVehiculo)
-                        </td>
-                        <td>
-                            @item.Usuario?.Empleado?.Nombres @item.Usuario?.Empleado?.Apellidos - Subgerencia/Unidad : @item.Usuario?.Empleado?.Unidad
-                        </td>
-
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Vehiculo.Placa)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FechaSalida)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FechaRegreso)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Recorrido)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FechaSolicitud)
-                        </td>
-
-                        <td style="position: sticky; right: 0;">
-
-                            <a class="btn-sm btn-warning" asp-action="Edit" asp-route-id="@item.IdSolicitudVehiculo" data-bs-toggle="tooltip" data-bs-placement="right" title="Editar Solicitud Vehiculo"><i class="fa-solid fa-pen"></i></a>
-                            <a class="btn-sm btn-info" asp-action="Details" asp-route-id="@item.IdSolicitudVehiculo" data-bs-toggle="tooltip" data-bs-placement="right" title="Detalles de la Solicitud del Vehiculo"><i class="fa-solid fa-list"></i></a>
-                            <a class="btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.IdSolicitudVehiculo" data-bs-toggle="tooltip" data-bs-placement="right" title="Eliminar Solicitud de Vehiculo"><i class="fa-solid fa-trash"></i></a>
-
-                        </td>
-
+                        <th>
+                            Numero de solicitud
+                        </th>
+                        <th>
+                            Usuario
+                        </th>
+                        <th>
+                            Vehiculo
+                        </th>
+                        <th>
+                            Fecha de Salida
+                        </th>
+                        <th>
+                            Fecha de Regreso
+                        </th>
+                        <th>
+                            Recorrido
+                        </th>
+                        <th>
+                            Fecha de la Solicitud
+                        </th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Solicitudes)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IdSolicitudVehiculo)
+                            </td>
+                            <td>
+                                @item.Usuario?.Empleado?.Nombres @item.Usuario?.Empleado?.Apellidos - Subgerencia/Unidad : @item.Usuario?.Empleado?.Unidad
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Vehiculo.Placa)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaSalida)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaRegreso)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Recorrido)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaSolicitud)
+                            </td>
+
+                            <td style="position: sticky; right: 0;">
+
+                                <a class="btn-sm btn-warning" asp-action="Edit" asp-route-id="@item.IdSolicitudVehiculo" data-bs-toggle="tooltip" data-bs-placement="right" title="Editar Solicitud Vehiculo"><i class="fa-solid fa-pen"></i></a>
+                                <a class="btn-sm btn-info" asp-action="Details" asp-route-id="@item.IdSolicitudVehiculo" data-bs-toggle="tooltip" data-bs-placement="right" title="Detalles de la Solicitud del Vehiculo"><i class="fa-solid fa-list"></i></a>
+                                <a class="btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.IdSolicitudVehiculo" data-bs-toggle="tooltip" data-bs-placement="right" title="Eliminar Solicitud de Vehiculo"><i class="fa-solid fa-trash"></i></a>
+
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
 </div>
+
+<nav class="py-2">
+    <ul class="pagination justify-content-center">
+        @if (Model.TotalPaginas > 1)
+        {
+            int inicio = Math.Max(1, Math.Min(Model.TotalPaginas - 4, Model.PaginaActual - 2));
+            int fin = Math.Min(Model.TotalPaginas, inicio + 4);
+
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("Index", "SolicitudVehiculos", new { busquedaNombre = Model.BusquedaNombres, paginaActual = Model.PaginaActual - 5 })">&laquo;</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("Index", "SolicitudVehiculos", new { busquedaNombre = Model.BusquedaNombres, paginaActual = Model.PaginaActual - 1 })">&lsaquo;</a>
+            </li>
+            @for (int pagina = inicio; pagina <= fin; pagina++)
+            {
+                <li class="page-item @(pagina == Model.PaginaActual ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", "SolicitudVehiculos", new { busquedaNombre = Model.BusquedaNombres, paginaActual = pagina })">@pagina</a>
+                </li>
+            }
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("Index", "SolicitudVehiculos", new { busquedaNombre = Model.BusquedaNombres, paginaActual = Model.PaginaActual + 1 })">&rsaquo;</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("Index", "SolicitudVehiculos", new { busquedaNombre = Model.BusquedaNombres, paginaActual = Model.PaginaActual + 5 })">&raquo;</a>
+            </li>
+        }
+    </ul>
+</nav>
+
 @section Scripts {
     <script>
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
@@ -115,4 +177,4 @@
           return new bootstrap.Tooltip(tooltipTriggerEl)
         })
     </script>
-    }
+}

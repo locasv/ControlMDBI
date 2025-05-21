@@ -29,7 +29,7 @@
         </div>
     </div>
 
- @if (Model.Usuarios.Count == 0)
+    @if (Model.Usuarios.Count == 0)
     {
         <div class="col-md-12">
             <p>No se encontraron usuarios que coincidan con la búsqueda.</p>
@@ -38,64 +38,65 @@
     else
     {
 
-<div class="table-responsive">
-    <table class="table table-hover text-nowrap">
-    <thead>
-        <tr>
-            <th>
-               Empleado
-            </th>
-            <th>
-               NombreUsuario
-            </th>
-            <th>
-               Rol
-            </th>
-            <th>
-               FechaRegistro
-            </th>
-            <th>
-                Estado
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Usuarios) {
-        <tr>
-            <td>
-                @item.Empleado.Nombres  @item.Empleado.Apellidos
-            </td>
-            <td>
-                @item.NombreUsuario
-            </td>
-            <td>
-               @item.Rol
-            </td>
-            <td>
-                @item.FechaRegistro
-            </td>
-                <td class="text-success">
-                    @if (item.Empleado.Activo)
+        <div class="table-responsive">
+            <table class="table table-hover text-nowrap">
+                <thead>
+                    <tr>
+                        <th>
+                            Empleado
+                        </th>
+                        <th>
+                            NombreUsuario
+                        </th>
+                        <th>
+                            Rol
+                        </th>
+                        <th>
+                            FechaRegistro
+                        </th>
+                        <th>
+                            Estado
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Usuarios)
                     {
-                        <span class="badge bg-success">Activo</span>
+                        <tr>
+                            <td>
+                                @item.Empleado.Nombres  @item.Empleado.Apellidos
+                            </td>
+                            <td>
+                                @item.NombreUsuario
+                            </td>
+                            <td>
+                                @item.Rol
+                            </td>
+                            <td>
+                                @item.FechaRegistro
+                            </td>
+                            <td class="text-success">
+                                @if (item.Empleado.Activo)
+                                {
+                                    <span class="badge bg-success">Activo</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Inactivo</span>
+                                }
+                            </td>
+                            <td>
+                                <a class="btn-sm btn-warning" asp-action="Edit" asp-route-id="@item.IdUsuario" data-bs-toggle="tooltip" data-bs-placement="right" title="Editar Usuario"><i class="fa-solid fa-pen"></i></a>
+                                <a class="btn-sm btn-info" asp-action="Details" asp-route-id="@item.IdUsuario" data-bs-toggle="tooltip" data-bs-placement="right" title="Detalles del Usuario"><i class="fa-solid fa-list"></i></a> |
+                                <a class="btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.IdUsuario" data-bs-toggle="tooltip" data-bs-placement="right" title="Eliminar Usuario"><i class="fa-solid fa-trash"></i></a>
+                            </td>
+                        </tr>
                     }
-                    else
-                    {
-                        <span class="badge bg-danger">Inactivo</span>
-                    }
-                </td>
-                <td>
-                    <a class="btn-sm btn-warning" asp-action="Edit" asp-route-id="@item.IdUsuario" data-bs-toggle="tooltip" data-bs-placement="right" title="Editar Usuario"><i class="fa-solid fa-pen"></i></a> 
-                    <a class="btn-sm btn-info" asp-action="Details" asp-route-id="@item.IdUsuario" data-bs-toggle="tooltip" data-bs-placement="right" title="Detalles del Usuario"><i class="fa-solid fa-list"></i></a> |
-                    <a class="btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.IdUsuario" data-bs-toggle="tooltip" data-bs-placement="right" title="Eliminar Usuario"><i class="fa-solid fa-trash"></i></a>
-                </td>
-        </tr>
-}
-    </tbody>
-</table>
-</div>
-}
+                </tbody>
+            </table>
+        </div>
+    }
 </div>
 <nav class="py-2">
     <ul class="pagination justify-content-center">
@@ -105,10 +106,14 @@
             int fin = Math.Min(Model.TotalPaginas, inicio + 4);
 
             <li class="page-item">
-                <a class="page-link" href="@Url.Action("Index", "Usuarios", new { busquedaNombre = Model.BusquedaNombre, paginaActual = Model.PaginaActual - 5 })">&laquo;</a>
+                <a class="page-link" href="@Url.Action("Index", "Usuarios", new { busquedaNombre = Model.BusquedaNombre, paginaActual = Model.PaginaActual - 5 })">
+                    <i class="fa-solid fa-backward-fast"></i>
+                </a>
             </li>
             <li class="page-item">
-                <a class="page-link" href="@Url.Action("Index", "Usuarios", new { busquedaNombre = Model.BusquedaNombre, paginaActual = Model.PaginaActual - 1 })">&lsaquo;</a>
+                <a class="page-link" href="@Url.Action("Index", "Usuarios", new { busquedaNombre = Model.BusquedaNombre, paginaActual = Model.PaginaActual - 1 })">
+                    <i class="fa-solid fa-backward-step"></i>
+                </a>
             </li>
             @for (int pagina = inicio; pagina <= fin; pagina++)
             {
@@ -117,10 +122,14 @@
                 </li>
             }
             <li class="page-item">
-                <a class="page-link" href="@Url.Action("Index", "Usuarios", new { busquedaNombre = Model.BusquedaNombre, paginaActual = Model.PaginaActual + 1 })">&rsaquo;</a>
+                <a class="page-link" href="@Url.Action("Index", "Usuarios", new { busquedaNombre = Model.BusquedaNombre, paginaActual = Model.PaginaActual + 1 })">
+                    <i class="fa-solid fa-backward-step fa-flip-both"></i>
+                </a>
             </li>
             <li class="page-item">
-                <a class="page-link" href="@Url.Action("Index", "Usuarios", new { busquedaNombre = Model.BusquedaNombre, paginaActual = Model.PaginaActual + 5 })">&raquo;</a>
+                <a class="page-link" href="@Url.Action("Index", "Usuarios", new { busquedaNombre = Model.BusquedaNombre, paginaActual = Model.PaginaActual + 5 })">
+                    <i class="fa-solid fa-backward-fast fa-flip-both"></i>
+                </a>
             </li>
         }
     </ul>

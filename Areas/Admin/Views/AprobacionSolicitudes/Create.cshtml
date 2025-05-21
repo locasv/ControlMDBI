@@ -1,0 +1,160 @@
+﻿@model ControlMDBI.Models.AprobacionVehiculo
+@{
+    ViewData["Title"] = "Crear Aprobación de Solicitud";
+    var solicitudSeleccionada = ViewData["SolicitudSeleccionada"] as ControlMDBI.Models.SolicitudVehiculo;
+}
+
+<h1>Crear Aprobación de Solicitud</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" id="formAprobacion">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Información de Aprobación</h5>
+                </div>
+                <div class="card-body">
+                    <div class="form-group mb-3">
+                        <label asp-for="IdSolicitudVehiculo" class="control-label">Solicitud de Vehículo</label>
+                        <select asp-for="IdSolicitudVehiculo" class="form-control" asp-items="ViewBag.IdSolicitudVehiculo" id="selectSolicitud">
+                            <option value="">-- Seleccione una solicitud --</option>
+                        </select>
+                        <span asp-validation-for="IdSolicitudVehiculo" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="IdUsuario" class="control-label">Usuario Aprobador</label>
+                        <select asp-for="IdUsuario" class="form-control" asp-items="ViewBag.IdUsuario"></select>
+                        <span asp-validation-for="IdUsuario" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="FechaAprobacion" class="control-label">Fecha de Aprobación</label>
+                        <input asp-for="FechaAprobacion" class="form-control" type="datetime-local" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                        <span asp-validation-for="FechaAprobacion" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Estado" class="control-label">Estado de Aprobación</label>
+                        <select asp-for="Estado" class="form-control" asp-items="@(new SelectList(Enum.GetNames(typeof(ListaEstadoAprobacion))))">
+                            <option value="" selected disabled>-- Seleccione Estado --</option>
+                        </select>
+                        <span asp-validation-for="Estado" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Observaciones" class="control-label">Observaciones</label>
+                        <textarea asp-for="Observaciones" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Observaciones" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+
+                <button type="submit" class="btn btn-blueMuni"> <i class="fas fa-save"></i> Guardar Aprobación</button>
+                <a asp-action="Index" class="btn btn-outline-blueMuni">
+                    <i class="fa-solid fa-circle-arrow-left"></i> Regresar
+                </a>
+
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card" id="detallesSolicitud">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Detalles de la Solicitud</h5>
+            </div>
+            <div class="card-body">
+                @if (solicitudSeleccionada != null)
+                {
+                    <div class="detalles-solicitud">
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">ID Solicitud:</div>
+                            <div class="col-md-8">@solicitudSeleccionada.IdSolicitudVehiculo</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Solicitante:</div>
+                            <div class="col-md-8">@(solicitudSeleccionada.Usuario?.NombreUsuario ?? "No especificado")</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Vehículo:</div>
+                            <div class="col-md-8">
+                                @if (solicitudSeleccionada.Vehiculo != null)
+                                {
+
+                                    @* Aquí puedes mostrar más detalles del vehículo si son necesarios *@
+                                    @($" Placa : {solicitudSeleccionada.Vehiculo.Placa}")
+                                    @($" Marca : {solicitudSeleccionada.Vehiculo.Marca}")
+                                }
+                                else
+                                {
+                                    <span>No especificado</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Fecha Solicitud:</div>
+                            <div class="col-md-8">@solicitudSeleccionada.FechaSolicitud.ToString("dd/MM/yyyy hh:mm tt")</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Fecha Salida:</div>
+                            <div class="col-md-8">@solicitudSeleccionada.FechaSalida.ToString("dd/MM/yyyy hh:mm tt")</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Fecha Regreso:</div>
+                            <div class="col-md-8">@solicitudSeleccionada.FechaRegreso.ToString("dd/MM/yyyy hh:mm tt")</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Recorrido:</div>
+                            <div class="col-md-8">@solicitudSeleccionada.Recorrido</div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        Seleccione una solicitud para ver sus detalles.
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function() {
+
+            // Inicializar Select2
+        $("#selectSolicitud").select2({
+            placeholder: "-- Seleccione una solicitud --",
+            allowClear: true,
+            width: '100%',
+            language : {
+                noResults: function() {
+                    return "No se encontraron resultados";
+                }
+            }
+            
+        });
+            // Función para cargar los detalles de la solicitud al cambiar la selección
+            $("#selectSolicitud").change(function() {
+                var idSolicitud = $(this).val();
+                if (idSolicitud) {
+                    // Recargar la página con el ID de solicitud seleccionado
+                    window.location.href = '@Url.Action("Create")' + '?idSolicitud=' + idSolicitud;
+                }
+            });
+        });
+    </script>
+}
+

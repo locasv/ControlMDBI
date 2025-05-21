@@ -25,7 +25,7 @@ namespace ControlMDBI.Models
         public DateTime FechaAprobacion { get; set; }
 
         [StringLength(200, ErrorMessage = "Las observaciones no pueden exceder los {1} caracteres.")]
-        public string Observaciones { get; set; }
+        public string? Observaciones { get; set; }
 
         [Required(ErrorMessage = "El estado de la solicitud es obligatorio.")]
         [StringLength(15, ErrorMessage = "El estado no puede exceder los 50 caracteres.")]

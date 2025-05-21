@@ -1,0 +1,139 @@
+﻿@model ControlMDBI.Models.AprobacionVehiculo
+@{
+    ViewData["Title"] = "Detalles de Aprobación";
+}
+
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Detalles de Aprobación</h1>
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model?.IdAprobacionVehiculo" class="btn btn-primary btn-sm">
+                <i class="fas fa-edit"></i> Editar
+            </a>
+            <a asp-action="Index" class="btn btn-secondary btn-sm">
+                <i class="fas fa-arrow-left"></i> Volver a la lista
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Información de la Solicitud -->
+        <div class="col-xl-12 col-md-12 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-header py-3">
+                    <h5 class="m-0 font-weight-bold text-white">Información de la Solicitud</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="text-muted mb-1">Número de Solicitud</label>
+                                <p class="h5">@Model.SolicitudVehiculo?.IdSolicitudVehiculo</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-muted mb-1">Solicitante</label>
+                                <p class="h5">@Model.SolicitudVehiculo?.Usuario?.NombreUsuario</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-muted mb-1">Fecha de Solicitud</label>
+                                <p class="h5">@Model.SolicitudVehiculo?.FechaSolicitud.ToString("dd/MM/yyyy HH:mm")</p>
+                            </div>
+                            
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="text-muted mb-1">Vehículo</label>
+                                <p class="h5">@Model.SolicitudVehiculo?.Vehiculo?.Marca</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-muted mb-1">Placa</label>
+                                <p class="h5">@Model.SolicitudVehiculo?.Vehiculo?.Placa</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-muted mb-1">Período de Uso</label>
+                                <p class="h5">
+                                    @Model.SolicitudVehiculo?.FechaSalida.ToString("dd/MM/yyyy HH:mm") -
+                                    @Model.SolicitudVehiculo?.FechaRegreso.ToString("dd/MM/yyyy HH:mm")
+                                </p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-muted mb-1">Recorrido</label>
+                                <p class="h5">@Model.SolicitudVehiculo?.Recorrido</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Información de la Aprobación -->
+        <div class="col-xl-12 col-md-12 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-header py-3">
+                    <h5 class="m-0 font-weight-bold text-white">Información de la Aprobación</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="text-muted mb-1">ID de Aprobación</label>
+                                <p class="h5">@Model.IdAprobacionVehiculo</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-muted mb-1">Usuario que aprobó</label>
+                                <p class="h5">@Model.Usuario?.NombreUsuario</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-muted mb-1">Fecha de Aprobación</label>
+                                <p class="h5">@Model.FechaAprobacion.ToString("dd/MM/yyyy HH:mm")</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="text-muted mb-1">Estado</label>
+                                
+                                @{
+                                    string badgeClass = "bg-secondary";
+                                    switch (Model.Estado)
+                                    {
+                                        case "Aprobado":
+                                            badgeClass = "bg-success";
+                                            break;
+                                        case "Rechazado":
+                                            badgeClass = "bg-danger";
+                                            break;
+                                        case "Pendiente":
+                                            badgeClass = "bg-warning text-dark";
+                                            break;
+                                    }
+                                }
+                                <p><span class="badge @badgeClass">@Model.Estado</span></p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-muted mb-1">Observaciones</label>
+                                <div class="card bg-light py-2 px-3">
+                                    <p>@(string.IsNullOrEmpty(Model.Observaciones) ? "Sin observaciones" : Model.Observaciones)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="d-flex">
+                <a asp-action="Edit" asp-route-id="@Model?.IdAprobacionVehiculo" class="btn btn-primary mr-2">
+                    <i class="fas fa-edit"></i> Editar
+                </a>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver a la lista
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

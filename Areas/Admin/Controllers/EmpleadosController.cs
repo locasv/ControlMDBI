@@ -67,7 +67,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
         // GET: Admin/Empleados
         public async Task<IActionResult> Index(string? busquedaNombre, string? busquedaDNI, int paginaActual = 1)
         {
-            int usuariosPorPagina = 15;
+            int usuariosPorPagina = 2;
             if (string.IsNullOrEmpty(busquedaNombre))
             {
                 busquedaNombre = "";
@@ -79,8 +79,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
             var model = await GetEmpleadoPaginado(busquedaNombre, busquedaDNI, paginaActual, usuariosPorPagina);
 
             return View(model);
-            //var controlMDBIDbContext = _context.Empleado.Include(e => e.Sede);
-            //return View(await controlMDBIDbContext.ToListAsync());
+
         }
 
         // GET: Admin/Empleados/Details/5
