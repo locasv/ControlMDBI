@@ -1,120 +1,4 @@
-﻿@* @model ControlMDBI.Models.AprobacionVehiculo
-
-@{
-    ViewData["Title"] = "Editar Aprobación";
-    var solicitudSeleccionada = ViewData["SolicitudSeleccionada"] as ControlMDBI.Models.SolicitudVehiculo;
-}
-
-<div class="container-fluid">
-    <h2 class="mt-4">Editar Aprobación de Solicitud</h2>
-    <hr />
-
-    <div class="row">
-        <div class="col-md-6">
-            <form asp-action="Edit">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="IdAprobacionVehiculo" />
-
-                <div class="card mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Datos de la solicitud</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label asp-for="IdSolicitudVehiculo" class="control-label">Solicitud de Vehículo</label>
-                            <select asp-for="IdSolicitudVehiculo" class="form-control" asp-items="ViewBag.IdSolicitudVehiculo" disabled></select>
-                            <input type="hidden" asp-for="IdSolicitudVehiculo" />
-                            <span asp-validation-for="IdSolicitudVehiculo" class="text-danger"></span>
-                        </div>
-
-                        @if (solicitudSeleccionada != null)
-                        {
-                            <div class="mt-4">
-                                <div class="alert alert-info">
-                                    <h6>Detalles de la solicitud:</h6>
-                                    <hr />
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <p><strong>Solicitante:</strong> @solicitudSeleccionada.Usuario?.NombreUsuario</p>
-                                            <p><strong>Fecha de solicitud:</strong> @solicitudSeleccionada.FechaSolicitud.ToString("dd/MM/yyyy HH:mm")</p>
-                                            <p><strong>Recorrido : </strong> @solicitudSeleccionada.Recorrido</p>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p><strong>Vehículo:</strong> @(solicitudSeleccionada.Vehiculo?.Marca + " " + solicitudSeleccionada.Vehiculo?.Marca)</p>
-                                            <p><strong>Fecha salida:</strong> @solicitudSeleccionada.FechaSalida.ToString("dd/MM/yyyy HH:mm")</p>
-                                            <p><strong>Fecha regreso:</strong> @solicitudSeleccionada.FechaRegreso.ToString("dd/MM/yyyy HH:mm")</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                </div>
-
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Datos de la aprobación</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label asp-for="IdUsuario" class="control-label">Usuario que aprueba</label>
-                            <select asp-for="IdUsuario" class="form-control" asp-items="ViewBag.IdUsuario"></select>
-                            <span asp-validation-for="IdUsuario" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-group">
-                            <label asp-for="FechaAprobacion" class="control-label">Fecha de aprobación</label>
-                            <input asp-for="FechaAprobacion" class="form-control" type="datetime-local" />
-                            <span asp-validation-for="FechaAprobacion" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-group">
-                            <label asp-for="Estado" class="control-label">Estado</label>
-                            <select asp-for="Estado" class="form-control" asp-items="@(new SelectList(Enum.GetNames(typeof(ListaEstadoAprobacion))))">
-                                <option value="" selected disabled>-- Seleccione Estado --</option>
-                            </select>
-                            <span asp-validation-for="Estado" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-group">
-                            <label asp-for="Observaciones" class="control-label">Observaciones</label>
-                            <textarea asp-for="Observaciones" class="form-control" rows="4"></textarea>
-                            <span asp-validation-for="Observaciones" class="text-danger"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Guardar cambios
-                    </button>
-                    <a asp-action="Index" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left"></i> Volver a la lista
-                    </a>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-
-    <script>
-        $(document).ready(function () {
-            // Formatear fecha para el input datetime-local si es necesario
-            var fechaAprobacion = $('#FechaAprobacion').val();
-            if (fechaAprobacion) {
-                var fecha = new Date(fechaAprobacion);
-                var formattedDate = fecha.toISOString().slice(0, 16);
-                $('#FechaAprobacion').val(formattedDate);
-            }
-        });
-    </script>
-} *@
-
+﻿
 @model ControlMDBI.Models.AprobacionVehiculo
 @{
     ViewData["Title"] = "Editar Aprobación";
@@ -133,12 +17,12 @@
         <div class="col-md-6">
             <div class="card mb-4">
                 <div class="card-header py-3">
-                    <h5 class="m-0 font-weight-bold text-white">Datos de la solicitud</h5>
+                    <h5 class="m-0 font-weight-bold text-white"><i class="fa-solid fa-file-signature"></i> Datos de la solicitud</h5>
                 </div>
                 <div class="card-body">
-                    <div class="form-group">
-                        <label asp-for="IdSolicitudVehiculo" class="control-label">Solicitud de Vehículo</label>
-                        <select asp-for="IdSolicitudVehiculo" class="form-control" asp-items="ViewBag.IdSolicitudVehiculo" disabled></select>
+                    <div class="mb-3">
+                        <label asp-for="IdSolicitudVehiculo" class="form-label text-blueMuni-600">Solicitud de Vehículo</label>
+                        <select asp-for="IdSolicitudVehiculo" class="form-select" asp-items="ViewBag.IdSolicitudVehiculo" disabled></select>
                         <span asp-validation-for="IdSolicitudVehiculo" class="text-danger"></span>
                     </div>
 
@@ -155,8 +39,8 @@
                                 </div>
                                 <div class="col-md-6">
                                     <p class="alert alert-info"><strong>Vehículo <br />Marca:</strong> @(solicitudSeleccionada.Vehiculo?.Marca)<br /><strong> Placa :</strong> @(solicitudSeleccionada.Vehiculo?.Placa)</p>
-                                    <p><strong>Fecha salida:</strong> @solicitudSeleccionada.FechaSalida.ToString("dd/MM/yyyy HH:mm")</p>
-                                    <p><strong>Fecha regreso:</strong> @solicitudSeleccionada.FechaRegreso.ToString("dd/MM/yyyy HH:mm")</p>
+                                    <p><strong>Fecha salida:</strong> @solicitudSeleccionada.FechaSalida.ToString("dd/MM/yyyy HH:mm tt")</p>
+                                    <p><strong>Fecha regreso:</strong> @solicitudSeleccionada.FechaRegreso.ToString("dd/MM/yyyy HH:mm tt")</p>
                                 </div>
                             </div>
                         </div>
@@ -169,32 +53,35 @@
         <div class="col-md-6">
             <div class="card mb-4">
                 <div class="card-header py-3">
-                    <h5 class="m-0 font-weight-bold text-white">Datos de la aprobación</h5>
+                    <h5 class="m-0 font-weight-bold text-white"><i class="fa-solid fa-user-check"></i> Datos de la aprobación</h5>
                 </div>
                 <div class="card-body">
-                    <div class="form-group">
-                        <label asp-for="IdUsuario" class="control-label">Usuario que aprueba</label>
-                        <select asp-for="IdUsuario" class="form-control" asp-items="ViewBag.IdUsuario"></select>
+                    <div class="mb-3">
+                        <label asp-for="IdUsuario" class="form-label text-blueMuni-600">Usuario que aprueba</label>
+                        <select asp-for="IdUsuario" class="form-select" asp-items="ViewBag.IdUsuario"></select>
+                        
                         <span asp-validation-for="IdUsuario" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group">
-                        <label asp-for="FechaAprobacion" class="control-label">Fecha de aprobación</label>
+                    <div class="form-floating mb-3">
+                        
                         <input asp-for="FechaAprobacion" class="form-control" type="datetime-local" />
+                        <label asp-for="FechaAprobacion" class="form-label">Fecha de aprobación</label>
                         <span asp-validation-for="FechaAprobacion" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group">
-                        <label asp-for="Estado" class="control-label">Estado</label>
-                        <select asp-for="Estado" class="form-control" asp-items="@(new SelectList(Enum.GetNames(typeof(ListaEstadoAprobacion))))">
+                    <div class="form-floating mb-3">
+                        
+                        <select asp-for="Estado" class="form-select" asp-items="@(new SelectList(Enum.GetNames(typeof(ListaEstadoAprobacion))))">
                             <option value="" selected disabled>-- Seleccione Estado --</option>
                         </select>
+                        <label asp-for="Estado" class="form-label">Estado</label>
                         <span asp-validation-for="Estado" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group">
-                        <label asp-for="Observaciones" class="control-label">Observaciones</label>
-                        <textarea asp-for="Observaciones" class="form-control" rows="4"></textarea>
+                    <div class="form-floating mb-3">
+                        <textarea asp-for="Observaciones" class="form-control" rows="4" placeholder="Observaciones" autocomplete="off"></textarea>
+                        <label asp-for="Observaciones" class="form-label">Observaciones</label>
                         <span asp-validation-for="Observaciones" class="text-danger"></span>
                     </div>
                 </div>

@@ -16,7 +16,7 @@
                 <div class="col-md-6">
                     <form asp-action="Filtrar" method="get" id="searchForm">
                         <div class="input-group">
-                            <input type="text" id="entradaBusqueda" name="buscarPalabra" class="form-control" placeholder="Buscar..." value="@ViewBag.FiltroActual">
+                            <input type="text" id="entradaBusqueda" name="buscarPalabra" class="form-control" placeholder="Buscar solicitud o solicitante o aprobador" value="@ViewBag.FiltroActual">
                             <input type="hidden" name="estado" value="@ViewBag.EstadoActual" />
                             <a asp-action="Index" class="btn btn-outline-secondary">
                                 <i class="fa-solid fa-arrows-rotate"></i>
@@ -67,22 +67,32 @@
                                 <td class="text-start">
                                     <span class="badge bg-info ">Número de Solicitud : @item.IdSolicitudVehiculo</span>
                                     <div class="small text-muted" >
-                                       Recorrido : @(item.SolicitudVehiculo?.Recorrido?.Length > 40 ? item.SolicitudVehiculo.Recorrido.Substring(0, 40) + "..." : item.SolicitudVehiculo?.Recorrido)
+                                        Periodo de Uso <i class="fa-solid fa-hourglass-half"></i><br />
+                                        <i class="fa-solid fa-play"></i> @Html.DisplayFor(modelItem => item.SolicitudVehiculo.FechaSalida)     <br /> <i class="fa-solid fa-stop"></i> @Html.DisplayFor(modelItem => item.SolicitudVehiculo.FechaRegreso)
                                         <br />
-                                        Fecha Solicitud : @item.SolicitudVehiculo?.FechaSolicitud.ToString("dd/MM/yyyy HH:mm")
+                                        <span class="badge bg-blueMuni-950"> Fecha Solicitud : @Html.DisplayFor(modelItem => item.SolicitudVehiculo.FechaSolicitud)</span> 
+
+                                       @* Periodo de Uso : @item.SolicitudVehiculo?.FechaSalida.ToString("dd/MM/yyyy HH:mm tt") - @item.SolicitudVehiculo?.FechaRegreso.ToString("dd/MM/yyyy HH:mm tt")
                                         <br />
-                                        Placa de Vehículo : @item.SolicitudVehiculo?.Vehiculo?.Placa 
+                                        Fecha Solicitud : @item.SolicitudVehiculo?.FechaSolicitud.ToString("dd/MM/yyyy HH:mm tt") *@
+                                        <br />
+                                        Placa <i class="fa-solid fa-car-rear"></i> : @item.SolicitudVehiculo?.Vehiculo?.Placa 
 
                                 </div>
                             </td>
                             <td>
-                                @(item.SolicitudVehiculo?.Usuario?.NombreUsuario ?? "No especificado")
+                                @(item.SolicitudVehiculo?.Usuario?.Empleado.Nombres ?? "No especificado") 
+                                @(item.SolicitudVehiculo?.Usuario?.Empleado?.Apellidos ?? "No especificado") <br />
+                                DNI: @(item.SolicitudVehiculo?.Usuario?.Empleado.DNI ?? "No especificado")
                             </td>
                             <td>
-                                @(item.Usuario?.NombreUsuario ?? "No especificado")
+                                @(item.Usuario?.Empleado?.Nombres ?? "No especificado") 
+                                @(item.Usuario?.Empleado?.Apellidos ?? "No especificado") <br />
+                                DNI: @(item.Usuario?.Empleado.DNI ?? "No especificado")
                             </td>
                             <td>
-                                @item.FechaAprobacion.ToString("dd/MM/yyyy HH:mm")
+                               @Html.DisplayFor(modelItem => item.FechaAprobacion)
+                                @* @item.FechaAprobacion.ToString("dd/MM/yyyy HH:mm tt") *@
                             </td>
                             <td>
                                 @{

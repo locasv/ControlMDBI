@@ -202,7 +202,7 @@ body {
 
 /*cambiar el color del borde, focus, active de form-control y form-select*/
 .form-control {
-    border-color: var(--co-600);
+    border-color: #d1d1d1;
 }
 
     .form-control:focus {
@@ -215,11 +215,11 @@ body {
         }
 
     .form-control:not(:focus) + .form-label {
-        color: #000000;
+        color: var(--co-950);
     }
 
 .form-select {
-    border-color: var(--co-600);
+    border-color: #d1d1d1;
 }
 
     .form-select:focus {
@@ -232,10 +232,8 @@ body {
         }
 
     .form-select:not(:focus) + .form-label {
-        color: #000000;
+        color: var(--co-950);
     }
-
-
 
 
 /* Sidebar */
@@ -638,20 +636,6 @@ hr {
     border-color: var(--co-300);
 }
 
-.form-control {
-    border-color: var(--co-200);
-}
-
-    .form-control:focus {
-        border-color: var(--co-400);
-        box-shadow: 0 0 0 0.2rem rgba(25, 164, 221, 0.25);
-    }
-
-.control-label {
-    color: var(--co-800);
-    font-weight: 500;
-}
-
 .btn-primary {
     background-color: var(--co-600);
     border-color: var(--co-700);
@@ -790,4 +774,32 @@ dd {
     pointer-events: none;
     background-color: var(--co-100);
     border-color: var(--co-100);
+}
+
+/*
+    Select2
+*/
+/* Aumentar el padding del contenedor para dar más espacio */
+.select2-container--default .select2-selection--single {
+    padding-right: 25px; /* Aumenta el espacio a la derecha */
+}
+
+    /* Ajustar la posición del botón de limpieza */
+    .select2-container--default .select2-selection--single .select2-selection__clear {
+        margin-right: 10px; /* Más margen a la derecha */
+        position: relative;
+        right: 5px;
+    }
+
+    /* Opcional: Mejorar el estilo del botón clear para hacerlo más visible */
+    .select2-container--default .select2-selection--single .select2-selection__clear {
+        font-size: 1.2em; /* Hacer el icono "×" un poco más grande */
+        color: #999;
+        font-weight: bold;
+        padding: 0 5px;
+    }
+
+/* Ajustar el contenedor para asegurar que haya suficiente espacio */
+.form-floating .select2-container {
+    width: 100% !important; /* Asegurar que el ancho sea consistente */
 }

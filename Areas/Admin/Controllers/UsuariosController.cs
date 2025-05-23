@@ -99,7 +99,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
         {
           
             var empleados = await _context.Empleado
-                .Where(b => b.Activo && ((b.Nombres + " " + b.Apellidos).Contains(empleadoBuscado) || (b.Apellidos + " " + b.Nombres).Contains(empleadoBuscado) ) || b.DNI.Contains(empleadoBuscado))
+                .Where(b => b.Activo && ((b.Nombres + " " + b.Apellidos).Contains(empleadoBuscado) || (b.Apellidos + " " + b.Nombres).Contains(empleadoBuscado) || b.DNI.Contains(empleadoBuscado)))
                 .Select(e => new { id = e.IdEmpleado, text = e.Nombres + " " + e.Apellidos +" - Cargo : "+e.Cargo+" Unidad/Subgerencia : "+ e.Unidad })
                 .ToListAsync();
             return Json(empleados);
@@ -210,43 +210,50 @@ namespace ControlMDBI.Areas.Admin.Controllers
                 return NotFound();
             }
 
+            // Comprobar la validez del modelo, pero excluir los campos que no son relevantes para la edición
             if (ModelState.IsValid)
             {
-                var usuario = await _context.Usuario.FindAsync(id);
-                var empleado = await _context.Empleado.FindAsync(model.IdEmpleado);
-                if (usuario == null || empleado == null)
-                {
-                    return NotFound();
-                }
-                // Obtener la contraseña actual del usuario en la base de datos
-                var usuarioActual = await _context.Usuario.AsNoTracking().FirstOrDefaultAsync(u => u.IdUsuario == id);
-                
-                
-                if (usuarioActual == null)
-                {
-                    return NotFound();
-                }
-
-                // Hashear solo si cambió la contraseña
-                if (model.Contrasenia != usuarioActual.Contrasenia)
-                {
-                    usuario.Contrasenia = BCrypt.Net.BCrypt.HashPassword(model.Contrasenia);
-                }
-                else
-                {
-                    usuario.Contrasenia = usuarioActual.Contrasenia; // No cambió, mantener la misma
-                }
-
-                usuario.NombreUsuario = model.NombreUsuario;
-                usuario.Rol = model.Rol;
-                usuario.FechaRegistro = DateTime.Now;
-                //actualizar estado del empleado
-
-                empleado.Activo = model.ActivoEmpleado;
-
                 try
                 {
+                    // Obtener el usuario actual con AsNoTracking para no afectar al seguimiento de EF
+                    var usuarioActual = await _context.Usuario.AsNoTracking()
+                        .FirstOrDefaultAsync(u => u.IdUsuario == id);
+
+                    if (usuarioActual == null)
+                    {
+                        return NotFound();
+                    }
+
+                    // Obtener el usuario para actualizar (con tracking)
+                    var usuario = await _context.Usuario.FindAsync(id);
+
+                    // Obtener el empleado
+                    var empleado = await _context.Empleado.FindAsync(model.IdEmpleado);
+
+                    if (usuario == null || empleado == null)
+                    {
+                        return NotFound();
+                    }
+
+                    // Actualizar los datos del usuario
+                    usuario.NombreUsuario = model.NombreUsuario;
+                    usuario.Rol = model.Rol;
+
+                    // Actualizar contraseña solo si se proporcionó una nueva
+                    string contraseniaNueva = Request.Form["contraseniaNueva"];
+                    if (!string.IsNullOrEmpty(contraseniaNueva))
+                    {
+                        usuario.Contrasenia = BCrypt.Net.BCrypt.HashPassword(contraseniaNueva);
+                    }
+                    // No actualizar la fecha de registro si no es necesario
+
+                    // Actualizar estado del empleado
+                    empleado.Activo = model.ActivoEmpleado;
+
+                    // Guardar los cambios
                     await _context.SaveChangesAsync();
+
+                    // Redireccionar al índice
                     return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
@@ -261,7 +268,9 @@ namespace ControlMDBI.Areas.Admin.Controllers
                     }
                 }
             }
-                return View(model);
+
+            // Si llegamos aquí, algo falló; volver a la vista con el modelo actual
+            return View(model);
         }
        
         // GET: Admin/Usuarios/Delete/5

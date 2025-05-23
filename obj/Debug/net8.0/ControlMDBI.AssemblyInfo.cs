@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ControlMDBI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bb43ea4477b0871b1d09d8ac77601af819b32ea8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f78ce64e4b8e39edf432cbf312a0e248526a8317")]
 [assembly: System.Reflection.AssemblyProductAttribute("ControlMDBI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ControlMDBI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

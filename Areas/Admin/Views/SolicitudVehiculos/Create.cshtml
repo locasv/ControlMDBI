@@ -14,42 +14,42 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
-                <label asp-for="IdUsuario" class="control-label">Empleado que hace solicitud</label>
-                <select asp-for="IdUsuario" class="form-control buscarUsuario" asp-items="ViewBag.IdUsuario">
+            <div class="mb-3">
+                <label asp-for="IdUsuario" class="form-label text-blueMuni-600 small">Empleado que hace solicitud</label>
+                <select asp-for="IdUsuario" class="form-select buscarUsuario" asp-items="ViewBag.IdUsuario">
                 </select>
             </div>
 
-            @* <div class="form-group"> *@
-            @*     <label asp-for="IdVehiculo" class="control-label">Placa</label> *@
-            @*     <select asp-for="IdVehiculo" class ="form-control" asp-items="ViewBag.IdVehiculo"></select> *@
-            @* </div> *@
-            <div class="form-group">
-                <label asp-for="IdVehiculo" class="control-label">Placa Vehiculo</label>
+            <div class="mb-3">
+                <label asp-for="IdVehiculo" class="form-label text-blueMuni-600 small">Placa Vehiculo</label>
                 <select asp-for="IdVehiculo" class="form-select" id="buscarPlaca" data-placeholder="Buscar Vehiculo Activo">
                     <option></option>
                 </select>
                 <span asp-validation-for="IdVehiculo" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="FechaSalida" class="control-label"></label>
-                <input asp-for="FechaSalida" value="@Model.FechaSalida.ToString("yyyy-MM-ddTHH:mm")" class="form-control" />
+            <div class="form-floating mb-3">
+              
+                <input asp-for="FechaSalida" value="@Model.FechaSalida.ToString("yyyy-MM-ddTHH:mm")" class="form-control" placeholder="Fecha de salida" autocomplete="off" />
+                 <label asp-for="FechaSalida" class="form-label">Fecha de salida</label>
                 <span asp-validation-for="FechaSalida" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="FechaRegreso" class="control-label"></label>
-                <input asp-for="FechaRegreso" value="@Model.FechaSalida.ToString("yyyy-MM-ddTHH:mm")" class="form-control" />
+            <div class="form-floating mb-3">
+                
+                <input asp-for="FechaRegreso" value="@Model.FechaRegreso.ToString("yyyy-MM-ddTHH:mm")" class="form-control" placeholder="Fecha de Regreso" autocomplete="off" />
+                <label asp-for="FechaRegreso" class="form-label">Fecha de Regreso</label>
                 <span asp-validation-for="FechaRegreso" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Recorrido" class="control-label"></label>
-                <input asp-for="Recorrido" class="form-control" />
+            <div class="form-floating mb-3">
+                
+                <input asp-for="Recorrido" class="form-control" placeholder="Recorrido" autocomplete="off" />
+                <label asp-for="Recorrido" class="form-label"></label>
                 <span asp-validation-for="Recorrido" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="FechaSolicitud" class="control-label">Fecha de Solicitud</label>
-                <input asp-for="FechaSolicitud" class="form-control" readonly />
+            <div class="form-floating mb-3">
+                
+                <input asp-for="FechaSolicitud" class="form-control" placeholder="Fecha de solicitud" autocomplete="off" readonly />
+                <label asp-for="FechaSolicitud" class="form-label">Fecha de Solicitud</label>
                 <span asp-validation-for="FechaSolicitud" class="text-danger"></span>
             </div>
 
@@ -129,9 +129,7 @@
 
             });
         });
-    </script>
-
-    <script>
+    
 
              $( '#buscarPlaca' ).select2( {
             theme: "bootstrap-5",

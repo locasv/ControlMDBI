@@ -22,6 +22,8 @@ namespace ControlMDBI.Models
 
         [Required(ErrorMessage = "La fecha de aprobación es obligatoria.")]
         [DataType(DataType.DateTime, ErrorMessage = "La fecha de aprobación no es válida.")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy hh:mm tt}", ApplyFormatInEditMode = false)]
+        [Display(Name = "Fecha de Salida")]
         public DateTime FechaAprobacion { get; set; }
 
         [StringLength(200, ErrorMessage = "Las observaciones no pueden exceder los {1} caracteres.")]

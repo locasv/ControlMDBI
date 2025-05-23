@@ -14,46 +14,48 @@
 
             <div class="card mb-4">
                 <div class="card-header">
-                    <h5 class="mb-0">Información de Aprobación</h5>
+                    <h5 class="mb-0"><i class="fa-solid fa-circle-info"></i> Información de Aprobación</h5>
                 </div>
                 <div class="card-body">
-                    <div class="form-group mb-3">
-                        <label asp-for="IdSolicitudVehiculo" class="control-label">Solicitud de Vehículo</label>
-                        <select asp-for="IdSolicitudVehiculo" class="form-control" asp-items="ViewBag.IdSolicitudVehiculo" id="selectSolicitud">
-                            <option value="">-- Seleccione una solicitud --</option>
+                    <div class="form-floating mb-3">
+                        <select asp-for="IdSolicitudVehiculo" class="form-select" asp-items="ViewBag.IdSolicitudVehiculo" id="selectSolicitud">
+                            <option value="" ></option>
                         </select>
                         <span asp-validation-for="IdSolicitudVehiculo" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group mb-3">
-                        <label asp-for="IdUsuario" class="control-label">Usuario Aprobador</label>
+                    <div class="form-floating mb-3">
                         <select asp-for="IdUsuario" class="form-control" asp-items="ViewBag.IdUsuario"></select>
+                        <label asp-for="IdUsuario" class="form-label" placeholder="Usuario Aprobador" autocomplete="off">Usuario Aprobador</label>
                         <span asp-validation-for="IdUsuario" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group mb-3">
-                        <label asp-for="FechaAprobacion" class="control-label">Fecha de Aprobación</label>
+                     <div class="form-floating mb-3">
                         <input asp-for="FechaAprobacion" class="form-control" type="datetime-local" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                        <label asp-for="FechaAprobacion" class="form-label">Fecha de Aprobación</label>
                         <span asp-validation-for="FechaAprobacion" class="text-danger"></span>
-                    </div>
+                    </div> 
 
-                    <div class="form-group mb-3">
-                        <label asp-for="Estado" class="control-label">Estado de Aprobación</label>
-                        <select asp-for="Estado" class="form-control" asp-items="@(new SelectList(Enum.GetNames(typeof(ListaEstadoAprobacion))))">
+                    <div class="form-floating mb-3">
+                       
+                        <select asp-for="Estado" class="form-select" asp-items="@(new SelectList(Enum.GetNames(typeof(ListaEstadoAprobacion))))">
+
                             <option value="" selected disabled>-- Seleccione Estado --</option>
                         </select>
+                        <label asp-for="Estado" class="form-label">Estado de Aprobación</label> 
                         <span asp-validation-for="Estado" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group mb-3">
-                        <label asp-for="Observaciones" class="control-label">Observaciones</label>
-                        <textarea asp-for="Observaciones" class="form-control" rows="3"></textarea>
+                    <div class="form-floating mb-3">
+                      
+                        <textarea asp-for="Observaciones" class="form-control" rows="3" placeholder="Observaciones" autocomplete="off"></textarea>
+                        <label asp-for="Observaciones" class="form-label"></label>
                         <span asp-validation-for="Observaciones" class="text-danger"></span>
                     </div>
                 </div>
             </div>
 
-            <div class="text-center mt-4">
+            <div class="text-center mt-3">
 
                 <button type="submit" class="btn btn-blueMuni"> <i class="fas fa-save"></i> Guardar Aprobación</button>
                 <a asp-action="Index" class="btn btn-outline-blueMuni">
@@ -67,7 +69,7 @@
     <div class="col-md-6">
         <div class="card" id="detallesSolicitud">
             <div class="card-header bg-info text-white">
-                <h5 class="mb-0">Detalles de la Solicitud</h5>
+                <h5 class="mb-0"><i class="fa-solid fa-file-invoice"></i> Detalles de la Solicitud</h5>
             </div>
             <div class="card-body">
                 @if (solicitudSeleccionada != null)
@@ -79,7 +81,7 @@
                         </div>
                         <div class="row mb-2">
                             <div class="col-md-4 fw-bold">Solicitante:</div>
-                            <div class="col-md-8">@(solicitudSeleccionada.Usuario?.NombreUsuario ?? "No especificado")</div>
+                            <div class="col-md-8"> @(solicitudSeleccionada.Usuario?.Empleado?.Nombres ?? "No especificado") @(solicitudSeleccionada.Usuario?.Empleado?.Apellidos ?? "No especificado")</div>
                         </div>
                         <div class="row mb-2">
                             <div class="col-md-4 fw-bold">Vehículo:</div>
@@ -99,11 +101,12 @@
                         </div>
                         <div class="row mb-2">
                             <div class="col-md-4 fw-bold">Fecha Solicitud:</div>
-                            <div class="col-md-8">@solicitudSeleccionada.FechaSolicitud.ToString("dd/MM/yyyy hh:mm tt")</div>
+                            <div class="col-md-8">@Html.DisplayFor(s => s.FechaAprobacion)</div>
+                            @* <div class="col-md-8">@solicitudSeleccionada.FechaSolicitud.ToString("dd/MM/yyyy hh:mm tt")</div> *@
                         </div>
                         <div class="row mb-2">
                             <div class="col-md-4 fw-bold">Fecha Salida:</div>
-                            <div class="col-md-8">@solicitudSeleccionada.FechaSalida.ToString("dd/MM/yyyy hh:mm tt")</div>
+                             <div class="col-md-8">@solicitudSeleccionada.FechaSalida.ToString("dd/MM/yyyy hh:mm tt")</div> 
                         </div>
                         <div class="row mb-2">
                             <div class="col-md-4 fw-bold">Fecha Regreso:</div>
@@ -137,8 +140,8 @@
             // Inicializar Select2
         $("#selectSolicitud").select2({
             placeholder: "-- Seleccione una solicitud --",
-            allowClear: true,
             width: '100%',
+            allowClear: true,
             language : {
                 noResults: function() {
                     return "No se encontraron resultados";
@@ -146,15 +149,32 @@
             }
             
         });
+        // Opcional: Mejorar comportamiento del form-floating con Select2
+        $("#selectSolicitud").on("select2:open", function() {
+            $(this).parent().addClass("focused");
+        }).on("select2:close", function() {
+            if (!$(this).val()) {
+                $(this).parent().removeClass("focused");
+            }
+        });
             // Función para cargar los detalles de la solicitud al cambiar la selección
             $("#selectSolicitud").change(function() {
                 var idSolicitud = $(this).val();
                 if (idSolicitud) {
                     // Recargar la página con el ID de solicitud seleccionado
                     window.location.href = '@Url.Action("Create")' + '?idSolicitud=' + idSolicitud;
+                }else{
+                    // Limpiar los detalles si no hay selección
+                    // $("#detallesSolicitud").hide();
+                     window.location.href = '@Url.Action("Create")';
                 }
             });
         });
+
+       
     </script>
+    
+        
+    
 }
 

@@ -12,55 +12,50 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            @*<div class="form-group">
-                <label asp-for="IdEmpleado" class="control-label">Empleado</label>
-                <select asp-for="IdEmpleado" class="form-control" asp-items="ViewBag.IdEmpleado">
-                    <option value="">-- Seleccionar Empleado --</option>
-                </select>
-            </div>
-            *@
-            <div class="form-group">
-                <label asp-for="IdEmpleado" class="control-label">Empleado</label>
+            <div asp-validation-summary="All" class="text-danger"></div> 
+            <div class="mb-3">
+                <label asp-for="IdEmpleado" class="form-label text-blueMuni-600">Empleado</label>
                 <select asp-for="IdEmpleado" class="form-select" id="buscarEmpleado" data-placeholder="Buscar Empleado Activo">
                     <option></option>
                 </select>
+               
                 <span asp-validation-for="IdEmpleado" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="NombreUsuario" class="control-label">Nombre de Usuario</label>
-                <input asp-for="NombreUsuario" class="form-control" />
+            <div class="form-floating mb-3">
+               
+                <input asp-for="NombreUsuario" class="form-control" placeholder="Nombre de Usuario" autocomplete="off" />
+                <label asp-for="NombreUsuario" class="form-label">Nombre de Usuario</label>
                 <span asp-validation-for="NombreUsuario" class="text-danger"></span>
             </div>
-            <div class="form-group position-relative">
-                <label asp-for="Contrasenia" class="control-label">Contraseña</label>
-                <div class="input-group">
+            <div class="form-floating mb-3">
                     <!-- Contenedor para alinear input + botón -->
-                    <input asp-for="Contrasenia" class="form-control pe-5" type="password" />
-                    <button class="btn position-absolute top-50 end-0 translate-middle-y p-0 me-3" type="button" id="togglePassword" style="background: none; border: none; box-shadow: none;">
+                    <input type="password" asp-for="Contrasenia" class="form-control" placeholder="Contraseña" autocomplete="off" />
+                    <label asp-for="Contrasenia" class="form-label">Contraseña</label>
+                    <button class="btn position-absolute top-50 end-0 translate-middle-y text-secondary" type="button" id="togglePassword" style="background: none; border: none; box-shadow: none;">
                         <i class="fa-solid fa-eye" style="font-size: 1.25rem;"></i>
                     </button>
-                </div>
                 <span asp-validation-for="Contrasenia" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Rol" class="control-label"></label>
-                <select asp-for="Rol" class="form-control" asp-items="@(new SelectList(Enum.GetNames(typeof(ListaRolesUsuario))))">
+            <div class="form-floating mb-3">
+               
+                <select asp-for="Rol" class="form-select" asp-items="@(new SelectList(Enum.GetNames(typeof(ListaRolesUsuario))))">
                     <option value="" selected disabled>Seleccione Rol</option>
 
                 </select>
+                <label asp-for="Rol" class="form-label"></label>
                 <span asp-validation-for="Rol" class="text-danger"></span>
             </div>
 
 
-            <div class="form-group">
-                <label asp-for="FechaRegistro" class="control-label"> Fecha de Registro </label>
-                <input asp-for="FechaRegistro" class="form-control" readonly />
+            <div class="form-floating mb-3">
+                
+                <input asp-for="FechaRegistro" class="form-control" placeholder="Fecha de Registro" autocomplete="off" readonly />
+                <label asp-for="FechaRegistro" class="form-label"> Fecha de Registro </label>
                 <span asp-validation-for="FechaRegistro" class="text-danger"></span>
             </div>
-            <div class="form-group d-flex gap-2">
+            <div class="form-floating mb-3 d-flex gap-2">
                 <input type="submit" value="Crear" class="btn btn-blueMuni" />
                 <a asp-action="Index" class="btn btn-outline-blueMuni">
                     <i class="fa-solid fa-circle-arrow-left"></i> Atrás
@@ -103,7 +98,7 @@
             allowClear: true,
                 language: {
             noResults: function () {
-                return "No se encontraron empleados.";
+                return "No se encontro al empleado / Busque un empleado.";
             },
         searching: function () {
             return "Buscando empleados...";

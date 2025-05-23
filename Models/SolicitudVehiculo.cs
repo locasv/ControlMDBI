@@ -30,6 +30,7 @@ namespace ControlMDBI.Models
         [Required(ErrorMessage = "La fecha de regreso es obligatoria.")]
         [DataType(DataType.DateTime, ErrorMessage = "La fecha de regreso no es válida.")]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy hh:mm tt}", ApplyFormatInEditMode = false)]
+        [Display(Name = "Fecha de Regreso")]
         public DateTime FechaRegreso { get; set; } =  DateTime.Now;
 
         [Required(ErrorMessage = "El recorrido de la solicitud es obligatorio.")]
@@ -40,6 +41,7 @@ namespace ControlMDBI.Models
         [Required(ErrorMessage = "La fecha de solicitud es obligatoria.")]
         [DataType(DataType.DateTime, ErrorMessage = "La fecha de solicitud no es válida.")]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy hh:mm tt}", ApplyFormatInEditMode = false)]
+        [Display(Name = "Fecha de Solicitud")]
         public DateTime FechaSolicitud { get; set; } = DateTime.Now;
 
 
