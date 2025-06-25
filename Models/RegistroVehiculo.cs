@@ -7,7 +7,7 @@ namespace ControlMDBI.Models
     {
         [Key]
         public int IdRegistroVehiculo { get; set; }
-        //Es necesario el codigo de aprobacion para el registro de vehiculo
+        //Es necesario el codigo de aprobacion para el registro de vehiculo ya que ahi se puede obtener el vehiculo para el registro
         [Required(ErrorMessage = "La aprobacion es obligatoria.")]
         public int IdAprobacionVehiculo { get; set; }
         [ForeignKey("IdAprobacionVehiculo")]
@@ -31,7 +31,7 @@ namespace ControlMDBI.Models
 
    
         [StringLength(200, ErrorMessage = "Las observaciones no puede exceder los {1} caracteres.")]
-        public string Observaciones { get; set; }
+        public string? Observaciones { get; set; }
 
 
     }

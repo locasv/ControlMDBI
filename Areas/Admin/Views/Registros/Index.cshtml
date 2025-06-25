@@ -1,0 +1,209 @@
+﻿@* Views/Admin/Registros/Index.cshtml - Vista principal de registros *@
+@{
+    ViewData["Title"] = "Registros";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">Registros del Día</h1>
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["Success"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @TempData["Error"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <div class="row mb-4">
+                <div class="col-12">
+                    <a class="btn btn-blueMuni me-2" asp-area="Admin" asp-controller="RegistrosVehiculos" asp-action="Create">
+                        <i class="fas fa-car me-2"></i>Registrar Vehículo
+                    </a>
+                    <a class="btn btn-blueMuni me-2" asp-area="Admin" asp-controller="RegistrosPersonas" asp-action="Create">
+                        <i class="fas fa-user me-2"></i>Registrar Persona
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Registro de Empleados -->
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header bg-blueMuni-500 text-white ">
+                    <h5 class="mb-0"><i class="fas fa-user-tie"></i> Registros de Empleados</h5>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.RegistrosPersonas != null && ((List<ControlMDBI.Models.RegistroEmpleado>)ViewBag.RegistrosPersonas).Any() @*|| ViewBag.RegistrosVisitantes != null && ((List<ControlMDBI.Models.RegistroVisitante>)ViewBag.RegistrosVisitantes).Any()*@)
+
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Registrador</th>
+                                        <th>Empleado</th>
+                                        <th>Tipo</th>
+                                        <th>Hora</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var registro in (List<ControlMDBI.Models.RegistroEmpleado>)ViewBag.RegistrosPersonas)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @registro.Usuario?.Empleado?.Nombres @registro.Usuario?.Empleado?.Apellidos
+                                            </td>
+                                            <td>@registro.Empleado.Nombres @registro.Empleado.Apellidos</td>
+                                            <td>
+                                                <span class="badge @(registro.TipoRegistro == "Ingreso" ? "bg-success" : "bg-warning")">
+                                                    @registro.TipoRegistro
+                                                </span>
+                                            </td>
+                                            <td>
+                                                @* @Html.DisplayFor(modelItem => registro.FechaRegistroEmpleado, "{0:HH:mm}") *@
+                                                @registro.FechaRegistroEmpleado.ToString("HH:mm tt")
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        @* <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Registrador</th>
+                                        <th>DNI</th>
+                                        <th>Razón</th>
+                                        <th>Hora</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var registro in (List<ControlMDBI.Models.RegistroVisitante>)ViewBag.RegistrosVisitantes)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @registro.Usuario?.Empleado?.Nombres @registro.Usuario?.Empleado?.Apellidos
+                                            </td>
+                                            <td>@registro.DNI</td>
+                                            <td>@registro.RazonVisita</td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => registro.FechaRegistroVisitante, "{0:HH:mm}")
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div> *@
+                    }
+                    else
+                    {
+                        <p class="text-muted">No hay registros de empleados hoy.</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Registro de Visitantes -->
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-user-friends"></i> Registros de Visitantes</h5>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.RegistrosVisitantes != null && ((List<ControlMDBI.Models.RegistroVisitante>)ViewBag.RegistrosVisitantes).Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Registrador</th>
+                                        <th>DNI</th>
+                                        <th>Razón</th>
+                                        <th>Hora</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var registro in (List<ControlMDBI.Models.RegistroVisitante>)ViewBag.RegistrosVisitantes)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @registro.Usuario?.Empleado?.Nombres @registro.Usuario?.Empleado?.Apellidos
+                                            </td>
+                                            <td>@registro.DNI</td>
+                                            <td>@registro.RazonVisita</td>
+                                            <td>
+                                                @registro.FechaRegistroVisitante.ToString("HH:mm tt")
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No hay registros de visitantes hoy.</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Registro de Vehículos -->
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0"><i class="fas fa-car"></i> Registros de Vehículos</h5>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.RegistrosVehiculos != null && ((List<ControlMDBI.Models.RegistroVehiculo>)ViewBag.RegistrosVehiculos).Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Placa</th>
+                                        <th>Tipo</th>
+                                        <th>Hora</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var registro in (List<ControlMDBI.Models.RegistroVehiculo>)ViewBag.RegistrosVehiculos)
+                                    {
+                                        <tr>
+                                            <td>@registro.AprobacionVehiculo.SolicitudVehiculo.Vehiculo.Placa</td>
+                                            <td>
+                                                <span class="badge @(registro.TipoRegistro == "Ingreso" ? "bg-success" : "bg-warning")">
+                                                    @registro.TipoRegistro
+                                                </span>
+                                            </td>
+                                            <td>@registro.FechaRegistroVehiculo.ToString("HH:mm tt")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No hay registros de vehículos hoy.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

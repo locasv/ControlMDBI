@@ -72,6 +72,34 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcRW1wbGVhZG9zXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/MUNI BDI/ControlMDBI/Areas/Admin/Views/RegistrosPersonas/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcUmVnaXN0cm9zUGVyc29uYXNcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/MUNI BDI/ControlMDBI/Areas/Admin/Views/RegistrosVehiculos/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcUmVnaXN0cm9zVmVoaWN1bG9zXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/MUNI BDI/ControlMDBI/Areas/Admin/Views/RegistrosVehiculos/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcUmVnaXN0cm9zVmVoaWN1bG9zXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/MUNI BDI/ControlMDBI/Areas/Admin/Views/RegistrosVehiculos/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcUmVnaXN0cm9zVmVoaWN1bG9zXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/MUNI BDI/ControlMDBI/Areas/Admin/Views/RegistrosVehiculos/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcUmVnaXN0cm9zVmVoaWN1bG9zXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/MUNI BDI/ControlMDBI/Areas/Admin/Views/RegistrosVehiculos/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcUmVnaXN0cm9zVmVoaWN1bG9zXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/MUNI BDI/ControlMDBI/Areas/Admin/Views/Registros/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcUmVnaXN0cm9zXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/MUNI BDI/ControlMDBI/Areas/Admin/Views/Sedes/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU2VkZXNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -234,6 +262,34 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/MUNI BDI/ControlMDBI/Areas/Vigi/Views/Dashboard/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcVmlnaVxWaWV3c1xEYXNoYm9hcmRcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/MUNI BDI/ControlMDBI/Areas/Vigi/Views/RegistrosPersonas/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcVmlnaVxWaWV3c1xSZWdpc3Ryb3NQZXJzb25hc1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/MUNI BDI/ControlMDBI/Areas/Vigi/Views/RegistrosVehiculos/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcVmlnaVxWaWV3c1xSZWdpc3Ryb3NWZWhpY3Vsb3NcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/MUNI BDI/ControlMDBI/Areas/Vigi/Views/RegistrosVehiculos/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcVmlnaVxWaWV3c1xSZWdpc3Ryb3NWZWhpY3Vsb3NcRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/MUNI BDI/ControlMDBI/Areas/Vigi/Views/RegistrosVehiculos/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcVmlnaVxWaWV3c1xSZWdpc3Ryb3NWZWhpY3Vsb3NcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/MUNI BDI/ControlMDBI/Areas/Vigi/Views/RegistrosVehiculos/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcVmlnaVxWaWV3c1xSZWdpc3Ryb3NWZWhpY3Vsb3NcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/MUNI BDI/ControlMDBI/Areas/Vigi/Views/RegistrosVehiculos/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcVmlnaVxWaWV3c1xSZWdpc3Ryb3NWZWhpY3Vsb3NcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/MUNI BDI/ControlMDBI/Areas/Vigi/Views/Registros/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcVmlnaVxWaWV3c1xSZWdpc3Ryb3NcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/MUNI BDI/ControlMDBI/Areas/Vigi/Views/_ViewImports.cshtml]

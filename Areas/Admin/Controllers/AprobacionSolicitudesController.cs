@@ -47,24 +47,14 @@ namespace ControlMDBI.Areas.Admin.Controllers
             {
                 buscarPalabra = buscarPalabra.ToLower();
                 query = query.Where(a =>
-                   ////Por recorrido
-                   // a.SolicitudVehiculo.Recorrido.ToLower().Contains(buscarPalabra) ||
                     //Por usuario que aprueba
                     (a.Usuario.Empleado.Nombres +" "+ a.Usuario.Empleado.Apellidos).ToLower().Contains(buscarPalabra) ||
                     (a.Usuario.Empleado.Apellidos + " " + a.Usuario.Empleado.Nombres).ToLower().Contains(buscarPalabra) ||
                     //Por solicitante
                     (a.SolicitudVehiculo.Usuario.Empleado.Nombres +" "+ a.SolicitudVehiculo.Usuario.Empleado.Apellidos).ToLower().Contains(buscarPalabra) ||
                     (a.SolicitudVehiculo.Usuario.Empleado.Apellidos + " " + a.SolicitudVehiculo.Usuario.Empleado.Nombres).ToLower().Contains(buscarPalabra) ||
-                    //Por observaciones
-                    //a.Observaciones.ToLower().Contains(buscarPalabra) ||
                     //Por numero de solicitud
-                    a.IdSolicitudVehiculo.ToString().Contains(buscarPalabra)||
-                    // Por vehiculo
-                    a.SolicitudVehiculo.Vehiculo.Placa.ToLower().Contains(buscarPalabra)||
-                    //Por DNI del solicitante
-                   a.SolicitudVehiculo.Usuario.Empleado.DNI.Contains(buscarPalabra) ||
-                    //Por DNI del aprobador
-                     a.Usuario.Empleado.DNI.Contains(buscarPalabra) 
+                    a.IdSolicitudVehiculo.ToString().Contains(buscarPalabra)
                 );
             }
 
@@ -126,7 +116,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
         {
             // Obtener lista de solicitudes de vehículos para el dropdown
             var solicitudes = _context.SolicitudVehiculo
-                .Include(s => s.Usuario).Include(s => s.Usuario.Empleado)
+                .Include(s => s.Usuario).ThenInclude(s => s.Empleado)
                 .Include(s => s.Vehiculo)
                 .ToList();
 
@@ -135,7 +125,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
                 solicitudes.Select(s => new
                 {
                     IdSolicitudVehiculo = s.IdSolicitudVehiculo,
-                    Descripcion = $"N° Solicitud: {s.IdSolicitudVehiculo} - Solicitante: {s.Usuario?.Empleado?.Nombres} {s.Usuario?.Empleado?.Apellidos} - Fecha: {s.FechaSolicitud.ToString("dd/MM/yyyy HH:mm tt")}"
+                    Descripcion = $"N° Solicitud: {s.IdSolicitudVehiculo}"
                 }),
                 "IdSolicitudVehiculo",
                 "Descripcion"
@@ -178,21 +168,38 @@ namespace ControlMDBI.Areas.Admin.Controllers
                     .AnyAsync(a => a.IdSolicitudVehiculo == aprobacionVehiculo.IdSolicitudVehiculo);
                 if (existeAprobacion)
                 {
-                    ModelState.AddModelError(string.Empty, "Ya existe una aprobación para esta solicitud.");
+                    TempData["ErrorMessage"] = "No se debe repetir la solicitud!!";
                 }
                 else
                 {
-
                     // Establecer la fecha de aprobación al momento actual si no está establecida
                     if (aprobacionVehiculo.FechaAprobacion == default)
                         aprobacionVehiculo.FechaAprobacion = DateTime.Now;
 
+                    // Si la solicitud es RECHAZADA, cambiar el estado del vehículo a "Activo"
+                    if (aprobacionVehiculo.Estado == "Rechazado")
+                    {
+                        // Obtener la solicitud para conseguir el IdVehiculo
+                        var solicitud = await _context.SolicitudVehiculo
+                            .FirstOrDefaultAsync(s => s.IdSolicitudVehiculo == aprobacionVehiculo.IdSolicitudVehiculo);
+
+                        if (solicitud != null)
+                        {
+                            // Cambiar el estado del vehículo a "Activo"
+                            var vehiculo = await _context.Vehiculo.FindAsync(solicitud.IdVehiculo);
+                            if (vehiculo != null)
+                            {
+                                vehiculo.Estado = "Activo";
+                                _context.Update(vehiculo);
+                            }
+                        }
+                    }
+
                     _context.Add(aprobacionVehiculo);
                     await _context.SaveChangesAsync();
-
+                    TempData["SuccessMessage"] = "Agregado correctamente";
                     return RedirectToAction(nameof(Index));
                 }
-                
             }
 
             // Si hay errores, volver a cargar las listas desplegables
@@ -205,7 +212,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
                 solicitudes.Select(s => new
                 {
                     IdSolicitudVehiculo = s.IdSolicitudVehiculo,
-                    Descripcion = $"ID: {s.IdSolicitudVehiculo} - Usuario: {s.Usuario?.NombreUsuario} - Fecha: {s.FechaSolicitud.ToString("dd/MM/yyyy HH:mm")}"
+                    Descripcion = $"N° Solicitud: {s.IdSolicitudVehiculo}"
                 }),
                 "IdSolicitudVehiculo",
                 "Descripcion",
@@ -258,7 +265,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
                 solicitudes.Select(s => new
                 {
                     IdSolicitudVehiculo = s.IdSolicitudVehiculo,
-                    Descripcion = $"N° Solicitud: {s.IdSolicitudVehiculo} - Usuario: {s.Usuario?.NombreUsuario} - Fecha: {s.FechaSolicitud.ToString("dd/MM/yyyy HH:mm")}"
+                    Descripcion = $"N° Solicitud: {s.IdSolicitudVehiculo}"
                 }),
                 "IdSolicitudVehiculo",
                 "Descripcion",
@@ -338,7 +345,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
                 solicitudes.Select(s => new
                 {
                     IdSolicitudVehiculo = s.IdSolicitudVehiculo,
-                    Descripcion = $"N° Solicitud: {s.IdSolicitudVehiculo} - Usuario: {s.Usuario?.NombreUsuario} - Fecha: {s.FechaSolicitud.ToString("dd/MM/yyyy HH:mm")}"
+                    Descripcion = $"N° Solicitud: {s.IdSolicitudVehiculo}"
                 }),
                 "IdSolicitudVehiculo",
                 "Descripcion",

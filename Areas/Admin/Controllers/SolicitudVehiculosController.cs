@@ -210,13 +210,13 @@ namespace ControlMDBI.Areas.Admin.Controllers
                                     innerColumn.Item().Row(row =>
                                     {
                                         row.RelativeItem().Text($"\nFECHA DE SALIDA : {solicitudVehiculo.FechaSalida:dd/MM/yy}");
-                                        row.RelativeItem().Text($"\nHORA : {solicitudVehiculo.FechaSalida:HH:mm tt}");
+                                        row.RelativeItem().Text($"\nHORA : {solicitudVehiculo.FechaSalida:HH:mm}");
                                     });
 
                                     innerColumn.Item().Row(row =>
                                     {
                                         row.RelativeItem().Text($"\nFECHA DE REGRESO : {solicitudVehiculo.FechaRegreso:dd/MM/yy}");
-                                        row.RelativeItem().Text($"\nHORA : {solicitudVehiculo.FechaRegreso:HH:mm tt}");
+                                        row.RelativeItem().Text($"\nHORA : {solicitudVehiculo.FechaRegreso:HH:mm}");
                                     });
 
                                     innerColumn.Item().PaddingVertical(10);
@@ -296,8 +296,8 @@ namespace ControlMDBI.Areas.Admin.Controllers
             var modelo = new SolicitudVehiculo()
             {
                 FechaSalida = DateTime.Now,
-                FechaRegreso = DateTime.Now.AddHours(1),
-                FechaSolicitud = DateTime.Now
+                FechaSolicitud = DateTime.Now,
+                FechaRegreso = DateTime.Now
             };
 
             ViewData["IdVehiculo"] = new SelectList(_context.Vehiculo, "IdVehiculo", "Placa");
@@ -309,7 +309,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
             //            .Select(u => new
             //            {
             //                u.IdUsuario,
-            //                NombreCompletoYUnidad = u.Empleado.Nombres + " " + u.Empleado.Apellidos + "- Cargo : " + u.Empleado.Cargo + " - Subgerencia/Unidad : " + u.Empleado.Unidad
+            //                NombreCompletoYUnidad = u.Empleado.Nombres + " " + u.Empleado.Apellidos 
             //            })
             //            .ToList(), "IdUsuario", "NombreCompletoYUnidad");
 
@@ -319,7 +319,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
                 .Select(u => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
                 {
                     Value = u.IdUsuario.ToString(),
-                    Text = $"{u.Empleado.Nombres} {u.Empleado.Apellidos}  <small>Cargo: {u.Empleado.Cargo} - Unidad: {u.Empleado.Unidad}</small>"
+                    Text = $"{u.Empleado.Apellidos}, {u.Empleado.Nombres}"
                 }).ToList();
 
             //Para el empleado, mas no para el administrador o patrimonio
@@ -337,7 +337,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
         {
             var placaVehiculos = await _context.Vehiculo
                 .Where(b => b.Estado == "Activo" && (b.Placa.Contains(placaBuscada)))
-                .Select(e => new { id = e.IdVehiculo, text = "Placa : " + e.Placa + " - " + e.Estado })
+                .Select(e => new { id = e.IdVehiculo, text = e.Placa})
                 .ToListAsync();
 
             return Json(placaVehiculos);
@@ -361,19 +361,27 @@ namespace ControlMDBI.Areas.Admin.Controllers
                     .Include(u => u.Empleado)
                     .FirstOrDefault(u => u.NombreUsuario == User.Identity.Name);
 
-
                 if (usuarioActual?.Empleado != null)
                 {
-                    ViewBag.NombreEmpleado = $"{usuarioActual.Empleado.Nombres} {usuarioActual.Empleado.Apellidos} - Cargo : {usuarioActual.Empleado.Cargo} - Subgerencia/Unidad : {usuarioActual.Empleado.Unidad}";
+                    ViewBag.NombreEmpleado = $"{usuarioActual.Empleado.Nombres} {usuarioActual.Empleado.Apellidos}";
                     ViewBag.IdUsuario = usuarioActual.IdUsuario;
                 }
 
                 return View(solicitudVehiculo);
 
             }
+            // Buscar el vehículo seleccionado y cambiar su estado a "Circulando"
+            var vehiculo = await _context.Vehiculo.FindAsync(solicitudVehiculo.IdVehiculo);
+            if (vehiculo != null)
+            {
+                vehiculo.Estado = "Circulando";
+                _context.Update(vehiculo);
+            }
+            // Agregar la solicitud
             _context.Add(solicitudVehiculo);
+            // Guardar los datos
             await _context.SaveChangesAsync();
-            TempData["SuccessMessage"] = "La solicitud fue creada exitosamente.";
+            TempData["SuccessMessage"] = "La solicitud fue creada exitosamente y el vehículo cambió a estado 'Circulando'.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -397,7 +405,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
     .Select(u => new
     {
         IdUsuario = u.IdUsuario,
-        Nombre = u.Empleado.Nombres + " " + u.Empleado.Apellidos + " - Cargo: " + u.Empleado.Cargo + " - Subgerencia/Unidad: " + u.Empleado.Unidad
+        Nombre = u.Empleado.Apellidos + ", " + u.Empleado.Nombres
     }), "IdUsuario", "Nombre", solicitudVehiculo.IdUsuario);
 
 
@@ -424,10 +432,42 @@ namespace ControlMDBI.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 try
-                {            // Indicar que la entidad ha sido modificada en lugar de intentar adjuntarla
+                {
+                    // Obtener la solicitud original de la base de datos
+                    var solicitudOriginal = await _context.SolicitudVehiculo
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(s => s.IdSolicitudVehiculo == id);
 
+                    if (solicitudOriginal == null)
+                    {
+                        return NotFound();
+                    }
+
+                    // Verificar si se cambió el vehículo
+                    if (solicitudOriginal.IdVehiculo != solicitudVehiculo.IdVehiculo)
+                    {
+                        // Si cambió el vehículo, actualizar estados
+                        // 1. Cambiar el vehículo anterior a "Activo"
+                        var vehiculoAnterior = await _context.Vehiculo.FindAsync(solicitudOriginal.IdVehiculo);
+                        if (vehiculoAnterior != null)
+                        {
+                            vehiculoAnterior.Estado = "Activo";
+                            _context.Update(vehiculoAnterior);
+                        }
+
+                        // 2. Cambiar el nuevo vehículo a "Circulando"
+                        var vehiculoNuevo = await _context.Vehiculo.FindAsync(solicitudVehiculo.IdVehiculo);
+                        if (vehiculoNuevo != null)
+                        {
+                            vehiculoNuevo.Estado = "Circulando";
+                            _context.Update(vehiculoNuevo);
+                        }
+                    }
+
+                    // Actualizar la solicitud
                     _context.Update(solicitudVehiculo);
                     await _context.SaveChangesAsync();
+
                     TempData["SuccessMessage"] = "Solicitud actualizada correctamente.";
                 }
                 catch (DbUpdateConcurrencyException)

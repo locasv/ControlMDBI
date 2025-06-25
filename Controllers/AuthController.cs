@@ -14,21 +14,21 @@ namespace ControlMDBI.Controllers
     public class AuthController : Controller
     {
         private readonly ControlMDBIDbContext _context;
-        
+
 
         public AuthController(ControlMDBIDbContext context)
         {
             _context = context;
         }
 
-       public IActionResult Login()
+        public IActionResult Login(string? seccioExpirada)
         {
             if (User.Identity.IsAuthenticated)
             {
                 var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
                 if (userRole == "Administrador")
                 {
-                    return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
+                    return RedirectToAction("Index", "Empleados", new { area = "Admin" });
                 }
                 else if (userRole == "Empleado")
                 {
@@ -40,7 +40,7 @@ namespace ControlMDBI.Controllers
                 }
                 else if (userRole == "Vigilante")
                 {
-                    return RedirectToAction("Index", "Dashboard", new { area = "Vigi" });
+                    return RedirectToAction("Index", "Registros", new { area = "Vigi" });
                 }
                 else if (userRole == "RRHH")
                 {
@@ -51,6 +51,12 @@ namespace ControlMDBI.Controllers
                     return RedirectToAction("Index", "Home");
                 }
             }
+
+            if (!string.IsNullOrEmpty(seccioExpirada) && seccioExpirada == "true")
+            {
+                ViewBag.Mensaje = "Tu sesión ha expirado por inactividad.";
+            }
+
             return View();
         }
 
@@ -58,7 +64,7 @@ namespace ControlMDBI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(Usuario usuario)
         {
-            
+
 
             if (string.IsNullOrEmpty(usuario.NombreUsuario) || string.IsNullOrEmpty(usuario.Contrasenia))
             {
@@ -69,33 +75,40 @@ namespace ControlMDBI.Controllers
             // Incluir el empleado relacionado en la consulta
             var userDB = await _context.Usuario
                 .Include(u => u.Empleado) // Cargar la relación con Empleado
-                .FirstOrDefaultAsync(u => u.NombreUsuario == usuario.NombreUsuario && u.Empleado.Activo==true);
+                .FirstOrDefaultAsync(u => u.NombreUsuario == usuario.NombreUsuario && u.Empleado.Activo == true);
             //verifica 2: que el empleado este activo
-         
+
             // Verificar 1: Que el usuario exista,Que la contraseña sea correcta
             if (userDB != null && BCrypt.Net.BCrypt.Verify(usuario.Contrasenia, userDB.Contrasenia))
             {
-           
+
                 // Crear claims (añadir más datos si es necesario)
                 var claims = new List<Claim>
                     {
                        new Claim(ClaimTypes.Name, userDB.NombreUsuario),
                         new Claim(ClaimTypes.Role, userDB.Rol),
-                        new Claim("NombreEmpleado",$"{userDB.Empleado.Nombres}")
+                        new Claim("NombreEmpleado",$"{userDB.Empleado.Nombres}"),
+                        new Claim("IdUsuario", userDB.IdUsuario.ToString()),
+                        new Claim(ClaimTypes.NameIdentifier, userDB.IdUsuario.ToString()),
                     };
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
 
                 await HttpContext.SignInAsync(
                     CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(claimsIdentity));
+                    new ClaimsPrincipal(claimsIdentity),
+                    new AuthenticationProperties
+                    {
+                        IsPersistent = true, // 🔥 Esto hace que la cookie persista
+                        ExpiresUtc = DateTime.UtcNow.AddMinutes(30) // ⏱️ Tiempo de expiración
+                    });
                 // Redirección por rol
                 return userDB.Rol switch
                 {
-                    "Administrador" => RedirectToAction("Index", "Dashboard", new { area = "Admin" }),
+                    "Administrador" => RedirectToAction("Index", "Empleados", new { area = "Admin" }),
                     "Empleado" => RedirectToAction("Index", "Dashboard", new { area = "Emple" }),
                     "Patrimonio" => RedirectToAction("Index", "Dashboard", new { area = "Patri" }),
-                    "Vigilante" => RedirectToAction("Index", "Dashboard", new { area = "Vigi" }),
+                    "Vigilante" => RedirectToAction("Index", "Registros", new { area = "Vigi" }),
                     "RRHH" => RedirectToAction("Index", "Dashboard", new { area = "RRHH" }),
                     _ => RedirectToAction("Index", "Home"),
                 };
@@ -107,30 +120,6 @@ namespace ControlMDBI.Controllers
 
             }
         }
-        //[ServiceFilter(typeof(ActiveUserFilter))]
-        public class ActiveUserFilter : IAsyncAuthorizationFilter
-        {
-            public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
-            {
-                var user = context.HttpContext.User;
-                if (!user.Identity.IsAuthenticated) return;
-
-                var dbContext = context.HttpContext.RequestServices.GetService<ControlMDBIDbContext>();
-                var userId = int.Parse(user.FindFirst(ClaimTypes.NameIdentifier).Value);
-
-                var usuarioActivo = await dbContext.Usuario
-                    .Include(u => u.Empleado)
-                    .Where(u => u.IdUsuario == userId && u.Empleado.Activo)
-                    .AnyAsync();
-
-                if (!usuarioActivo)
-                {
-                    await context.HttpContext.SignOutAsync();
-                    context.Result = new RedirectToActionResult("Login", "Auth", new { message = "Su cuenta ha sido desactivada" });
-                }
-            }
-        }
-
         public IActionResult Logout()
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -139,7 +128,8 @@ namespace ControlMDBI.Controllers
         public JsonResult MiPerfil()
         {
             var userName = User.Identity.Name;
-            var usuario = _context.Usuario.Include(u=> u.Empleado).Where(u => u.NombreUsuario == userName).Select(u => new {
+            var usuario = _context.Usuario.Include(u => u.Empleado).Where(u => u.NombreUsuario == userName).Select(u => new
+            {
                 u.IdUsuario,
                 u.IdEmpleado,
                 u.NombreUsuario,
@@ -153,7 +143,7 @@ namespace ControlMDBI.Controllers
 
             if (usuario == null)
             {
-                return Json(new { success = false, message  ="Usuario no encontrado" });
+                return Json(new { success = false, message = "Usuario no encontrado" });
             }
             // Serializar el objeto usuario a JSON
             //string data = JsonConvert.SerializeObject(usuario);

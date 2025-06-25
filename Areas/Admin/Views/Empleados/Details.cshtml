@@ -4,10 +4,10 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Detalles del Empleado  @Html.DisplayFor(model => model.Apellidos)  @Html.DisplayFor(model => model.Nombres)</h1>
 
 <div>
-    <h4>Empleado</h4>
+    <h4>Datos</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -16,18 +16,18 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.DNI)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nombres)
+        @* <dt class = "col-sm-2">
+           Nombres Completos
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Nombres)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Apellidos)
+           Apellidos
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Apellidos)
-        </dd>
+        </dd> *@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Direccion)
         </dt>
@@ -62,11 +62,11 @@
             @Html.DisplayNameFor(model => model.Sede)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Sede.Direccion)
+            @Html.DisplayFor(model => model.Sede.Nombre)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.IdEmpleado">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model?.IdEmpleado"><i class="fa-solid fa-pen me-2"></i>Editar</a> |
+    <a class="btn btn-blueMuni" asp-action="Index">Regresar</a>
 </div>

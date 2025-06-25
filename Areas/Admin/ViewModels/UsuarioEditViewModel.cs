@@ -6,7 +6,14 @@
         public int IdEmpleado { get; set; }
 
         public string NombreUsuario { get; set; }
-        public string Contrasenia { get; set; }
+        // Contraseña actual (solo para mostrar que existe)
+        public string ContraseniaActual { get; set; }
+
+        // Nueva contraseña (para cambios)
+        public string? ContraseniaNueva { get; set; }
+
+        // Confirmación de nueva contraseña
+        public string? ConfirmarContrasenia { get; set; }
         public string Rol { get; set; }
         public DateTime FechaRegistro { get; set; }
 
@@ -16,5 +23,7 @@
         public string? Cargo { get; set; }
         public string? Unidad { get; set; }
         public bool ActivoEmpleado { get; set; }
+        // Indica si el usuario tiene contraseña establecida
+        public bool TieneContrasenia { get; set; }
     }
 }

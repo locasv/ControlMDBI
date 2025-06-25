@@ -25,11 +25,11 @@
 }
 
 <div class="mt-3" style="font-size: 14px;">
-    <h2>Lista de Empleados</h2>
+    <h1>Empleados</h1>
     <div class="row d-fex flex-column flex-md-row my-4">
         <div class="col-8 col-md-4 col-lg-6 mb-3 mb-md-0">
             <a class="btn btn-success" asp-action="Create">
-                <i class="fa-solid fa-plus"></i>&nbsp;Nuevo Empleado
+                <i class="fa-solid fa-plus"></i>&nbsp;Agregar Empleado
             </a>
         </div>
 
@@ -38,7 +38,7 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="input-group">
                     <input asp-for="@Model.BusquedaNombre" name="busquedaNombre" class="form-control" placeholder="Nombre del Empleado" aria-label="Nombre del Empleado" autocomplete="off" />
-                    <input asp-for="@Model.BusquedaDNI" name="busquedaDNI" class="form-control" placeholder="Numero de DNI" aria-label="Numero de DNI" autocomplete="off" />
+                    <input asp-for="@Model.BusquedaDNI" name="busquedaDNI" class="form-control" placeholder="Numero de DNI" aria-label="Numero de DNI" autocomplete="off"  maxlength="8" pattern="[0-9]{8}" />
                     <button name="botonBusqueda" id="botonBusqueda" type="submit" class="btn btn-outline-primary">
                         <i class="fa-solid fa-magnifying-glass"></i>
                         <span class="d-none d-md-inline-block">Buscar</span>
@@ -72,25 +72,15 @@
                         <th>
                             Apellidos
                         </th>
-                        <th>
-                            Direccion
-                        </th>
+                      
                         <th>
                             Correo
                         </th>
-                        <th>
-                            Cargo
-                        </th>
-                        <th>
-                            Unidad/Subgerencia
-                        </th>
-                        <th>
-                            Estado
-                        </th>
-                        <th>
-                            Sede
-                        </th>
-                        <th></th>
+                   
+                        <th>Estado</th>
+                       
+                        <th>Acciones</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -106,38 +96,41 @@
                             <td>
                                 @item.Apellidos
                             </td>
-                            <td>
-                                @item.Direccion
-                            </td>
+                        
                             <td>
                                 @item.Correo
                             </td>
-                            <td>
-                                @item.Cargo
-                            </td>
-                            <td>
-                                @item.Unidad
-                            </td>
+                         
 
                             <td class="text-success">
+                                <input type="checkbox" class="form-check-input" checked="@item.Activo" onchange="ActualizarEstado(@item.IdEmpleado, this.checked)" />
                                 @if (item.Activo)
                                 {
-                                    <span class="badge bg-success">Activo</span>
+                                    <span class="badge bg-success ms-4">Habilitado</span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-danger">Inactivo</span>
+                                    <span class="badge bg-danger ms-4">Deshabilitado</span>
                                 }
+                                
                             </td>
 
                             <td>
-                                @item.Sede?.Nombre
+                                <a class="btn-sm btn-outline-blueMuni" asp-action="Edit" asp-route-id="@item.IdEmpleado" data-bs-toggle="tooltip" data-bs-placement="right" title="Detalles empleado">
+                                    <i class="fa-solid fa-list me-2"></i>Detalles
+                                    @* <i class="fa-solid fa-pen"></i> *@
+                                    </a>
+                                @* <a class="btn-sm btn-info" asp-action="Details" asp-route-id="@item.IdEmpleado" data-bs-toggle="tooltip" data-bs-placement="right" title="Detalles del Usuario"><i class="fa-solid fa-list"></i></a> | *@
+
+                                @* <a class="btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.IdEmpleado" data-bs-toggle="tooltip" data-bs-placement="right" title="Eliminar Usuario"><i class="fa-solid fa-trash"></i></a> *@
                             </td>
-                            <td>
-                                <a class="btn-sm btn-warning" asp-action="Edit" asp-route-id="@item.IdEmpleado" data-bs-toggle="tooltip" data-bs-placement="right" title="Editar Usuario"><i class="fa-solid fa-pen"></i></a>
-                                <a class="btn-sm btn-info" asp-action="Details" asp-route-id="@item.IdEmpleado" data-bs-toggle="tooltip" data-bs-placement="right" title="Detalles del Usuario"><i class="fa-solid fa-list"></i></a> |
-                                <a class="btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.IdEmpleado" data-bs-toggle="tooltip" data-bs-placement="right" title="Eliminar Usuario"><i class="fa-solid fa-trash"></i></a>
-                            </td>
+                            @* <td>
+                                <form asp-action="ActualizarEstado" method="post">
+                                    <input type="hidden" name="id" value="@item.IdEmpleado"/>
+                                    <input type="checkbox" name="estado" value="true" @(item.Activo ? "checked" : "")onchange="this.form.submit()" />
+                                </form> 
+                                <input type="checkbox" class="form-check-input" checked="@item.Activo" onchange="ActualizarEstado(@item.IdEmpleado, this.checked)" /> 
+                            </td> *@
                         </tr>
                     }
                 </tbody>
@@ -189,5 +182,20 @@
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
           return new bootstrap.Tooltip(tooltipTriggerEl)
         })
+
+        function ActualizarEstado(idEmpleado, estado){
+            $.ajax({
+                type:"POST",
+                 url:"@Url.Action("ActualizarEstado", "Empleados")",
+                data:{id:idEmpleado, estado:estado},
+                success: function(data){
+                    location.reload();
+                    console.log("Estado actualizado correctamente");
+                },
+                error:function(xhr, status, error){
+                    console.log("Error al actualizar el estado")
+                }
+            })
+        }
     </script>
 }

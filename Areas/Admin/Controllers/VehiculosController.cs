@@ -28,7 +28,40 @@ namespace ControlMDBI.Areas.Admin.Controllers
             var controlMDBIDbContext = _context.Vehiculo.Include(v => v.Sede);
             return View(await controlMDBIDbContext.ToListAsync());
         }
+        // POST: Método para actualizar el estado del vehículo via AJAX
+        [HttpPost]
+        public async Task<IActionResult> UpdateEstado(int id, string nuevoEstado)
+        {
+            try
+            {
+                var vehiculo = await _context.Vehiculo.FindAsync(id);
+                if (vehiculo == null)
+                {
+                    return Json(new { success = false, message = "Vehículo no encontrado" });
+                }
 
+                // Validar que el estado sea válido
+                var estadosValidos = new[] { "Activo", "Inactivo", "Mantenimiento", "Circulando" };
+                if (!estadosValidos.Contains(nuevoEstado))
+                {
+                    return Json(new { success = false, message = "Estado no válido" });
+                }
+
+                vehiculo.Estado = nuevoEstado;
+                await _context.SaveChangesAsync();
+
+                return Json(new
+                {
+                    success = true,
+                    message = $"Estado del vehículo {vehiculo.Placa} actualizado a {nuevoEstado}",
+                    nuevoEstado = nuevoEstado
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error al actualizar el estado: " + ex.Message });
+            }
+        }
         // GET: Admin/Vehiculos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -62,11 +95,27 @@ namespace ControlMDBI.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Vehiculo vehiculo)
         {
+           
             if (ModelState.IsValid)
             {
-                _context.Add(vehiculo);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //Verificar si ya existe un vehiculo con esa placa
+                var existeVehiculo = await _context.Vehiculo
+                    .AnyAsync(a => a.Placa == vehiculo.Placa);
+                if (existeVehiculo)
+                {
+                    // Puedes redirigir o mostrar un mensaje de error más claro
+                    TempData["ErrorMessage"] = "Ya existe un Vehiculo con esa placa.";
+                    //return RedirectToAction(nameof(Index));
+                    //ModelState.AddModelError(string.Empty, "Ya existe una empleado con ese DNI.");
+                }
+                else
+                {
+                    _context.Add(vehiculo);
+                    await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "El vehiculo fue creado con exito.";
+                    return RedirectToAction(nameof(Index));
+
+                }
             }
             ViewData["IdSede"] = new SelectList(_context.Sede, "IdSede", "Nombre", vehiculo.IdSede);
             return View(vehiculo);
@@ -94,7 +143,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdVehiculo,Placa,Marca,Estado,IdSede")] Vehiculo vehiculo)
+        public async Task<IActionResult> Edit(int id, Vehiculo vehiculo)
         {
             if (id != vehiculo.IdVehiculo)
             {
@@ -103,10 +152,26 @@ namespace ControlMDBI.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                //Verificar si ya existe un vehiculo con esa placa
+                var existeVehiculo = await _context.Vehiculo
+                    .AnyAsync(a => a.Placa == vehiculo.Placa && a.IdVehiculo != vehiculo.IdVehiculo);
                 try
                 {
-                    _context.Update(vehiculo);
-                    await _context.SaveChangesAsync();
+                    if (existeVehiculo)
+                    {
+                        // Mostrar un mensaje de error más claro
+                        TempData["ErrorMessage"] = "Ya existe un Vehiculo con esa placa.";
+                        //return RedirectToAction(nameof(Index));
+
+                    }
+                    else
+                    {
+                        _context.Update(vehiculo);
+                        await _context.SaveChangesAsync();
+                        TempData["SuccessMessage"] = "El los cambios realizados se guardaron con exito.";
+                        return RedirectToAction(nameof(Index));
+
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -119,7 +184,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                
             }
             ViewData["IdSede"] = new SelectList(_context.Sede, "IdSede", "Direccion", vehiculo.IdSede);
             return View(vehiculo);

@@ -513,6 +513,13 @@ footer {
         #sidebar.active {
             margin-left: 0;
         }
+    .container-fluid {
+        padding: 1rem;
+    }
+
+    .card-body {
+        padding: 2rem 1.5rem;
+    }
 }
 
 
@@ -522,6 +529,7 @@ footer {
     border-color: var(--co-200);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 2rem;
+
 }
 
     .card:hover {
@@ -582,7 +590,7 @@ footer {
 }
 
 h5 {
-    color: var(--co-800);
+    
     margin-bottom: 15px;
     font-size: 1.25rem;
     font-weight: 600;
@@ -689,7 +697,11 @@ a {
     background-color: #d4edda;
     border-color: #c3e6cb;
 }
-
+.alert-info {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    color: #0c5460;
+}
 
 
 .btn-danger {
@@ -803,3 +815,8 @@ dd {
 .form-floating .select2-container {
     width: 100% !important; /* Asegurar que el ancho sea consistente */
 }
+/*.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label,
+.form-floating > .form-select ~ label {
+    color: #5a5c69;
+}*/

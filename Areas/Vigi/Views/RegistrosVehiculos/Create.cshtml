@@ -1,0 +1,453 @@
+﻿@* Areas/Vigi/Views/RegistrosVehiculos/Create.cshtml - Vista para crear registros de vehículos *@
+@* @model ControlMDBI.Models.RegistroVehiculo
+
+@{
+    ViewData["Title"] = "Registrar Vehículo";
+} *@
+
+@* <div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Registro de Vehículo</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group mb-3">
+                                    <label asp-for="IdAprobacionVehiculo" class="form-label">Vehículo Aprobado</label>
+                                    <select asp-for="IdAprobacionVehiculo" class="form-select" asp-items="ViewBag.AprobacionesVehiculos">
+                                        <option value="">Seleccione un vehículo...</option>
+                                    </select>
+                                    <span asp-validation-for="IdAprobacionVehiculo" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="TipoRegistro" class="form-label">Tipo de Registro</label>
+                                    <select asp-for="TipoRegistro" class="form-select" asp-items="ViewBag.TiposRegistro">
+                                        <option value="">Seleccione...</option>
+                                    </select>
+                                    <span asp-validation-for="TipoRegistro" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Fecha y Hora</label>
+                                    <input type="text" class="form-control" value="@DateTime.Now.ToString("dd/MM/yyyy HH:mm tt")" readonly />
+                                    <div class="form-text">Fecha y hora actual del registro</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Observaciones" class="form-label">Observaciones</label>
+                                    <textarea asp-for="Observaciones" class="form-control" rows="3" placeholder="Observaciones adicionales (opcional)"></textarea>
+                                    <span asp-validation-for="Observaciones" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Registrar Vehículo
+                            </button>
+                            <a asp-action="Index" asp-controller="Registros" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Volver
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> *@
+
+@* @section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+} *@
+@* Areas/Vigi/Views/RegistrosVehiculos/Create.cshtml - Vista mejorada para crear registros de vehículos *@
+@model ControlMDBI.Models.RegistroVehiculo
+
+@{
+    ViewData["Title"] = "Registrar Vehículo";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-car fa-2x me-3"></i>
+                        <div>
+                            <h4 class="mb-0">Registro de Vehículo</h4>
+                            <small class="opacity-75">Sistema de Control de Acceso Vehicular</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body p-4">
+                    <!-- Sección de Lectura de Placa -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card bg-light border-0">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">
+                                        <i class="fas fa-qrcode me-2"></i>Lectura Automática de Placa
+                                    </h5>
+                                    <div class="row align-items-end">
+                                        <div class="col-md-6">
+                                            <label for="placaInput" class="form-label fw-bold">
+                                                <i class="fas fa-id-card me-1"></i>Placa del Vehículo
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-primary text-white">
+                                                    <i class="fas fa-car"></i>
+                                                </span>
+                                                <input type="text"
+                                                       id="placaInput"
+                                                       class="form-control form-control-lg text-uppercase"
+                                                       placeholder="Ingrese o escanee la placa..."
+                                                       autocomplete="off"
+                                                       style="font-weight: bold; letter-spacing: 2px;">
+                                            </div>
+                                            <div class="form-text">
+                                                <i class="fas fa-info-circle me-1"></i>
+                                                La placa se puede ingresar manualmente o mediante el lector automático
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button type="button" id="buscarVehiculo" class="btn btn-success btn-lg w-100">
+                                                <i class="fas fa-search me-2"></i>Buscar
+                                            </button>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button type="button" id="limpiarBusqueda" class="btn btn-outline-secondary btn-lg w-100">
+                                                <i class="fas fa-broom me-2"></i>Limpiar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información del Vehículo Encontrado -->
+                    <div id="vehiculoInfo" class="row mb-4" style="display: none;">
+                        <div class="col-12">
+                            <div class="card border-success">
+                                <div class="card-header bg-success text-white">
+                                    <div class="row mb-2">
+                                        <div class="col-4"><strong>Vigilante/Portero:</strong></div>
+                                        <div class="col-8" id="infoVigilante">-</div>
+                                    </div>
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-check-circle me-2"></i>Vehículo Encontrado
+                                       
+                                    </h5>
+                                    
+                                       
+                                   
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="row mb-2">
+                                                <div class="col-4"><strong>Aprobador:</strong></div>
+                                                <div class="col-8" id="infoAprobador">-</div>
+                                            </div>
+                                           
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="row mb-2">
+                                                <div class="col-4"><strong>Solicitante:</strong></div>
+                                                <div class="col-8" id="infoSolicitante">-</div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-4"><strong>Descripcion Vehiculo</strong></div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-4"><strong>Placa:</strong></div>
+                                                <div class="col-8" id="infoPlaca">-</div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-4"><strong>Marca:</strong></div>
+                                                <div class="col-8" id="infoMarca">-</div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-4"><strong>Estado:</strong></div>
+                                                <div class="col-8" id="infoEstado">-</div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-4"><strong>Sede:</strong></div>
+                                                <div class="col-8" id="infoSede">-</div>
+                                            </div>
+                                            
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Formulario de Registro -->
+                    <form asp-action="Create" method="post" id="registroForm">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group mb-3">
+                                    <label asp-for="IdAprobacionVehiculo" class="form-label fw-bold">
+                                        <i class="fas fa-list me-1"></i>Vehículo Aprobado
+                                    </label>
+                                    <select asp-for="IdAprobacionVehiculo"
+                                            id="vehiculoSelect"
+                                            class="form-select form-select-lg"
+                                            asp-items="ViewBag.AprobacionesVehiculos">
+                                        <option value="">Seleccione un vehículo...</option>
+                                    </select>
+                                    <span asp-validation-for="IdAprobacionVehiculo" class="text-danger"></span>
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Este campo se completará automáticamente al buscar por placa
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="TipoRegistro" class="form-label fw-bold">
+                                        <i class="fas fa-sign-in-alt me-1"></i>Tipo de Registro
+                                    </label>
+                                    <select asp-for="TipoRegistro" class="form-select form-select-lg" asp-items="ViewBag.TiposRegistro">
+                                        <option value="">Seleccione...</option>
+                                    </select>
+                                    <span asp-validation-for="TipoRegistro" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-clock me-1"></i>Fecha y Hora
+                                    </label>
+                                    <input type="text"
+                                           class="form-control form-control-lg bg-light"
+                                           value="@DateTime.Now.ToString("dd/MM/yyyy HH:mm tt")"
+                                           readonly />
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Fecha y hora actual del registro
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group mb-4">
+                                    <label asp-for="Observaciones" class="form-label fw-bold">
+                                        <i class="fas fa-comment-alt me-1"></i>Observaciones
+                                    </label>
+                                    <textarea asp-for="Observaciones"
+                                              class="form-control"
+                                              rows="4"
+                                              placeholder="Observaciones adicionales (opcional)..."></textarea>
+                                    <span asp-validation-for="Observaciones" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group d-flex gap-3 justify-content-end">
+                            <a asp-action="Index" asp-controller="Registros" class="btn btn-outline-secondary btn-lg">
+                                <i class="fas fa-arrow-left me-2"></i>Volver
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save me-2"></i>Registrar Vehículo
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast para notificaciones -->
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="toastNotification" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto" id="toastTitle">Notificación</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="toastMessage"></div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            // Variables globales
+            let vehiculoEncontrado = null;
+
+            // Función para mostrar toast
+            function mostrarToast(titulo, mensaje, tipo = 'info') {
+                const toast = new bootstrap.Toast(document.getElementById('toastNotification'));
+                const toastHeader = document.querySelector('#toastNotification .toast-header');
+
+                // Cambiar color según el tipo
+                toastHeader.className = `toast-header bg-${tipo} text-white`;
+
+                document.getElementById('toastTitle').textContent = titulo;
+                document.getElementById('toastMessage').textContent = mensaje;
+                toast.show();
+            }
+
+            // Auto-focus en el campo de placa
+            $('#placaInput').focus();
+
+            // Búsqueda automática al presionar Enter
+            $('#placaInput').on('keypress', function (e) {
+                if (e.which === 13) { // Enter key
+                    e.preventDefault();
+                    buscarVehiculo();
+                }
+            });
+
+            // Convertir a mayúsculas automáticamente
+            $('#placaInput').on('input', function () {
+                this.value = this.value.toUpperCase();
+            });
+
+            // Evento para buscar vehículo
+            $('#buscarVehiculo').on('click', function () {
+                buscarVehiculo();
+            });
+
+            // Evento para limpiar búsqueda
+            $('#limpiarBusqueda').on('click', function () {
+                limpiarBusqueda();
+            });
+
+            // Función para buscar vehículo
+            function buscarVehiculo() {
+                const placa = $('#placaInput').val().trim();
+
+                if (!placa) {
+                    mostrarToast('Error', 'Por favor ingrese una placa', 'warning');
+                    $('#placaInput').focus();
+                    return;
+                }
+
+                // Mostrar loading
+                const btnBuscar = $('#buscarVehiculo');
+                const originalText = btnBuscar.html();
+                btnBuscar.html('<i class="fas fa-spinner fa-spin me-2"></i>Buscando...').prop('disabled', true);
+
+                // Realizar búsqueda
+                $.ajax({
+                    url: '@Url.Action("BuscarVehiculoPorPlaca", "RegistrosVehiculos")',
+                    type: 'GET',
+                    data: { placa: placa },
+                    success: function (response) {
+                        if (response.success) {
+                            vehiculoEncontrado = response.vehiculo;
+                            mostrarInformacionVehiculo(response.vehiculo);
+                            seleccionarVehiculoEnDropdown(response.vehiculo.id);
+                            mostrarToast('Éxito', 'Vehículo encontrado y seleccionado', 'success');
+                        } else {
+                            mostrarToast('Error', response.message || 'Vehículo no encontrado', 'danger');
+                            ocultarInformacionVehiculo();
+                        }
+                    },
+                    error: function () {
+                        mostrarToast('Error', 'Error al buscar el vehículo. Intente nuevamente.', 'danger');
+                        ocultarInformacionVehiculo();
+                    },
+                    complete: function () {
+                        // Restaurar botón
+                        btnBuscar.html(originalText).prop('disabled', false);
+                    }
+                });
+            }
+
+            // Función para mostrar información del vehículo
+            function mostrarInformacionVehiculo(vehiculo) {
+                $('#infoPlaca').text(vehiculo.placa || '-');
+                $('#infoMarca').text(vehiculo.marca || '-');
+                $('#infoEstado').text(vehiculo.estado || '-');
+                $('#infoSede').text(vehiculo.sede || '-');
+                $('#infoAprobador').text(vehiculo.aprobador || '-');
+                $('#infoSolicitante').text(vehiculo.solicitante || '-');
+                $('#infoDescripcion').text(vehiculo.descripcion || '-');
+                $('#infoVigilante').text(vehiculo.vigilante || '-');
+
+                $('#vehiculoInfo').slideDown();
+            }
+
+            // Función para ocultar información del vehículo
+            function ocultarInformacionVehiculo() {
+                $('#vehiculoInfo').slideUp();
+                vehiculoEncontrado = null;
+                $('#vehiculoSelect').val('');
+            }
+
+            // Función para seleccionar vehículo en dropdown
+            function seleccionarVehiculoEnDropdown(vehiculoId) {
+                $('#vehiculoSelect').val(vehiculoId);
+            }
+
+            // Función para limpiar búsqueda
+            function limpiarBusqueda() {
+                $('#placaInput').val('').focus();
+                ocultarInformacionVehiculo();
+                mostrarToast('Info', 'Búsqueda limpiada', 'info');
+            }
+
+            // Validación del formulario
+            $('#registroForm').on('submit', function (e) {
+                const vehiculoSeleccionado = $('#vehiculoSelect').val();
+                const tipoRegistro = $('select[name="TipoRegistro"]').val();
+
+                if (!vehiculoSeleccionado) {
+                    e.preventDefault();
+                    mostrarToast('Error', 'Debe seleccionar un vehículo', 'warning');
+                    return false;
+                }
+
+                if (!tipoRegistro) {
+                    e.preventDefault();
+                    mostrarToast('Error', 'Debe seleccionar el tipo de registro', 'warning');
+                    return false;
+                }
+            });
+
+            // Simular lectura automática de placa (para pruebas)
+            // En producción, esto se conectaría con el hardware del lector
+            $(document).on('keydown', function(e) {
+                // Ctrl + Shift + P para simular lectura automática
+                if (e.ctrlKey && e.shiftKey && e.keyCode === 80) {
+                    e.preventDefault();
+                    const placaSimulada = 'ABC123'; // Aquí vendría del lector
+                    $('#placaInput').val(placaSimulada);
+                    buscarVehiculo();
+                    mostrarToast('Simulación', 'Placa leída automáticamente', 'info');
+                }
+            });
+        });
+    </script>
+}

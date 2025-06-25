@@ -67,7 +67,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
         // GET: Admin/Empleados
         public async Task<IActionResult> Index(string? busquedaNombre, string? busquedaDNI, int paginaActual = 1)
         {
-            int usuariosPorPagina = 2;
+            int usuariosPorPagina = 12;
             if (string.IsNullOrEmpty(busquedaNombre))
             {
                 busquedaNombre = "";
@@ -79,6 +79,20 @@ namespace ControlMDBI.Areas.Admin.Controllers
             var model = await GetEmpleadoPaginado(busquedaNombre, busquedaDNI, paginaActual, usuariosPorPagina);
 
             return View(model);
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> ActualizarEstado(int id, bool estado)
+        {
+            var empleado = await _context.Empleado.FindAsync(id);
+            if (empleado != null)
+            {
+                empleado.Activo =estado;
+                _context.Update(empleado);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            return NotFound();
 
         }
 
@@ -117,9 +131,26 @@ namespace ControlMDBI.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(empleado);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //Verificar si ya existe una aprobación para esa solicitud 
+                var existeEmpleado = await _context.Empleado
+                    .AnyAsync(a => a.DNI == empleado.DNI || a.Nombres.Equals(empleado.Nombres) || a.Apellidos.Equals(empleado.Apellidos));
+                if (existeEmpleado)
+                {
+                    // muestrar un mensaje de error más claro
+                    TempData["ErrorMessage"] = "Error al crear algunos datos coiciden con otro empleado, intenlo de nuevo";
+
+                    //return RedirectToAction(nameof(Index));
+                    //ModelState.AddModelError(string.Empty, "Ya existe una empleado con ese DNI.");
+                }
+                else
+                {
+
+                    _context.Add(empleado);
+                    await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "El empleado fue creado con exito.";
+                    return RedirectToAction(nameof(Index));
+                }
+
             }
             ViewData["IdSede"] = new SelectList(_context.Sede, "IdSede", "Nombre", empleado.IdSede);
             return View(empleado);
@@ -147,7 +178,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdEmpleado,DNI,Nombres,Apellidos,Direccion,Correo,Cargo,Unidad,Activo,IdSede")] Empleado empleado)
+        public async Task<IActionResult> Edit(int id, Empleado empleado)
         {
             if (id != empleado.IdEmpleado)
             {
@@ -156,23 +187,23 @@ namespace ControlMDBI.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                //Verificar si ya existe una empleado con ese DNI 
+                var existeEmpleado = await _context.Empleado
+                    .AnyAsync(a => a.DNI == empleado.DNI && a.IdEmpleado != empleado.IdEmpleado);
+                if (existeEmpleado)
+                {
+                    // Puedes redirigir o mostrar un mensaje de error más claro
+                    TempData["ErrorMessage"] = "Error al guardar.";
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+
                 {
                     _context.Update(empleado);
                     await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Los cambios que se hicieron se guardaron con exito.";
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!EmpleadoExists(empleado.IdEmpleado))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
             }
             ViewData["IdSede"] = new SelectList(_context.Sede, "IdSede", "Nombre", empleado.IdSede);
             return View(empleado);

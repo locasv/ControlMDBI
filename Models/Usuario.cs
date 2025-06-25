@@ -30,6 +30,7 @@ namespace ControlMDBI.Models
 
         [Required(ErrorMessage = "La fecha de registro es obligatorio.")]
         [DataType(DataType.DateTime, ErrorMessage = "La fecha de registro no es válida.")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy hh:mm tt}", ApplyFormatInEditMode = false)]
         public DateTime FechaRegistro { get; set; } = DateTime.Now;
 
         // Relación: Un usuario (vigilante) puede hacer muchos registros de empleados

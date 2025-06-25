@@ -7,11 +7,12 @@ namespace ControlMDBI.Models
     {
         [Key]
         public int IdRegistroEmpleado { get; set; }
-      
+        //Empleado registrado lo rescata de la base de datos conn su DNI
         public int IdEmpleado { get; set; }
         [ForeignKey("IdEmpleado")]
         public Empleado Empleado { get; set; }
 
+        // Es necesario el usuario (vigilante) que registra el empleado
         public int IdUsuario { get; set; }
         [ForeignKey("IdUsuario")]
         public Usuario Usuario { get; set; }
@@ -28,6 +29,7 @@ namespace ControlMDBI.Models
 
         [Required(ErrorMessage = "La fecha y hora de registro es obligatoria.")]
         [DataType(DataType.DateTime, ErrorMessage = "La fecha y hora de registro no es válida.")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy hh:mm tt}", ApplyFormatInEditMode = false)]
         public DateTime FechaRegistroEmpleado { get; set; } = DateTime.Now;
 
         public bool Objeto { get; set; }

@@ -1,76 +1,200 @@
 ﻿@model ControlMDBI.Areas.Admin.ViewModels.UsuarioEditViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Detalles de usuario";
 }
-<h1>Edit</h1>
-<h4>Usuario</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdUsuario" />
-            <input type="hidden" asp-for="IdEmpleado" />
-            <!-- Formulario -->
 
-            <div class="form-floating mb-3">
-                <input class="form-control" value="@Model.NombresEmpleado @Model.ApellidosEmpleado   Cargo: @Model.Cargo - Unidad:  @Model.Unidad" readonly />
-                <label class="form-label">Empleado</label>
+<!-- Alertas -->
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
+        <div class="d-flex align-items-center">
+            <div class="flex-shrink-0">
+                <i class="fas fa-exclamation-triangle fa-lg text-danger"></i>
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="NombreUsuario" class="form-control" placeholder="Nombre Usuario" autocomplete="off" />
-                <label asp-for="NombreUsuario" class="form-label">Nombre Usuario</label>
-                <span asp-validation-for="NombreUsuario" class="text-danger"></span>
+            <div class="flex-grow-1 ms-3">
+                <h6 class="alert-heading mb-1 fw-bold">¡Error!</h6>
+                <p class="mb-0">@TempData["ErrorMessage"]</p>
             </div>
-            <div class="form-floating mb-3">
-                <input type="password" name="contraseniaNueva" id="contraseniaNueva" class="form-control" placeholder="Nueva Contraseña" autocomplete="off" />
-                <label for="contraseniaNueva" class="form-label">Nueva Contraseña</label>
-                <span class="text-muted small">Dejar en blanco para mantener la contraseña actual</span>
-                <button class="btn position-absolute top-50 end-0 translate-middle-y text-secondary" type="button" id="togglePassword" style="background: none; border: none; box-shadow: none;">
-                    <i class="fa-solid fa-eye" style="font-size: 1.25rem;"></i>
-                </button>
-            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+}
 
-            <!-- Agregar un campo oculto para mantener la contraseña actual -->
-            <input type="hidden" asp-for="Contrasenia" />
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
+        <div class="d-flex align-items-center">
+            <div class="flex-shrink-0">
+                <i class="fas fa-check-circle fa-lg text-success"></i>
+            </div>
+            <div class="flex-grow-1 ms-3">
+                <h6 class="alert-heading mb-1 fw-bold">¡Éxito!</h6>
+                <p class="mb-0">@TempData["SuccessMessage"]</p>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+}
+<div class="row justify-content-center">
+    <div class="col-lg-12">
+        <div class="card shadow">
+            <div class="card-header bg-blueMuni-600 text-white">
+                <h5 class="card-title mb-0">
 
-            <div class="form-floating mb-3">
-                <select asp-for="Rol" class="form-select" asp-items="@(new SelectList(Enum.GetNames(typeof(ListaRolesUsuario))))">
-                    <option value="" selected disabled>Seleccione un Rol</option>
-                </select>
-                <label asp-for="Rol" class="form-label"></label>
-                <span asp-validation-for="Rol" class="text-danger"></span>
+                    <i class="fas fa-user-edit text-primary me-2"></i>
+                    Detalles del Usuario
+                </h5>
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="FechaRegistro" class="form-control" placeholder="Fecha de registro" autocomplete="off" readonly />
-                <label asp-for="FechaRegistro" class="form-label">Fecha de Registro</label>
-                <span asp-validation-for="FechaRegistro" class="text-danger"></span>
+            <div class="card-body">
+
+
+                <form asp-action="Edit" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="IdUsuario" />
+                    <input type="hidden" asp-for="IdEmpleado" />
+                    <div class="row d-flex align-items-center justify-content-center">
+                        <div class="col-md-4">
+                            <!-- Información del empleado -->
+                            <div class="form-text">
+                                <i class="fas fa-info-circle text-info me-1"></i>
+                                Este campo no puede ser modificado
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input class="form-control" value="@Model.NombresEmpleado @Model.ApellidosEmpleado" readonly />
+                                <label class="form-label">
+                                    <i class="fas fa-user-tie me-2 text-muted"></i>
+                                    Empleado
+                                </label>
+                            </div>
+
+
+                            <!-- Nombre de usuario -->
+                            <div class="form-floating mb-3">
+                                <input asp-for="NombreUsuario" class="form-control" placeholder="Nombre Usuario" autocomplete="off" />
+                                <label asp-for="NombreUsuario" class="form-label">
+                                    <i class="fas fa-at me-2 text-muted"></i>
+                                    Nombre Usuario
+                                </label>
+                                <span asp-validation-for="NombreUsuario" class="text-danger"></span>
+                            </div>
+
+                            <!-- Contraseña actual (solo indicativa) -->
+                            <div class="form-floating mb-3">
+                                <input asp-for="ContraseniaActual" class="form-control" readonly />
+                                <label asp-for="ContraseniaActual" class="form-label"><i class="fa-solid fa-lock me-2 text-muted"></i>Contraseña Actual</label>
+                                @if (Model.TieneContrasenia)
+                                {
+                                    <div class="form-text text-success">
+                                        <i class="fas fa-check-circle fa-2x text-success"></i> El usuario tiene contraseña establecida
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="form-text text-warning">
+                                        <i class="fas fa-exclamation-triangle"></i> El usuario no tiene contraseña establecida
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <!-- Nueva contraseña -->
+                            <div class="form-floating mb-3 position-relative">
+                                <input type="password" asp-for="ContraseniaNueva" class="form-control" placeholder="Nueva Contraseña" autocomplete="new-password" />
+                                <label asp-for="ContraseniaNueva" class="form-label">
+                                    <i class="fas fa-key me-2 text-muted"></i>
+                                    Nueva Contraseña
+                                </label>
+                                <button class="btn position-absolute top-50 end-0 translate-middle-y text-secondary me-3" type="button" id="toggleNewPassword" style="background: none; border: none; box-shadow: none; z-index: 10;">
+                                    <i class="fa-solid fa-eye" style="font-size: 1.25rem;"></i>
+                                </button>
+                                <span asp-validation-for="ContraseniaNueva" class="text-danger"></span>
+                                <div class="form-text">Dejar en blanco para mantener la contraseña actual</div>
+                            </div>
+
+                            <!-- Confirmar nueva contraseña -->
+                            <div class="form-floating mb-3 position-relative">
+                                <input type="password" asp-for="ConfirmarContrasenia" class="form-control" placeholder="Confirmar Nueva Contraseña" autocomplete="new-password" />
+                                <label asp-for="ConfirmarContrasenia" class="form-label">
+                                    <i class="fas fa-check-double me-2 text-muted"></i>
+                                    Confirmar Nueva Contraseña
+                                </label>
+                                <button class="btn position-absolute top-50 end-0 translate-middle-y text-secondary me-3" type="button" id="toggleConfirmPassword" style="background: none; border: none; box-shadow: none; z-index: 10;">
+                                    <i class="fa-solid fa-eye" style="font-size: 1.25rem;"></i>
+                                </button>
+                                <span asp-validation-for="ConfirmarContrasenia" class="text-danger"></span>
+                            </div>
+
+                            <!-- Rol -->
+                            <div class="form-floating mb-3">
+                                <select asp-for="Rol" class="form-select" asp-items="@(new SelectList(Enum.GetNames(typeof(ListaRolesUsuario))))">
+                                    <option value="" selected disabled>Seleccione un Rol</option>
+                                </select>
+                                <label asp-for="Rol" class="form-label">
+                                    <i class="fas fa-user-tag me-2 text-muted"></i>
+                                    Rol
+                                </label>
+                                <span asp-validation-for="Rol" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row d-flex align-items-center justify-content-center">
+                            <div class="col-md-4 mb-3 d-flex justify-content-center">
+                                <!-- Fecha de registro -->
+                                <div class="form-floating mb-3 me-3">
+                                    <input asp-for="FechaRegistro" class="form-control" placeholder="Fecha de registro" value="@Model.FechaRegistro.ToString("yyyy-MM-ddTHH:mm")" autocomplete="off" readonly />
+                                    <label asp-for="FechaRegistro" class="form-label">
+                                        <i class="fas fa-calendar-plus me-2 text-muted"></i>
+                                        Fecha de Registro
+                                    </label>
+                                    <span asp-validation-for="FechaRegistro" class="text-danger"></span>
+                                </div>
+
+                                <!-- Estado del empleado -->
+                                <div class="form-group mb-3">
+                                    <label asp-for="ActivoEmpleado" class="form-label text-blueMuni-600">
+                                        <i class="fas fa-toggle-on fa-lg text-success" style="@(Model.ActivoEmpleado ? "" : "display:none")">
+                                            <span class="badge bg-success"><small>Habilitado</small></span>
+                                        </i>
+                                        <i class="fas fa-toggle-off fa-lg text-danger" style="@(Model.ActivoEmpleado ? "display:none" : "")">
+                                            <span class="badge bg-danger"><small>Deshabilitado</small></span>
+                                        </i>
+                                    </label>
+                                    <input class="form-check-input" asp-for="ActivoEmpleado" hidden onchange="cambiarIcono(this)" />
+                                </div>
+                            </div>
+                          
+                        </div>
+                        <!-- Botones de acción -->
+                        <div class="container-fluid">
+                            <div class="row d-flex align-items-center justify-content-center">
+                                <div class="col-md-3 mb-3 d-flex justify-content-center">
+                                    <button type="submit" class="btn btn-outline-success">
+                                        <i class="fa-solid fa-floppy-disk"></i>
+                                        Guardar
+                                    </button>
+                                    <a asp-action="Index" class="btn btn-danger ms-2">
+                                        <i class="fa-solid fa-xmark"></i>
+                                        Cancelar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label text-blueMuni-600">
-                    <input class="form-check-input" asp-for="ActivoEmpleado" /> Empleado Activo
-                </label>
-            </div>
-            <div class="form-group mt-3">
-                <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
+
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
-
-
     <script>
-        // Función para mostrar/ocultar la contraseña
-        document.getElementById('togglePassword').addEventListener('click', function () {
-            const passwordInput = document.getElementById('contraseniaNueva');
+        // Función para mostrar/ocultar nueva contraseña
+        document.getElementById('toggleNewPassword').addEventListener('click', function () {
+            const passwordInput = document.querySelector('input[name="ContraseniaNueva"]');
             const icon = this.querySelector('i');
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
@@ -82,5 +206,51 @@
                 icon.classList.add('fa-eye');
             }
         });
+
+        // Función para mostrar/ocultar confirmación de contraseña
+        document.getElementById('toggleConfirmPassword').addEventListener('click', function () {
+            const passwordInput = document.querySelector('input[name="ConfirmarContrasenia"]');
+            const icon = this.querySelector('i');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+
+        // Función para cambiar el icono del toggle
+        function cambiarIcono(checkbox) {
+            var toggleOn = $(checkbox).closest('.form-group').find('.fa-toggle-on');
+            var toggleOff = $(checkbox).closest('.form-group').find('.fa-toggle-off');
+            if (checkbox.checked) {
+                toggleOn.show();
+                toggleOff.hide();
+            } else {
+                toggleOn.hide();
+                toggleOff.show();
+            }
+        }
+
+        // Validación en tiempo real para confirmación de contraseña
+        document.querySelector('input[name="ConfirmarContrasenia"]').addEventListener('input', function() {
+            const newPassword = document.querySelector('input[name="ContraseniaNueva"]').value;
+            const confirmPassword = this.value;
+            const errorSpan = document.querySelector('span[data-valmsg-for="ConfirmarContrasenia"]');
+
+            if (newPassword && confirmPassword && newPassword !== confirmPassword) {
+                errorSpan.textContent = 'Las contraseñas no coinciden.';
+                errorSpan.classList.add('text-danger');
+            } else {
+                errorSpan.textContent = '';
+                errorSpan.classList.remove('text-danger');
+            }
+        });
     </script>
 }
+
+
+

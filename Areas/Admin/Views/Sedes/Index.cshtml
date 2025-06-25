@@ -6,11 +6,11 @@
 
 
 <div class="mt-3" style="font-size: 14px;">
-    <h2>Lista de Sedes</h2>
+    <h1>Sedes</h1>
 <div class="row d-fex flex-column flex-md-row my-4">
     <div class="col-8 col-md-4 col-lg-6 mb-3 mb-md-0">
         <a class="btn btn-success" asp-action="Create">
-            <i class="fa-solid fa-plus"></i>&nbsp;Nueva Sede
+            <i class="fa-solid fa-plus"></i>&nbsp;Agregar Sede
         </a>
     </div>
 </div>
@@ -25,7 +25,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Direccion)
             </th>
-            <th></th>
+            <th>Acción</th>
         </tr>
     </thead>
     <tbody>
@@ -38,9 +38,9 @@
                 @Html.DisplayFor(modelItem => item.Direccion)
             </td>
             <td>
-                    <a class="btn-sm btn-warning" asp-action="Edit" asp-route-id="@item.IdSede" data-bs-toggle="tooltip" data-bs-placement="right" title="Editar Sede"><i class="fa-solid fa-pen"></i></a>
-                    <a class="btn-sm btn-info" asp-action="Details" asp-route-id="@item.IdSede" data-bs-toggle="tooltip" data-bs-placement="right" title="Detalles del Sede"><i class="fa-solid fa-list"></i></a> |
-                    <a class="btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.IdSede" data-bs-toggle="tooltip" data-bs-placement="right" title="Eliminar Sede"><i class="fa-solid fa-trash"></i></a>
+                            <a class="btn-sm btn-outline-blueMuni" asp-action="Edit" asp-route-id="@item.IdSede" data-bs-toggle="tooltip" data-bs-placement="right" title="Detalles @item.Nombre"><i class="fa-solid fa-list me-2"></i>Detalles</a>
+                    @* <a class="btn-sm btn-info" asp-action="Details" asp-route-id="@item.IdSede" data-bs-toggle="tooltip" data-bs-placement="right" title="Detalles del Sede"><i class="fa-solid fa-list"></i></a> | *@
+                    @* <a class="btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.IdSede" data-bs-toggle="tooltip" data-bs-placement="right" title="Eliminar Sede"><i class="fa-solid fa-trash"></i></a> *@
             </td>
         </tr>
 }

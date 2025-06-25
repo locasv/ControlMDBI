@@ -87,7 +87,7 @@ namespace ControlMDBI.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdSede,Nombre,Direccion")] Sede sede)
+        public async Task<IActionResult> Edit(int id,  Sede sede)
         {
             if (id != sede.IdSede)
             {

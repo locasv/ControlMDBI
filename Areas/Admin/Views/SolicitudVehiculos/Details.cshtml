@@ -2,75 +2,97 @@
 @{
     ViewData["Title"] = "Detalles Solicitud";
 }
-<h1>Detalles</h1>
-<div id="content-to-print">
-    <h4>Solicitud de Vehiculo</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            Solicitante
-        </dt>
-        <dd class="col-sm-10">
-            @($"{Model.Usuario.Empleado.Nombres} {Model.Usuario.Empleado.Apellidos} - Cargo: {Model.Usuario.Empleado.Cargo} - Unidad : {Model.Usuario.Empleado.Unidad}")
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Vehiculo)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Vehiculo.Placa)
-            @if (Model.Vehiculo.Estado == "Activo")
-            {
-                <span class="badge bg-success"> Activo</span>
-            }
-            else if (Model.Vehiculo.Estado == "Inactivo")
-            {
-                <span class="badge bg-danger"> Inactivo</span>
-            }
-            else
-            {
-                <span class="badge bg-blueMuni-400"> Mantenimiento</span>
-            }
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaSalida)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FechaSalida)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaRegreso)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FechaRegreso)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Recorrido)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Recorrido)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaSolicitud)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FechaSolicitud)
-        </dd>
-    </dl>
-</div>
-<div>
-    <!--Botones -->
-    <div class="form-group d-flex gap-2">
-        <a asp-action="Index" class="btn btn-outline-blueMuni">
-            <i class="fa-solid fa-circle-arrow-left"></i> Regresar
-        </a>
-        <a asp-action="GenerarPDF" asp-route-id="@Model.IdSolicitudVehiculo" class="btn btn-blueMuni">
-            <i class="fa-solid fa-print"></i> Ver PDF
-        </a>
+<div class="row justify-content-center">
+    <div class="col-lg-4">
+        <div class="card shadow">
+            <div class="card-header bg-blueMuni-600 text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fa-solid fa-list me-2"></i>
+                    Detalles de Solicitud N° @Html.DisplayFor(model => model.IdSolicitudVehiculo)
+                </h5>
+
+            </div>
+            <div class="card-body">
+                <dl class="row table-responsive d-flex align-items-center justify-content-center">
+                    <dt class="col-sm-6">
+                        Solicitante
+                    </dt>
+                    <dd class="col-sm-6">
+                        @($"{Model.Usuario.Empleado.Apellidos}, {Model.Usuario.Empleado.Nombres}")
+                    </dd>
+                    <dt class="col-sm-6">
+                        @Html.DisplayNameFor(model => model.Vehiculo)
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.Vehiculo.Placa)
+                        @if (Model.Vehiculo.Estado == "Activo")
+                        {
+                            <span class="badge bg-success"> Activo</span>
+                        }
+                        else if (Model.Vehiculo.Estado == "Inactivo")
+                        {
+                            <span class="badge bg-danger"> Inactivo</span>
+                        }
+                        else if (Model.Vehiculo.Estado == "Mantenimiento")
+                        {
+                            <span class="badge bg-blueMuni-400"> Mantenimiento</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning">Circulando</span>
+                        }
+                    </dd>
+                    <dt class="col-sm-6">
+                        @Html.DisplayNameFor(model => model.FechaSalida)
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.FechaSalida)
+                    </dd>
+                    <dt class="col-sm-6">
+                        @Html.DisplayNameFor(model => model.FechaRegreso)
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.FechaRegreso)
+                    </dd>
+                    <dt class="col-sm-6">
+                        @Html.DisplayNameFor(model => model.Recorrido)
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.Recorrido)
+                    </dd>
+                    <dt class="col-sm-6">
+                        @Html.DisplayNameFor(model => model.FechaSolicitud)
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.FechaSolicitud)
+                    </dd>
+                </dl>
+                <!--Botones -->
+
+                <div class="container-fluid">
+                    <div class="row d-flex align-items-center justify-content-center">
+                        <div class="col-md-6 d-flex justify-content-center">
+                            <a asp-action="Index" asp-controller="AprobacionSolicitudes" class="btn btn-outline-blueMuni me-2">
+                                <i class="fa-solid fa-circle-arrow-left"></i> Regresar
+                            </a>
+                            <a asp-action="GenerarPDF" asp-route-id="@Model.IdSolicitudVehiculo" class="btn btn-blueMuni">
+                                <i class="fa-solid fa-print"></i> Ver PDF
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 
 
+
 @section Scripts {
+    @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+    }
+
 }

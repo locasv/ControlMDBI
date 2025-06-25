@@ -1,0 +1,262 @@
+﻿@* Areas/Admin/Views/RegistrosPersonas/Create.cshtml - Vista para crear registros de personas *@
+@model ControlMDBI.Areas.Admin.ViewModels.RegistroPersonaViewModel
+
+@{
+    ViewData["Title"] = "Registrar Persona";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Registro de Personas</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" id="registroTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" id="empleado-tab" data-bs-toggle="tab" href="#empleado" role="tab">
+                                <i class="fas fa-user-tie"></i> Empleado
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="visitante-tab" data-bs-toggle="tab" href="#visitante" role="tab">
+                                <i class="fas fa-user-friends"></i> Visitante
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content mt-3">
+                        <!-- Formulario Empleado -->
+                        <div class="tab-pane active" id="empleado" role="tabpanel">
+                            <form asp-action="CreateEmpleado" method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label asp-for="DniEmpleado" class="form-label">
+                                                DNI del Empleado
+                                                <i class="fas fa-qrcode text-primary" title="Escanee código o ingrese manualmente"></i>
+                                            </label>
+                                            <div class="input-group">
+                                                <input asp-for="DniEmpleado" class="form-control" id="dniEmpleado" name="dniEmpleado"
+                                                       required maxlength="8" pattern="[0-9]{8}"
+                                                       placeholder="Escanee código o ingrese DNI"
+                                                       autocomplete="off" />
+                                                <button type="button" class="btn btn-outline-secondary" id="btnBuscarEmpleado">
+                                                    <i class="fas fa-search"></i> Buscar
+                                                </button>
+                                                <button type="button" class="btn btn-outline-info" id="btnLimpiar">
+                                                    <i class="fas fa-broom"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-outline-warning" id="btnModoLectura" title="Alternar modo lectura automática">
+                                                    <i class="fas fa-qrcode"></i>
+                                                </button>
+                                            </div>
+                                            <div class="form-text">
+                                                <i class="fas fa-barcode"></i> Escanee el código del empleado o ingrese el DNI manualmente (8 dígitos)
+                                            </div>
+
+                                            <!-- Spinner de carga -->
+                                            <div id="loadingEmpleado" class="text-center mt-2" style="display: none;">
+                                                <div class="spinner-border spinner-border-sm" role="status">
+                                                    <span class="visually-hidden">Buscando...</span>
+                                                </div>
+                                                <small class="ms-2">Buscando empleado...</small>
+                                            </div>
+
+                                            <!-- Información del empleado encontrado -->
+                                            <div id="infoEmpleado" class="alert alert-success mt-2" style="display: none;">
+                                                <h6><i class="fas fa-user-check"></i> Empleado activo encontrado:</h6>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <p class="mb-1"><strong>Nombre:</strong> <span id="nombreEmpleado"></span></p>
+                                                        <p class="mb-1"><strong>Cargo:</strong> <span id="cargoEmpleado"></span></p>
+                                                        <p class="mb-1"><strong>Unidad:</strong> <span id="areaEmpleado"></span></p>
+                                                        <p class="mb-0">
+                                                            <strong>Estado:</strong>
+                                                            <span class="badge bg-success" id="estadoEmpleado">Activo</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Mensaje de error -->
+                                            <div id="errorEmpleado" class="alert alert-danger mt-2" style="display: none;">
+                                                <i class="fas fa-exclamation-triangle"></i>
+                                                <span id="mensajeError"></span>
+                                            </div>
+
+                                            <!-- Mensaje de redirección automática -->
+                                            <div id="redireccionInfo" class="alert alert-info mt-2" style="display: none;">
+                                                <i class="fas fa-info-circle"></i>
+                                                <span>Empleado no encontrado. Redirigiendo a registro de visitante...</span>
+                                                <div class="progress mt-2" style="height: 5px;">
+                                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label asp-for="TipoRegistroEmpleado" class="form-label">Tipo de Registro</label>
+                                            <select asp-for="TipoRegistroEmpleado" class="form-select">
+                                                <option value="">Seleccione...</option>
+                                                <option value="Ingreso">Ingreso</option>
+                                                <option value="Salida">Salida</option>
+                                            </select>
+                                            <span asp-validation-for="TipoRegistroEmpleado" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label asp-for="RazonEmpleado" class="form-label">Razón</label>
+                                            <input asp-for="RazonEmpleado" class="form-control" placeholder="Motivo del registro" />
+                                            <span asp-validation-for="RazonEmpleado" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label class="form-label">¿Porta objeto?</label>
+                                            <div class="form-check">
+                                                    <input asp-for="PortaObjeto" class="form-check-input" type="checkbox" checked />
+                                                    <label asp-for="PortaObjeto" class="form-check-label">No</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input asp-for="PortaObjeto" class="form-check-input" type="checkbox" id="portaObjetoEmpleado" />
+                                                <label asp-for="PortaObjeto" class="form-check-label">Sí</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label asp-for="CodigoObjeto" class="form-label">
+                                                Código del Objeto
+                                                <small class="text-muted">(Solo si porta objeto)</small>
+                                            </label>
+                                            <input asp-for="CodigoObjeto" class="form-control" id="codigoObjetoEmpleado"
+                                                   placeholder="Código del objeto" disabled />
+                                            <span asp-validation-for="CodigoObjeto" class="text-danger"></span>
+                                            <div class="form-text">
+                                                <i class="fas fa-shield-alt text-warning"></i>
+                                                Por seguridad, este campo solo se habilita si porta objeto
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label asp-for="ObservacionesEmpleado" class="form-label">Observaciones</label>
+                                            <textarea asp-for="ObservacionesEmpleado" class="form-control" rows="2" placeholder="Observaciones adicionales"></textarea>
+                                            <span asp-validation-for="ObservacionesEmpleado" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary" id="btnRegistrarEmpleado" disabled>
+                                        <i class="fas fa-save"></i> Registrar Empleado
+                                    </button>
+                                    <a asp-action="Index" asp-controller="Registros" class="btn btn-secondary">
+                                        <i class="fas fa-arrow-left"></i> Volver
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Formulario Visitante -->
+                        <div class="tab-pane" id="visitante" role="tabpanel">
+                            <form asp-action="CreateVisitante" method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label asp-for="DniVisitante" class="form-label">DNI del Visitante</label>
+                                            <div class="input-group">
+                                                <input asp-for="DniVisitante" class="form-control" id="dniVisitante"
+                                                       placeholder="Ingrese DNI" maxlength="8" pattern="[0-9]{8}" />
+                                                <button type="button" class="btn btn-outline-info" id="btnLimpiarVisitante">
+                                                    <i class="fas fa-broom"></i>
+                                                </button>
+                                            </div>
+                                            <span asp-validation-for="DniVisitante" class="text-danger"></span>
+                                            <div class="form-text">
+                                                <i class="fas fa-info-circle"></i>
+                                                Si viene desde búsqueda de empleado, el DNI se completará automáticamente
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label asp-for="RazonVisita" class="form-label">Razón de Visita</label>
+                                            <input asp-for="RazonVisita" class="form-control" placeholder="Motivo de la visita" />
+                                            <span asp-validation-for="RazonVisita" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @* <!-- Campos adicionales para visitante -->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label class="form-label">¿Porta objeto?</label>
+                                            <div class="form-check">
+                                                <input name="PortaObjetoVisitante" class="form-check-input" type="checkbox" id="portaObjetoVisitante" />
+                                                <label class="form-check-label">Sí</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label class="form-label">
+                                                Código del Objeto
+                                                <small class="text-muted">(Solo si porta objeto)</small>
+                                            </label>
+                                            <input name="CodigoObjetoVisitante" class="form-control" id="codigoObjetoVisitante"
+                                                   placeholder="Código del objeto" disabled />
+                                            <div class="form-text">
+                                                <i class="fas fa-shield-alt text-warning"></i>
+                                                Por seguridad, este campo solo se habilita si porta objeto
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> *@
+
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-info">
+                                        <i class="fas fa-save"></i> Registrar Visitante
+                                    </button>
+                                    <a asp-action="Index" asp-controller="Registros" class="btn btn-secondary">
+                                        <i class="fas fa-arrow-left"></i> Volver
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <!-- Script para pasar la URL al JavaScript -->
+    <script>
+        window.buscarEmpleadoUrl = '@Url.Action("BuscarEmpleado")';
+    </script>
+
+    <!-- Cargar el script externo -->
+    <script src="~/js/registro-personas.js"></script>
+
+}

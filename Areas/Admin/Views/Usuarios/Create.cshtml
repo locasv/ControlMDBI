@@ -1,127 +1,331 @@
-﻿@model ControlMDBI.Models.Usuario
-
+﻿@model ControlMDBI.Areas.Admin.ViewModels.UsuarioCreateViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Agregar Usuario";
 }
 
-<h1>Crear Nuevo</h1>
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col">
+            <h3 class="mb-0 ">
+                <i class="fas fa-user-plus me-2"></i>
+                Agregar Nuevo Usuario
+            </h3>
 
-<h4>Usuario</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="All" class="text-danger"></div> 
-            <div class="mb-3">
-                <label asp-for="IdEmpleado" class="form-label text-blueMuni-600">Empleado</label>
-                <select asp-for="IdEmpleado" class="form-select" id="buscarEmpleado" data-placeholder="Buscar Empleado Activo">
-                    <option></option>
-                </select>
-               
-                <span asp-validation-for="IdEmpleado" class="text-danger"></span>
-            </div>
+            <p class="text-muted mb-0">Complete el formulario para crear un nuevo usuario del sistema</p>
 
-            <div class="form-floating mb-3">
-               
-                <input asp-for="NombreUsuario" class="form-control" placeholder="Nombre de Usuario" autocomplete="off" />
-                <label asp-for="NombreUsuario" class="form-label">Nombre de Usuario</label>
-                <span asp-validation-for="NombreUsuario" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                    <!-- Contenedor para alinear input + botón -->
-                    <input type="password" asp-for="Contrasenia" class="form-control" placeholder="Contraseña" autocomplete="off" />
-                    <label asp-for="Contrasenia" class="form-label">Contraseña</label>
-                    <button class="btn position-absolute top-50 end-0 translate-middle-y text-secondary" type="button" id="togglePassword" style="background: none; border: none; box-shadow: none;">
-                        <i class="fa-solid fa-eye" style="font-size: 1.25rem;"></i>
-                    </button>
-                <span asp-validation-for="Contrasenia" class="text-danger"></span>
-            </div>
+        </div>
+    </div>
 
-            <div class="form-floating mb-3">
-               
-                <select asp-for="Rol" class="form-select" asp-items="@(new SelectList(Enum.GetNames(typeof(ListaRolesUsuario))))">
-                    <option value="" selected disabled>Seleccione Rol</option>
-
-                </select>
-                <label asp-for="Rol" class="form-label"></label>
-                <span asp-validation-for="Rol" class="text-danger"></span>
+    <!-- Alertas -->
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
+            <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-exclamation-triangle fa-lg text-danger"></i>
+                </div>
+                <div class="flex-grow-1 ms-3">
+                    <h6 class="alert-heading mb-1 fw-bold">¡Error!</h6>
+                    <p class="mb-0">@TempData["ErrorMessage"]</p>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
+        </div>
+    }
 
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
+            <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-check-circle fa-lg text-success"></i>
+                </div>
+                <div class="flex-grow-1 ms-3">
+                    <h6 class="alert-heading mb-1 fw-bold">¡Éxito!</h6>
+                    <p class="mb-0">@TempData["SuccessMessage"]</p>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    }
 
-            <div class="form-floating mb-3">
-                
-                <input asp-for="FechaRegistro" class="form-control" placeholder="Fecha de Registro" autocomplete="off" readonly />
-                <label asp-for="FechaRegistro" class="form-label"> Fecha de Registro </label>
-                <span asp-validation-for="FechaRegistro" class="text-danger"></span>
+    <!-- Formulario -->
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            <div class="card shadow">
+                <div class="card-header bg-blueMuni-600 text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-user-circle me-2"></i>
+                        Información del Usuario
+                    </h5>
+                    <p class="text-muted mb-0">Obligatorio (<span class="text-danger">*</span>)</p>
+                </div>
+                <div class="card-body">
+
+                    <form asp-action="Create" id="createUserForm">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <!-- Selección de Empleado -->
+                        <div class="row mb-2">
+                            <div class="col-md-6">
+                                <label asp-for="IdEmpleado" class="form-label fw-bold text-primary">
+                                    <i class="fas fa-user me-1"></i>
+                                    Empleado <span class="text-danger">*</span>
+                                </label>
+                                <select asp-for="IdEmpleado" class="form-select" id="buscarEmpleado"
+                                        data-placeholder="Buscar empleado activo sin usuario asignado" required>
+                                    <option></option>
+                                </select>
+                                <span asp-validation-for="IdEmpleado" class="text-danger"></span>
+                                <div class="form-text">Solo se muestran empleados activos sin usuario asignado</div>
+                            </div>
+                        </div>
+                        <!-- Datos de acceso -->
+                        <div class="row d-flex align-items-center justify-content-center">
+                            <div class="col-md-4">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="NombreUsuario" class="form-control" placeholder="Nombre de Usuario"
+                                           autocomplete="username" maxlength="50" />
+                                    <label asp-for="NombreUsuario" class="form-label">
+                                        <i class="fas fa-at me-2 text-muted"></i>
+                                        Nombre de Usuario <span class="text-danger">*</span>
+                                    </label>
+                                    <span asp-validation-for="NombreUsuario" class="text-danger"></span>
+                                    <div class="form-text">Solo letras, números, puntos, guiones y guiones bajos</div>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <select asp-for="Rol" class="form-select" asp-items="@(new SelectList(Enum.GetNames(typeof(ListaRolesUsuario))))" required>
+                                        <option value="" selected disabled>Seleccione un rol</option>
+                                    </select>
+                                    <label asp-for="Rol" class="form-label">
+                                        <i class="fas fa-user-tag me-2 text-muted"></i>
+                                        Rol <span class="text-danger">*</span>
+                                    </label>
+                                    <span asp-validation-for="Rol" class="text-danger"></span>
+                                </div>
+                            </div>
+                            
+                        
+
+                        <!-- Contraseñas -->
+                            <div class="col-md-4">
+                                <div class="form-floating mb-3 position-relative">
+                                    <input type="password" asp-for="Contrasenia" class="form-control"
+                                           placeholder="Contraseña" autocomplete="new-password" maxlength="100" />
+                                    <label asp-for="Contrasenia" class="form-label">
+                                        <i class="fa-solid fa-lock me-2 text-muted"></i>
+                                        Contraseña <span class="text-danger">*</span>
+                                    </label>
+                                    <button class="btn position-absolute top-50 end-0 translate-middle-y text-secondary me-3"
+                                            type="button" id="togglePassword"
+                                            style="background: none; border: none; box-shadow: none; z-index: 10;">
+                                        <i class="fas fa-eye" style="font-size: 1.25rem;"></i>
+                                    </button>
+                                    <span asp-validation-for="Contrasenia" class="text-danger"></span>
+                                </div>
+                                <!-- Indicador de fortaleza de contraseña -->
+                                <div class="mb-3">
+                                    <div class="progress" style="height: 5px;">
+                                        <div class="progress-bar" id="passwordStrength" role="progressbar" style="width: 0%"></div>
+                                    </div>
+                                    <small id="passwordStrengthText" class="form-text">Ingrese una contraseña</small>
+                                </div>
+
+                                <div class="form-floating mb-3 position-relative">
+                                    <input type="password" asp-for="ConfirmarContrasenia" class="form-control"
+                                           placeholder="Confirmar Contraseña" autocomplete="new-password" maxlength="100" />
+                                    <label asp-for="ConfirmarContrasenia" class="form-label">
+                                        <i class="fas fa-check-double me-2 text-muted"></i>
+                                        Confirmar Contraseña <span class="text-danger">*</span>
+                                    </label>
+                                    <button class="btn position-absolute top-50 end-0 translate-middle-y text-secondary me-3"
+                                            type="button" id="toggleConfirmPassword"
+                                            style="background: none; border: none; box-shadow: none; z-index: 10;">
+                                        <i class="fas fa-eye" style="font-size: 1.25rem;"></i>
+                                    </button>
+                                    <span asp-validation-for="ConfirmarContrasenia" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Fecha de registro -->
+                        <div class="row d-flex align-items-center justify-content-center">
+                            <div class="col-md-2">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="FechaRegistro" class="form-control" placeholder="Fecha de Registro"
+                                           value="@Model.FechaRegistro.ToString("yyyy-MM-ddTHH:mm")" readonly />
+                                    <label asp-for="FechaRegistro" class="form-label">
+                                        <i class="fas fa-calendar-plus me-2 text-muted"></i>
+                                        Fecha de Registro</label>
+                                    <span asp-validation-for="FechaRegistro" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botones de acción -->
+                        <div class="container-fluid">
+                            <div class="row d-flex align-items-center justify-content-center">
+                                <div class="col-md-4 d-flex justify-content-center">
+                                    <button type="submit" class="btn btn-outline-success">
+                                        <i class="fas fa-user-plus me-2"></i>
+                                        <span class="spinner-border spinner-border-sm me-2" ></span>
+                                        Agregar
+                                    </button>
+                                    <a asp-action="Index" class="btn btn-danger ms-2">
+                                        <i class="fas fa-times me-2"></i>
+                                        Cancelar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-floating mb-3 d-flex gap-2">
-                <input type="submit" value="Crear" class="btn btn-blueMuni" />
-                <a asp-action="Index" class="btn btn-outline-blueMuni">
-                    <i class="fa-solid fa-circle-arrow-left"></i> Atrás
-                </a>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
-
-
-
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
-
-
     <script>
-            // Función para mostrar/ocultar la contraseña
-            document.getElementById('togglePassword').addEventListener('click', function () {
-                const passwordInput = document.getElementById('Contrasenia');
-                const icon = this.querySelector('i');
-                if (passwordInput.type === 'password') {
-                    passwordInput.type = 'text';
-                    icon.classList.remove('fa-eye');
-                    icon.classList.add('fa-eye-slash');
-                } else {
-                    passwordInput.type = 'password';
-                    icon.classList.remove('fa-eye-slash');
-                    icon.classList.add('fa-eye');
+        $(document).ready(function() {
+            // Inicializar Select2
+            $('#buscarEmpleado').select2({
+                
+                placeholder: $(this).data('placeholder'),
+                allowClear: true,
+                language: {
+                    noResults: function () {
+                        return "No se encontraron empleados disponibles";
+                    },
+                    searching: function () {
+                        return "Buscando empleados...";
+                    }
+                },
+                ajax: {
+                    url: '/Admin/Usuarios/GetEmpleados',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            empleadoBuscado: params.term
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
                 }
             });
 
-             $( '#buscarEmpleado' ).select2( {
-            theme: "bootstrap-5",
-            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
-            placeholder: $( this ).data( 'placeholder' ),
-            allowClear: true,
-                language: {
-            noResults: function () {
-                return "No se encontro al empleado / Busque un empleado.";
-            },
-        searching: function () {
-            return "Buscando empleados...";
+            // Manejar selección de empleado
+            $('#buscarEmpleado').on('select2:select', function (e) {
+                const empleadoId = e.params.data.id;
+                mostrarInfoEmpleado(empleadoId);
+            });
+
+        });
+
+
+        // Toggle password visibility
+        $('#togglePassword').click(function () {
+            const passwordInput = $('#Contrasenia');
+            const icon = $(this).find('i');
+
+            if (passwordInput.attr('type') === 'password') {
+                passwordInput.attr('type', 'text');
+                icon.removeClass('fa-eye').addClass('fa-eye-slash');
+            } else {
+                passwordInput.attr('type', 'password');
+                icon.removeClass('fa-eye-slash').addClass('fa-eye');
+            }
+        });
+
+        $('#toggleConfirmPassword').click(function () {
+            const passwordInput = $('#ConfirmarContrasenia');
+            const icon = $(this).find('i');
+
+            if (passwordInput.attr('type') === 'password') {
+                passwordInput.attr('type', 'text');
+                icon.removeClass('fa-eye').addClass('fa-eye-slash');
+            } else {
+                passwordInput.attr('type', 'password');
+                icon.removeClass('fa-eye-slash').addClass('fa-eye');
+            }
+        });
+
+        // Password strength indicator
+        $('#Contrasenia').on('input', function () {
+            const password = $(this).val();
+            const strength = calculatePasswordStrength(password);
+            updatePasswordStrengthIndicator(strength);
+        });
+
+        function calculatePasswordStrength(password) {
+            let strength = 0;
+
+            if (password.length >= 6) strength += 20;
+            if (password.length >= 8) strength += 20;
+            if (/[a-z]/.test(password)) strength += 20;
+            if (/[A-Z]/.test(password)) strength += 20;
+            if (/[0-9]/.test(password)) strength += 10;
+            if (/[^A-Za-z0-9]/.test(password)) strength += 10;
+
+            return Math.min(strength, 100);
         }
-        },
-            ajax: {
-                url: '/Admin/Usuarios/GetEmpleados',
-                dataType: 'json',
-                delay: 250,
-                data: function ( params ) {
-                    return {
-                        empleadoBuscado: params.term
-                    };
-                },
-                processResults: function ( data ) {
-                    return {
-                        results: data
-                    };
-                },
-                cache: true
-            },
-        } );
+
+        function updatePasswordStrengthIndicator(strength) {
+            const progressBar = $('#passwordStrength');
+            const strengthText = $('#passwordStrengthText');
+
+            progressBar.css('width', strength + '%');
+
+            if (strength === 0) {
+                progressBar.removeClass().addClass('progress-bar');
+                strengthText.text('Ingrese una contraseña');
+            } else if (strength < 50) {
+                progressBar.removeClass().addClass('progress-bar bg-danger');
+                strengthText.text('Contraseña débil').removeClass().addClass('form-text text-danger');
+            } else if (strength < 70) {
+                progressBar.removeClass().addClass('progress-bar bg-warning');
+                strengthText.text('Contraseña regular').removeClass().addClass('form-text text-warning');
+            } else {
+                progressBar.removeClass().addClass('progress-bar bg-success');
+                strengthText.text('Contraseña fuerte').removeClass().addClass('form-text text-success');
+            }
+        }
+
+        // Validación en tiempo real para confirmación de contraseña
+        $('#ConfirmarContrasenia').on('input', function () {
+            const password = $('#Contrasenia').val();
+            const confirmPassword = $(this).val();
+            const errorSpan = $('span[data-valmsg-for="ConfirmarContrasenia"]');
+
+            if (password && confirmPassword && password !== confirmPassword) {
+                errorSpan.text('Las contraseñas no coinciden.').addClass('text-danger');
+            } else {
+                errorSpan.text('').removeClass('text-danger');
+            }
+        });
+
+        // Validación del nombre de usuario en tiempo real
+        $('#NombreUsuario').on('input', function () {
+            const username = $(this).val();
+            const regex = /^[a-zA-Z0-9._-]+$/;
+            const errorSpan = $('span[data-valmsg-for="NombreUsuario"]');
+
+            if (username && !regex.test(username)) {
+                errorSpan.text('Solo se permiten letras, números, puntos, guiones y guiones bajos').addClass('text-danger');
+            } else {
+                errorSpan.text('').removeClass('text-danger');
+            }
+        });
 
     </script>
-
 }

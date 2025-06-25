@@ -1,104 +1,118 @@
-﻿
-@model ControlMDBI.Models.AprobacionVehiculo
+﻿@model ControlMDBI.Models.AprobacionVehiculo
 @{
     ViewData["Title"] = "Editar Aprobación";
     var solicitudSeleccionada = ViewData["SolicitudSeleccionada"] as ControlMDBI.Models.SolicitudVehiculo;
 }
 
-<h1 class="mb-4">Editar Aprobación</h1>
+<div class="row justify-content-center">
+    <div class="col-lg-12">
+        <div class="card shadow">
+            <div class="card-header bg-blueMuni-600 text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-user-circle me-2"></i>
+                    Detalles de aprobación N° <span>@Model.IdAprobacionVehiculo</span>
+                </h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="IdAprobacionVehiculo" />
+                    <input type="hidden" asp-for="IdSolicitudVehiculo" />
 
-<form asp-action="Edit">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="IdAprobacionVehiculo" />
-    <input type="hidden" asp-for="IdSolicitudVehiculo" />
-
-    <div class="row">
-        <!-- Datos de la solicitud -->
-        <div class="col-md-6">
-            <div class="card mb-4">
-                <div class="card-header py-3">
-                    <h5 class="m-0 font-weight-bold text-white"><i class="fa-solid fa-file-signature"></i> Datos de la solicitud</h5>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label asp-for="IdSolicitudVehiculo" class="form-label text-blueMuni-600">Solicitud de Vehículo</label>
-                        <select asp-for="IdSolicitudVehiculo" class="form-select" asp-items="ViewBag.IdSolicitudVehiculo" disabled></select>
-                        <span asp-validation-for="IdSolicitudVehiculo" class="text-danger"></span>
-                    </div>
-
-                    @if (solicitudSeleccionada != null)
-                    {
-                        <div class="alert alert-info mt-4">
-                            <h6>Detalles de la solicitud:</h6>
-                            <hr />
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <p><strong>Solicitante:</strong> @solicitudSeleccionada.Usuario?.NombreUsuario</p>
-                                    <p><strong>Fecha de solicitud:</strong> @solicitudSeleccionada.FechaSolicitud.ToString("dd/MM/yyyy HH:mm")</p>
-                                    <p><strong>Recorrido:</strong> @solicitudSeleccionada.Recorrido</p>
+                    <div class="row table-responsive d-flex align-items-center justify-content-center">
+                        <!-- Datos de la solicitud -->
+                        <div class="col-md-6">
+                            <div class="card mb-2">
+                                <div class="card-header py-3">
+                                    <h5 class="m-0 font-weight-bold text-white"><i class="fa-solid fa-file-signature"></i> Datos de la solicitud</h5>
                                 </div>
-                                <div class="col-md-6">
-                                    <p class="alert alert-info"><strong>Vehículo <br />Marca:</strong> @(solicitudSeleccionada.Vehiculo?.Marca)<br /><strong> Placa :</strong> @(solicitudSeleccionada.Vehiculo?.Placa)</p>
-                                    <p><strong>Fecha salida:</strong> @solicitudSeleccionada.FechaSalida.ToString("dd/MM/yyyy HH:mm tt")</p>
-                                    <p><strong>Fecha regreso:</strong> @solicitudSeleccionada.FechaRegreso.ToString("dd/MM/yyyy HH:mm tt")</p>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label asp-for="IdSolicitudVehiculo" class="form-label text-blueMuni-600">Solicitud de Vehículo</label>
+                                        <select asp-for="IdSolicitudVehiculo" class="form-control" asp-items="ViewBag.IdSolicitudVehiculo" disabled></select>
+                                        <span asp-validation-for="IdSolicitudVehiculo" class="text-danger"></span>
+                                    </div>
+
+                                    @if (solicitudSeleccionada != null)
+                                    {
+                                        <div class="alert alert-info mt-4">
+                                            <h6>Detalles de la solicitud:</h6>
+                                            <hr />
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <p><strong>Solicitante:</strong> @solicitudSeleccionada.Usuario?.NombreUsuario</p>
+                                                    <p><strong>Fecha de solicitud:</strong> @solicitudSeleccionada.FechaSolicitud.ToString("dd/MM/yyyy HH:mm")</p>
+                                                    <p><strong>Recorrido:</strong> @solicitudSeleccionada.Recorrido</p>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p class="alert alert-info"><strong>Vehículo <br />Marca:</strong> @(solicitudSeleccionada.Vehiculo?.Marca)<br /><strong> Placa :</strong> @(solicitudSeleccionada.Vehiculo?.Placa)</p>
+                                                    <p><strong>Fecha salida:</strong> @solicitudSeleccionada.FechaSalida.ToString("dd/MM/yyyy HH:mm tt")</p>
+                                                    <p><strong>Fecha regreso:</strong> @solicitudSeleccionada.FechaRegreso.ToString("dd/MM/yyyy HH:mm tt")</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>
-                    }
-                </div>
-            </div>
-        </div>
 
-        <!-- Datos de la aprobación -->
-        <div class="col-md-6">
-            <div class="card mb-4">
-                <div class="card-header py-3">
-                    <h5 class="m-0 font-weight-bold text-white"><i class="fa-solid fa-user-check"></i> Datos de la aprobación</h5>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label asp-for="IdUsuario" class="form-label text-blueMuni-600">Usuario que aprueba</label>
-                        <select asp-for="IdUsuario" class="form-select" asp-items="ViewBag.IdUsuario"></select>
-                        
-                        <span asp-validation-for="IdUsuario" class="text-danger"></span>
+                        <!-- Datos de la aprobación -->
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-header py-3">
+                                    <h5 class="m-0 font-weight-bold text-white"><i class="fa-solid fa-user-check"></i> Datos de la aprobación</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label asp-for="IdUsuario" class="form-label text-blueMuni-600">Usuario que revisó</label>
+                                        <select asp-for="IdUsuario" class="form-select" asp-items="ViewBag.IdUsuario" disabled></select>
+
+                                        <span asp-validation-for="IdUsuario" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-floating mb-3">
+
+                                        <input asp-for="FechaAprobacion" class="form-control" type="datetime-local" readonly />
+                                        <label asp-for="FechaAprobacion" class="form-label">Fecha</label>
+                                        <span asp-validation-for="FechaAprobacion" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-floating mb-3">
+
+                                        <select asp-for="Estado" class="form-select" disabled asp-items="@(new SelectList(Enum.GetNames(typeof(ListaEstadoAprobacion))))">
+                                            <option value="" selected disabled>-- Seleccione Estado --</option>
+                                        </select>
+                                        <label asp-for="Estado" class="form-label">Estado</label>
+                                        <span asp-validation-for="Estado" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-floating mb-3">
+                                        <textarea asp-for="Observaciones" class="form-control" rows="4" placeholder="Observaciones" autocomplete="off"></textarea>
+                                        <label asp-for="Observaciones" class="form-label">Observaciones</label>
+                                        <span asp-validation-for="Observaciones" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Botones centrados -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-outline-success mx-2">
+                                <i class="fas fa-save"></i> Guardar
+                            </button>
+                            <a asp-action="Index" class="btn btn-danger mx-2">
+                                <i class="fa-solid fa-xmark me-2"></i>Cancelar
+                            </a>
+                        </div>
                     </div>
 
-                    <div class="form-floating mb-3">
-                        
-                        <input asp-for="FechaAprobacion" class="form-control" type="datetime-local" />
-                        <label asp-for="FechaAprobacion" class="form-label">Fecha de aprobación</label>
-                        <span asp-validation-for="FechaAprobacion" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-floating mb-3">
-                        
-                        <select asp-for="Estado" class="form-select" asp-items="@(new SelectList(Enum.GetNames(typeof(ListaEstadoAprobacion))))">
-                            <option value="" selected disabled>-- Seleccione Estado --</option>
-                        </select>
-                        <label asp-for="Estado" class="form-label">Estado</label>
-                        <span asp-validation-for="Estado" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-floating mb-3">
-                        <textarea asp-for="Observaciones" class="form-control" rows="4" placeholder="Observaciones" autocomplete="off"></textarea>
-                        <label asp-for="Observaciones" class="form-label">Observaciones</label>
-                        <span asp-validation-for="Observaciones" class="text-danger"></span>
-                    </div>
-                </div>
+                    
+                </form>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Botones centrados -->
-    <div class="text-center mt-4">
-        <button type="submit" class="btn btn-primary mx-2">
-            <i class="fas fa-save"></i> Guardar cambios
-        </button>
-        <a asp-action="Index" class="btn btn-secondary mx-2">
-            <i class="fas fa-arrow-left"></i> Volver a la lista
-        </a>
-    </div>
-</form>
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
@@ -115,4 +129,4 @@
             }
         });
     </script>
-} 
+}

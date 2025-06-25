@@ -4,15 +4,14 @@
 }
 
 <div class="container-fluid">
-    <h1>Aprobaciones de Solicitudes de Vehículos</h1>
+    <h1 class="mb-3">Solicitudes de Vehículos Revisadas</h1>
     <div class="d-flex justify-content-start align-items-center mb-4">
-        <a asp-action="Create" class="btn btn-success">
-            <i class="fa-solid fa-circle-plus"></i> Nueva Aprobación
+        <a asp-action="Create" class="btn-lg btn-success">
+            <i class="fa-solid fa-check-to-slot me-2"></i>Revisar Solicitud
         </a>
     </div>
-
     <div class="mt-3">
-            <div class="row">
+            <div class="row mb-3">
                 <div class="col-md-6">
                     <form asp-action="Filtrar" method="get" id="searchForm">
                         <div class="input-group">
@@ -43,19 +42,16 @@
                     </div>
                 </div>
             </div>
-        <br />
         <div class="p-0">
             <div class="table-responsive">
                 <table class="table table-hover text-nowrap mb-0">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>N° aprobación</th>
                             <th>Solicitud</th>
                             <th>Solicitante</th>
-                            <th>Aprobador</th>
-                            <th>Fecha Aprobación</th>
+                            <th>Revisador</th>
                             <th>Estado</th>
-                            <th>Observaciones</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -63,38 +59,28 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td>@item.IdAprobacionVehiculo</td>
-                                <td class="text-start">
-                                    <span class="badge bg-info ">Número de Solicitud : @item.IdSolicitudVehiculo</span>
-                                    <div class="small text-muted" >
-                                        Periodo de Uso <i class="fa-solid fa-hourglass-half"></i><br />
-                                        <i class="fa-solid fa-play"></i> @Html.DisplayFor(modelItem => item.SolicitudVehiculo.FechaSalida)     <br /> <i class="fa-solid fa-stop"></i> @Html.DisplayFor(modelItem => item.SolicitudVehiculo.FechaRegreso)
-                                        <br />
-                                        <span class="badge bg-blueMuni-950"> Fecha Solicitud : @Html.DisplayFor(modelItem => item.SolicitudVehiculo.FechaSolicitud)</span> 
-
-                                       @* Periodo de Uso : @item.SolicitudVehiculo?.FechaSalida.ToString("dd/MM/yyyy HH:mm tt") - @item.SolicitudVehiculo?.FechaRegreso.ToString("dd/MM/yyyy HH:mm tt")
-                                        <br />
-                                        Fecha Solicitud : @item.SolicitudVehiculo?.FechaSolicitud.ToString("dd/MM/yyyy HH:mm tt") *@
-                                        <br />
-                                        Placa <i class="fa-solid fa-car-rear"></i> : @item.SolicitudVehiculo?.Vehiculo?.Placa 
-
-                                </div>
-                            </td>
-                            <td>
+                                <td class="align-content-center">
+                                    @item.IdAprobacionVehiculo
+                                 </td>
+                                <td class="align-content-center"> 
+                                    <a class="btn-sm text-blueMuni-50 bg-black" asp-controller="SolicitudVehiculos" asp-action="Details" asp-route-id="@item.IdSolicitudVehiculo" data-bs-toggle="tooltip" data-bs-placement="right" title="Detalles de la Solicitud N° @item.IdSolicitudVehiculo">
+                                        <i class="fa-solid fa-list me-2"></i>
+                                    <b>N° : @item.IdSolicitudVehiculo</b>
+                                    </a>
+                                    
+                                 </td>
+                                <td class="align-content-center">
                                 @(item.SolicitudVehiculo?.Usuario?.Empleado.Nombres ?? "No especificado") 
-                                @(item.SolicitudVehiculo?.Usuario?.Empleado?.Apellidos ?? "No especificado") <br />
-                                DNI: @(item.SolicitudVehiculo?.Usuario?.Empleado.DNI ?? "No especificado")
-                            </td>
-                            <td>
+                                @(item.SolicitudVehiculo?.Usuario?.Empleado?.Apellidos ?? "No especificado")<br>
+                                DNI: @(item.SolicitudVehiculo?.Usuario?.Empleado.DNI ?? "No especificado")                 
+                                 </td>
+                               <td class="align-content-center">
                                 @(item.Usuario?.Empleado?.Nombres ?? "No especificado") 
-                                @(item.Usuario?.Empleado?.Apellidos ?? "No especificado") <br />
+                                @(item.Usuario?.Empleado?.Apellidos ?? "No especificado")<br>
                                 DNI: @(item.Usuario?.Empleado.DNI ?? "No especificado")
-                            </td>
-                            <td>
-                               @Html.DisplayFor(modelItem => item.FechaAprobacion)
-                                @* @item.FechaAprobacion.ToString("dd/MM/yyyy HH:mm tt") *@
-                            </td>
-                            <td>
+                                </td>
+                            
+                                <td class="align-content-center">
                                 @{
                                         string badgeClass = "bg-secondary";
                                         switch (item.Estado)
@@ -112,22 +98,14 @@
                                     }
                                     <span class="badge @badgeClass">@item.Estado</span>
                                 </td>
-                                <td>
-                                    @if (!string.IsNullOrEmpty(item.Observaciones))
-                                    {
-                                        <span data-bs-toggle="tooltip" data-bs-placement="top" title="@item.Observaciones">
-                                            @(item.Observaciones.Length > 20 ? item.Observaciones.Substring(0, 20) + "..." : item.Observaciones)
-                                </span>                         }
-                                    else
-                                    {
-                                        <span class="text-muted">Sin observaciones</span>
-                                    }
-                                </td>
-                                <td>
+                               
+                                <td class="align-content-center">
                                     <div class="btn-group">
-                                        <a class="btn-sm btn-warning" asp-action="Edit" asp-route-id="@item.IdAprobacionVehiculo" data-bs-toggle="tooltip" data-bs-placement="right" title="Editar Aprobación"><i class="fa-solid fa-pen"></i></a>
-                                        <a class="btn-sm btn-info" asp-action="Details" asp-route-id="@item.IdAprobacionVehiculo" data-bs-toggle="tooltip" data-bs-placement="right" title="Detalles del Aprobación"><i class="fa-solid fa-list"></i></a> | 
-                                        <a class="btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.IdAprobacionVehiculo" data-bs-toggle="tooltip" data-bs-placement="right" title="Eliminar Aprobación"><i class="fa-solid fa-trash"></i></a>
+                                        <a class="btn-sm btn-info" asp-action="Edit" asp-route-id="@item.IdAprobacionVehiculo" data-bs-toggle="tooltip" data-bs-placement="right" title="Detalles aprobación N° @item.IdAprobacionVehiculo">
+                                            <i class="fa-solid fa-list me-2"></i>Detalles
+                                        </a>
+                                        @* <a class="btn-sm btn-info" asp-action="Details" asp-route-id="@item.IdAprobacionVehiculo" data-bs-toggle="tooltip" data-bs-placement="right" title="Detalles del Aprobación"><i class="fa-solid fa-list"></i></a> |  *@
+                                        @* <a class="btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.IdAprobacionVehiculo" data-bs-toggle="tooltip" data-bs-placement="right" title="Eliminar Aprobación"><i class="fa-solid fa-trash"></i></a> *@
                                     </div>
                                 </td>
                             </tr>
@@ -136,6 +114,11 @@
                 </table>
             </div>
         </div>
+        <div class="d-flex justify-content-end align-items-center mb-4 mt-3">
+        <a asp-action="index" asp-controller="Vehiculos" class="btn-lg btn-danger">
+                <i class="fa-solid fa-circle-arrow-left"></i> Regresar a Vehiculos
+            </a>
+    </div>
     </div>
     <br />
       <nav aria-label="Page navigation">
