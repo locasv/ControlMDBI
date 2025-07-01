@@ -3,7 +3,7 @@ wwwroot\css\site.css
 wwwroot\favicon.ico
 wwwroot\img\logos\contrlmdbi-removebg-preview.png
 wwwroot\img\logos\contrlmdbi.png
-wwwroot\js\registro-personas.js
+wwwroot\js\sidebar.js
 wwwroot\js\site.js
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
@@ -116,4 +116,4 @@ wwwroot\lib\sweetalert2\sweetalert2.esm.min.js
 wwwroot\lib\sweetalert2\sweetalert2.js
 wwwroot\lib\sweetalert2\sweetalert2.min.css
 wwwroot\lib\sweetalert2\sweetalert2.min.js
-wwwroot\js\sidebar.js
+wwwroot\js\registro-personas.js

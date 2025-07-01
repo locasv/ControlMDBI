@@ -26,30 +26,6 @@ class RegistroPersonas {
         // Auto-focus en el campo DNI para lectura de códigos
         $('#dniEmpleado').focus();
 
-        // Controlar habilitación del campo código de objeto para EMPLEADO
-        $('#portaObjetoEmpleado').change(() => {
-            const portaObjeto = $('#portaObjetoEmpleado').is(':checked');
-            $('#codigoObjetoEmpleado').prop('disabled', !portaObjeto);
-
-            if (!portaObjeto) {
-                $('#codigoObjetoEmpleado').val('');
-            } else {
-                $('#codigoObjetoEmpleado').focus();
-            }
-        });
-
-        // Controlar habilitación del campo código de objeto para VISITANTE
-        $('#portaObjetoVisitante').change(() => {
-            const portaObjeto = $('#portaObjetoVisitante').is(':checked');
-            $('#codigoObjetoVisitante').prop('disabled', !portaObjeto);
-
-            if (!portaObjeto) {
-                $('#codigoObjetoVisitante').val('');
-            } else {
-                $('#codigoObjetoVisitante').focus();
-            }
-        });
-
         // Validar solo números en DNI de visitante
         $('#dniVisitante').on('input', function () {
             let valor = this.value.replace(/[^0-9]/g, '');

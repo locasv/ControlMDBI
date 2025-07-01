@@ -124,13 +124,22 @@
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
                                             <label class="form-label">¿Porta objeto?</label>
-                                            <div class="form-check">
-                                                    <input asp-for="PortaObjeto" class="form-check-input" type="checkbox" checked />
-                                                    <label asp-for="PortaObjeto" class="form-check-label">No</label>
+                                            @* <div class="form-check">
+                                                <input asp-for="PortaObjeto" class="form-check-input" type="checkbox" checked />
+                                                <label asp-for="PortaObjeto" class="form-check-label">No</label>
                                             </div>
                                             <div class="form-check">
                                                 <input asp-for="PortaObjeto" class="form-check-input" type="checkbox" id="portaObjetoEmpleado" />
                                                 <label asp-for="PortaObjeto" class="form-check-label">Sí</label>
+                                            </div> *@
+
+                                            <div class="form-check">
+                                                <input asp-for="PortaObjeto" class="form-check-input" type="radio" value="false" name="PortaObjeto" id="portaObjetoNo" checked />
+                                                <label for="portaObjetoNo" class="form-check-label">No</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input asp-for="PortaObjeto" class="form-check-input" type="radio" value="true" name="PortaObjeto" id="portaObjetoSi" />
+                                                <label for="portaObjetoSi" class="form-check-label">Sí</label>
                                             </div>
                                         </div>
                                     </div>
@@ -161,13 +170,17 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary" id="btnRegistrarEmpleado" disabled>
-                                        <i class="fas fa-save"></i> Registrar Empleado
-                                    </button>
-                                    <a asp-action="Index" asp-controller="Registros" class="btn btn-secondary">
-                                        <i class="fas fa-arrow-left"></i> Volver
-                                    </a>
+                                <div class="container-fluid">
+                                    <div class="row d-flex align-items-center justify-content-center">
+                                        <div class="col-md-6 d-flex justify-content-center">
+                                            <button type="submit" class="btn btn-outline-success me-2" id="btnRegistrarEmpleado" disabled>
+                                                <i class="fa-solid fa-user-check me-2"></i>Registrar
+                                            </button>
+                                            <a asp-action="Index" asp-controller="Registros" class="btn btn-danger">
+                                                <i class="fas fa-times me-2"></i>Cancelar
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -203,40 +216,17 @@
                                     </div>
                                 </div>
 
-                                @* <!-- Campos adicionales para visitante -->
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group mb-3">
-                                            <label class="form-label">¿Porta objeto?</label>
-                                            <div class="form-check">
-                                                <input name="PortaObjetoVisitante" class="form-check-input" type="checkbox" id="portaObjetoVisitante" />
-                                                <label class="form-check-label">Sí</label>
-                                            </div>
+                                <div class="container-fluid">
+                                    <div class="row d-flex align-items-center justify-content-center">
+                                        <div class="col-md-6 d-flex justify-content-center">
+                                            <button type="submit" class="btn btn-outline-success me-2">
+                                                <i class="fa-solid fa-user-check me-2"></i>Registrar
+                                            </button>
+                                            <a asp-action="Index" asp-controller="Registros" class="btn btn-danger">
+                                                <i class="fas fa-times me-2"></i>Cancelar
+                                            </a>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group mb-3">
-                                            <label class="form-label">
-                                                Código del Objeto
-                                                <small class="text-muted">(Solo si porta objeto)</small>
-                                            </label>
-                                            <input name="CodigoObjetoVisitante" class="form-control" id="codigoObjetoVisitante"
-                                                   placeholder="Código del objeto" disabled />
-                                            <div class="form-text">
-                                                <i class="fas fa-shield-alt text-warning"></i>
-                                                Por seguridad, este campo solo se habilita si porta objeto
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> *@
-
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-info">
-                                        <i class="fas fa-save"></i> Registrar Visitante
-                                    </button>
-                                    <a asp-action="Index" asp-controller="Registros" class="btn btn-secondary">
-                                        <i class="fas fa-arrow-left"></i> Volver
-                                    </a>
                                 </div>
                             </form>
                         </div>
@@ -258,5 +248,21 @@
 
     <!-- Cargar el script externo -->
     <script src="~/js/registro-personas.js"></script>
+
+    <script>
+               $(document).ready(function() {
+            //Controlar habilitación del campo código de objeto para EMPLEADO
+            $('input[name="PortaObjeto"]').change(function() {
+                const portaObjeto = $('input[name="PortaObjeto"]:checked').val() === 'true';
+                $('#codigoObjetoEmpleado').prop('disabled', !portaObjeto);
+                if (!portaObjeto) {
+                    $('#codigoObjetoEmpleado').val('');
+                } else {
+                    $('#codigoObjetoEmpleado').focus();
+                }
+            });
+        });
+
+    </script>
 
 }

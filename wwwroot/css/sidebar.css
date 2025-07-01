@@ -147,7 +147,7 @@
 
 /* Botón para mostrar/ocultar sidebar */
 #sidebarToggler {
-    background: transparent;
+    background: #19a4dd;
     border: 1px solid #dee2e6;
     color: #495057;
     padding: 0.5rem 0.75rem;
